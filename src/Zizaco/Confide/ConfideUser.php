@@ -77,7 +77,7 @@ class ConfideUser extends \Eloquent implements UserInterface {
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
                 function($m){
-                    $m->to( $this->email )->subject('Password Reset!');
+                    $m->to( $this->email )->subject( Lang::get('confide::confide.email.password_reset.subject') );
                 }
             );
 
@@ -105,7 +105,7 @@ class ConfideUser extends \Eloquent implements UserInterface {
         {
             Mail::send('confide::emails.confirm', ['user' => $this], function($m)
             {
-                $m->to( $this->email )->subject('Confirm your account');
+                $m->to( $this->email )->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
             });
 
             return true;

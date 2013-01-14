@@ -1,7 +1,7 @@
-<h1>Password Reset</h1>
+<h1>{{ Lang::get('confide::confide.email.password_reset.subject'); }}</h1>
 
-<p>Hi {{ $user->username }},</p>
+<p>{{ Lang::get('confide::confide.email.password_reset.greetings', array( 'name' => $user->username)); }},</p>
 
-<p>Your password has been changed to: {{ $new_password }}</p>
+<p>{{ Lang::get('confide::confide.email.password_reset.greetings', array( 'password' => $new_password)); }}</p>
 
-<p>Regards</p>
+<p>{{ Lang::get('confide::confide.email.password_reset.farewell'); }}</p>
