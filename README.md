@@ -1,6 +1,6 @@
-# Confide
+# Confide (Laravel4 Package)
 
-## Introduction
+![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
 
 Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, and other password reset.
 
@@ -12,7 +12,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "v0.2beta"
+    "zizaco/confide": "v0.3beta"
 
 Run the Composer update comand
 
