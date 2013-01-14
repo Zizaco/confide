@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'ConfideSetupUsersTable' => $baseDir . '/src/migrations/2013_01_13_172956_confide_setup_users_table.php',
-    'Zizaco\\Confide\\Confide' => $baseDir . '/src/Zizaco/Confide/Confide.php',
-    'Zizaco\\Confide\\ConfideServiceProvider' => $baseDir . '/src/Zizaco/Confide/ConfideServiceProvider.php',
-    'Zizaco\\Confide\\ConfideUser' => $baseDir . '/src/Zizaco/Confide/ConfideUser.php',
+    'Zizaco\\Confide\\ControllerCommand' => $baseDir . '/src/commands/ControllerCommand.php',
+    'Zizaco\\Confide\\RoutesCommand' => $baseDir . '/src/commands/RoutesCommand.php',
 );

@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Zizaco\\Confide' => $baseDir . '/src/',
+    'Mockery' => $vendorDir . '/mockery/mockery/library/',
     'Illuminate\\Support' => $vendorDir . '/illuminate/support/',
 );

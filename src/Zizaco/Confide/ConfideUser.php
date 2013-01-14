@@ -2,6 +2,8 @@
 
 use Illuminate\Auth\UserInterface;
 use Config;
+use Mail;
+use Hash;
 
 class ConfideUser extends \Eloquent implements UserInterface {
 
@@ -24,8 +26,8 @@ class ConfideUser extends \Eloquent implements UserInterface {
      */
     public function __construct()
     {
-        $this->table = Config::get('confide::users_table');
         parent::__construct();
+        $this->table = Config::get('auth.table');
     }
 
     /**
@@ -46,6 +48,68 @@ class ConfideUser extends \Eloquent implements UserInterface {
     public function getAuthPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Confirm the user (usually means that the user)
+     * email is valid.
+     *
+     * @return bool
+     */
+    public function Confirm()
+    {
+        $this->confirmed = true;
+        return $this->save();
+    }
+
+    /**
+     * Reset user password and sends in user e-mail
+     *
+     * @return string
+     */
+    public function ResetPassword()
+    {
+        $new_password = substr(md5(microtime().Config::get('app.key')),-9);
+        $this->password = Hash::make($new_password);
+        if ( $this->save() )
+        {
+            Mail::send(
+                'confide::emails.passwordreset',
+                ['user' => $this, 'new_password' => $new_password],
+                function($m){
+                    $m->to( $this->email )->subject('Password Reset!');
+                }
+            );
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /**
+     * Saves the user. Generate a confirmation code if
+     * is a new user.
+     *
+     * @return bool
+     */
+    public function save()
+    {
+        if ( empty($this->id) )
+        {
+            $this->confirmation_code = md5(microtime().Config::get('app.key'));
+        }
+
+        if ( parent::save($this) )
+        {
+            Mail::send('confide::emails.confirm', ['user' => $this], function($m)
+            {
+                $m->to( $this->email )->subject('Confirm your account');
+            });
+
+            return true;
+        }
     }
 
 }

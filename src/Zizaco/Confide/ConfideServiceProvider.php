@@ -1,6 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use App;
+use Artisan;
 use Illuminate\Support\ServiceProvider;
 
 class ConfideServiceProvider extends ServiceProvider {
@@ -33,10 +34,14 @@ class ConfideServiceProvider extends ServiceProvider {
 
 	    App::singleton('confide', function($app)
 		{
-		    return new Confide($app['view'], $app['config']);
+		    return new Confide($app['view'], $app['config'], $app['db']);
 		});
+
+	    $this->commands(
+	    	'Zizaco\Confide\ControllerCommand',
+	    	'Zizaco\Confide\RoutesCommand'
+	    );
 	    
-	    include __DIR__.'/routes.php';
 	}
 
 	/**
