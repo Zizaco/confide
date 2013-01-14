@@ -23,7 +23,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testGetVersion()
     {
-        $is = $this->confide->Version();
+        $is = $this->confide->version();
         $should_be = 'Confide v'.Confide::VERSION;
 
         $this->assertEquals( $should_be, $is );
@@ -40,7 +40,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->andReturn('true')->once();
         $this->confide->_database = $database;
 
-        $queryBuilder = $this->confide->Model();
+        $queryBuilder = $this->confide->model();
         $this->assertNotNull( $queryBuilder );
     }
 
@@ -49,7 +49,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $user = m::mock('ConfideUser');
         $user->shouldReceive('Confirm')->andReturn(true)->once();
 
-        $this->assertTrue( $this->confide->Confirm( $user ) );
+        $this->assertTrue( $this->confide->confirm( $user ) );
     }
 
     public function testShouldResetPassword()

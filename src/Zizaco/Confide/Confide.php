@@ -54,7 +54,7 @@ class Confide
      *
      * @return string
      */
-    public function Version()
+    public function version()
     {
         return 'Confide v'.Confide::VERSION;
     }
@@ -64,7 +64,7 @@ class Confide
      *
      * @return string
      */
-    public function Model()
+    public function model()
     {
         return $this->_database->table( $this->_config->get('auth.table') );
     }
@@ -75,12 +75,12 @@ class Confide
      * @param string  $code
      * @return bool
      */
-    public function Confirm( $code )
+    public function confirm( $code )
     {
         $user = ConfideUser::where('confirmation_code', '=', $code)->get()->first();
         if( $user )
         {
-            $user->Confirm();
+            $user->confirm();
             return true;
         }
         else
@@ -95,12 +95,12 @@ class Confide
      * @param string  $email
      * @return bool
      */
-    public function ResetPassword( $email )
+    public function resetPassword( $email )
     {
         $user = ConfideUser::where('email', '=', $email)->get()->first();
         if( $user )
         {
-            $user->ResetPassword();
+            $user->resetPassword();
             return true;
         }
         else
@@ -114,7 +114,7 @@ class Confide
      *
      * @return Illuminate\View\View
      */
-    public function MakeLoginForm()
+    public function makeLoginForm()
     {
         return $this->_view->make('confide::login');
     }
@@ -124,7 +124,7 @@ class Confide
      *
      * @return Illuminate\View\View
      */
-    public function MakeSignupForm()
+    public function makeSignupForm()
     {
         return $this->_view->make('confide::signup');
     }
@@ -134,7 +134,7 @@ class Confide
      *
      * @return Illuminate\View\View
      */
-    public function MakeForgetPasswordForm()
+    public function makeForgetPasswordForm()
     {
         return $this->_view->make('confide::forgot_password');
     }

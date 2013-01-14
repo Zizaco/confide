@@ -56,7 +56,7 @@ class ConfideUser extends \Eloquent implements UserInterface {
      *
      * @return bool
      */
-    public function Confirm()
+    public function confirm()
     {
         $this->confirmed = true;
         return $this->save();
@@ -67,7 +67,7 @@ class ConfideUser extends \Eloquent implements UserInterface {
      *
      * @return string
      */
-    public function ResetPassword()
+    public function resetPassword()
     {
         $new_password = substr(md5(microtime().Config::get('app.key')),-9);
         $this->password = Hash::make($new_password);

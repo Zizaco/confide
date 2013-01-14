@@ -19,7 +19,7 @@ class {{ $name }} extends BaseController {
      */
     public function create()
     {
-        return Confide::MakeSignupForm();
+        return Confide::makeSignupForm();
     }
 
     /**
@@ -31,7 +31,7 @@ class {{ $name }} extends BaseController {
         ${{ lcfirst(Config::get('auth.model')) }} = new {{ Config::get('auth.model') }};
         ${{ lcfirst(Config::get('auth.model')) }}->username = Input::get( 'username' );
         ${{ lcfirst(Config::get('auth.model')) }}->email = Input::get( 'email' );
-        ${{ lcfirst(Config::get('auth.model')) }}->password = Input::get( 'password' );
+        ${{ lcfirst(Config::get('auth.model')) }}->password = Hash::make(Input::get( 'password' ));
 
         ${{ lcfirst(Config::get('auth.model')) }}->save();
 
@@ -52,7 +52,7 @@ class {{ $name }} extends BaseController {
      */
     public function login()
     {
-        return Confide::MakeLoginForm();
+        return Confide::makeLoginForm();
     }
 
     /**
@@ -86,7 +86,7 @@ class {{ $name }} extends BaseController {
      */
     public function confirm( $code )
     {
-        if ( Confide::Confirm( $code ) )
+        if ( Confide::confirm( $code ) )
         {
             $notice_msg = "Your account has been confirmed! You may now login.";
             return Redirect::action('{{ $name }}@login')
@@ -106,7 +106,7 @@ class {{ $name }} extends BaseController {
      */
     public function forgot_password()
     {
-        return Confide::MakeForgetPasswordForm();
+        return Confide::makeForgetPasswordForm();
     }
 
     /**
@@ -115,7 +115,7 @@ class {{ $name }} extends BaseController {
      */
     public function reset_password()
     {
-        if( Confide::ResetPassword( Input::get( 'email' ) ) )
+        if( Confide::resetPassword( Input::get( 'email' ) ) )
         {
             $notice_msg = "A new password has been sent to your email.";
             return Redirect::action('{{ $name }}@login')
