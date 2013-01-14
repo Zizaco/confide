@@ -5,6 +5,8 @@ use Illuminate\Config\Repository;
 use Zizaco\Confide\ConfideUser;
 use View;
 use DB;
+use Auth;
+use Hash;
 
 class Confide
 {
@@ -66,7 +68,19 @@ class Confide
      */
     public function model()
     {
-        return $this->_database->table( $this->_config->get('auth.table') );
+        $model = $this->_config->get('auth.model');
+
+        return new $model;
+    }
+
+    /**
+     * Get the currently authenticated user or null.
+     *
+     * @return Zizaco\Confide\ConfideUser|null
+     */
+    public function user()
+    {
+        return Auth::user();
     }
 
     /**
@@ -90,6 +104,31 @@ class Confide
     }
 
     /**
+     * Attempt to log a user into the application with
+     * password and username or email.
+     *
+     * @param  array $arguments
+     * @return void
+     */
+    public function logAttempt( $credentials )
+    {
+        $user = $this->model()
+            ->where('email','=',$credentials['email'])
+            ->orWhere('username','=',$credentials['email'])
+            ->first();
+
+        if ( ! is_null($user) and Hash::check($credentials['password'], $user->password) )
+        {
+            Auth::login( 
+                $user,
+                isset($credentials['remember']) ? $credentials['remember'] : false 
+            );
+
+            return true;
+        }
+    }
+
+    /**
      * Reset the user password and send email to user
      *
      * @param string  $email
@@ -107,6 +146,16 @@ class Confide
         {
             return false;
         }
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        Auth::logout();
     }
 
     /**
