@@ -1,6 +1,5 @@
 {{ '<?php' }}
 
-
 /*
 |--------------------------------------------------------------------------
 | Confide Controller Template
@@ -64,15 +63,16 @@ class {{ $name }} extends BaseController {
         $input = array(
             'email' => Input::get( 'email' ),
             'password' => Input::get( 'password' ),
+            'remamber' => Input::get( 'remember' ),
         );
 
-        if ( Auth::attempt( $input, Input::get( 'remember' ) ) ) 
+        if ( Confide::logAttempt( $input ) ) 
         {
             return Redirect::to('/');
         }
         else
         {
-            $err_msg = "Incorrect e-mail or password.";
+            $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
             return Redirect::action('{{ $name }}@login')
                 ->withInput(Input::except('password'))
                 ->with( 'error', $err_msg );
@@ -88,13 +88,13 @@ class {{ $name }} extends BaseController {
     {
         if ( Confide::confirm( $code ) )
         {
-            $notice_msg = "Your account has been confirmed! You may now login.";
+            $notice_msg = Lang::get('confide::confide.alerts.confirmation');
             return Redirect::action('{{ $name }}@login')
                 ->with( 'notice', $notice_msg );
         }
         else
         {
-            $error_msg = "Wrong confirmation code.";
+            $error_msg = Lang::get('confide::confide.alerts.wrong_confirmation');
             return Redirect::action('{{ $name }}@login')
                 ->with( 'error', $error_msg );
         }
@@ -117,17 +117,28 @@ class {{ $name }} extends BaseController {
     {
         if( Confide::resetPassword( Input::get( 'email' ) ) )
         {
-            $notice_msg = "A new password has been sent to your email.";
+            $notice_msg = Lang::get('confide::confide.alerts.password_reset');
             return Redirect::action('{{ $name }}@login')
                 ->with( 'notice', $notice_msg );
         }
         else
         {
-            $error_msg = "User not found.";
+            $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
             return Redirect::action('{{ $name }}@forgot_password')
                 ->withInput()
                 ->with( 'error', $error_msg );
         }
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     */
+    public function logout()
+    {
+        Confide::logout();
+        
+        return Redirect::to('/');
     }
 
 }
