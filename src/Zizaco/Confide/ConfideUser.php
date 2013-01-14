@@ -4,6 +4,7 @@ use Illuminate\Auth\UserInterface;
 use Config;
 use Mail;
 use Hash;
+use Lang;
 
 class ConfideUser extends \Eloquent implements UserInterface {
 
@@ -77,7 +78,8 @@ class ConfideUser extends \Eloquent implements UserInterface {
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
                 function($m){
-                    $m->to( $this->email )->subject( Lang::get('confide::confide.email.password_reset.subject') );
+                    $m->to( $this->email )
+                    ->subject( Lang::get('confide::confide.email.password_reset.subject') );
                 }
             );
 
@@ -105,7 +107,8 @@ class ConfideUser extends \Eloquent implements UserInterface {
         {
             Mail::send('confide::emails.confirm', ['user' => $this], function($m)
             {
-                $m->to( $this->email )->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
+                $m->to( $this->email )
+                ->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
             });
 
             return true;
