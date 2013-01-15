@@ -8,12 +8,18 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 ## Features
 
-- Account confirmation (trought confirmation link).
-- Handles password reset (sending email with new password).
-- Easly render forms for login, signup and password reset.
-- Generate routes for login, signup, password reset, confirmation, etc.
+**Current:**
+- Account confirmation (through confirmation link).
+- Password reset (sending email with new password).
+- Easily render forms for login, signup and password reset.
+- Generate customizable routes for login, signup, password reset, confirmation, etc.
 - Generate a customizable controller that handles the basic user account actions
 - Contains a set of methods to help basic user features.
+- Integrated with the Laravel Auth component/configs.
+
+**Planned:**
+- Captcha in user signup and password reset.
+- General improvements.
 
 ## Quick start
 
