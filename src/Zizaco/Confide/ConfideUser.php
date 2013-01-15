@@ -6,7 +6,7 @@ use Mail;
 use Hash;
 use Lang;
 
-class ConfideUser extends \Eloquent implements UserInterface {
+class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInterface {
 
     /**
      * The database table used by the model.
