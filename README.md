@@ -27,7 +27,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "v0.4beta"
+    "zizaco/confide": "<dev-master"
 
 Run the Composer update comand
 
