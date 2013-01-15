@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use View;
 use Config;
 
-class ControllerCommand extends Command {
+class MigrationCommand extends Command {
 
     /**
      * The console command name.

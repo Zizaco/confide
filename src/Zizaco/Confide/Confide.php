@@ -13,7 +13,7 @@ class Confide
     /**
      * Confide Vesion
      */
-    const VERSION = '0.3';
+    const VERSION = '0.4';
 
     /**
      * Illuminate view environment.
