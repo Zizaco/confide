@@ -82,7 +82,7 @@ class ControllerCommand extends Command {
     protected function getOptions()
     {
         return array(
-            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', null),
+            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', Config::get('auth.model')),
         );
     }
 
