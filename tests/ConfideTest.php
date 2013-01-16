@@ -5,6 +5,11 @@ use Mockery as m;
 
 class ConfideTest extends PHPUnit_Framework_TestCase {
 
+    /**
+     * Confide instance
+     *
+     * @var Zizaco/Confide/Confide
+     */
     protected $confide;
 
     public function tearDown()
@@ -14,11 +19,9 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        $view = m::mock('Illuminate\View\Environment\View');
-        $config = m::mock('Illuminate\Config\Repository');
-        $database = m::mock('Illuminate\Database\DatabaseManager');
+        $app = $this->mockApp();
 
-        $this->confide = new Confide($view, $config, $database);
+        $this->confide = new Confide($app);
     }
 
     public function testGetVersion()
@@ -31,50 +34,169 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testGetModel()
     {
-        $config = m::mock('Illuminate\Config\Repository', ['get'=>'user']);
-        $this->confide->_config = $config;
-        
-        $database = m::mock('Illuminate\Database\DatabaseManager');
-        $database->shouldReceive('table')
-            ->with( $this->confide->_config->get('auth.table') )
-            ->andReturn('true')->once();
-        $this->confide->_database = $database;
+        // Make shure it grabbed the model from config
+        $config = m::mock('Illuminate\Config\Repository');
+        $config->shouldReceive('get')
+            ->with('auth.model')
+            ->andReturn( 'User' )
+            ->once();
+        $this->confide->_app['config'] = $config;
 
-        $queryBuilder = $this->confide->model();
-        $this->assertNotNull( $queryBuilder );
+        // Mocks an user
+        $confide_user = $this->mockConfideUser();
+
+        // Make shure the object provider returns the
+        // user object when called
+        $this->objProviderShouldReturn( 'User', $confide_user );
+
+        $user = $this->confide->model();
+
+        $this->assertNotNull( $user );
+    }
+
+    public function testShouldGetUser()
+    {
+        $confide_user = $this->mockConfideUser();
+
+        // Laravel auth component should return user
+        $auth = m::mock('Illuminate\Auth\Guard');
+        $auth->shouldReceive('user')
+            ->andReturn( $confide_user )
+            ->once();
+        $this->confide->_app['auth'] = $auth;
+
+        $this->assertEquals( $confide_user, $this->confide->user() );
     }
 
     public function testShouldConfirm()
     {
-        $user = m::mock('ConfideUser');
-        $user->shouldReceive('Confirm')->andReturn(true)->once();
+        $confide_user = $this->mockConfideUser();
+        $confide_user->shouldReceive('confirm')
+            ->andReturn( true )
+            ->once();
 
-        $this->assertTrue( $this->confide->confirm( $user ) );
+        $this->objProviderShouldReturn( 'User', $confide_user );
+
+        $this->assertTrue( $this->confide->confirm( '123123' ) );
+    }
+
+    public function testShouldlogAttempt()
+    {
+        $confide_user = $this->mockConfideUser();
+
+        // Considering a valid hash check from hash component
+        $hash = m::mock('Illuminate\Hashing\HasherInterface');
+        $hash->shouldReceive('check')
+            ->andReturn( true )
+            ->once();
+        $this->confide->_app['hash'] = $hash;
+
+        $this->objProviderShouldReturn( 'User', $confide_user );
+
+        $this->assertTrue( 
+            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ) )
+        );
     }
 
     public function testShouldResetPassword()
     {
-        $user = m::mock('ConfideUser');
-        $user->shouldReceive('ResetPassword')->andReturn(true)->once();
+        $confide_user = $this->mockConfideUser();
+        $confide_user->shouldReceive('resetPassword')
+            ->andReturn( true )
+            ->once();
 
-        $this->assertTrue( $this->confide->ResetPassword( $user ) );
+        $this->objProviderShouldReturn( 'User', $confide_user );
+
+        $this->assertTrue( $this->confide->resetPassword( 'mail@sample.com' ) );
     }
 
-    public function testShouldMakeLoginForm()
+    public function testShouldLogout()
     {
-        $view = m::mock('Illuminate\View\Environment\View');
-        $view->shouldReceive('make')->with('confide::login')->andReturn('something')->once();
+        // Make shure auth logout method is called
+        $auth = m::mock('Illuminate\Auth\Guard');
+        $auth->shouldReceive('logout')
+            ->once();
 
-        $this->confide->_view = $view;
+        $this->confide->_app['auth'] = $auth;
+        $this->assertEquals( null, $this->confide->logout() );
+    }
+
+    public function testShouldMakeForms()
+    {
+        // Make shure view make method is called 3 times
+        $view = m::mock('Illuminate\View\Environment\View');
+        $view->shouldReceive('make')
+            ->andReturn( 'Content' )
+            ->times( 3 );
+
+        $this->confide->_app['view'] = $view;
+
         $this->assertNotEquals( null, $this->confide->MakeLoginForm() );
+        $this->assertNotEquals( null, $this->confide->makeSignupForm() );
+        $this->assertNotEquals( null, $this->confide->makeForgetPasswordForm() );
     }
 
-    public function testShouldMakeSignupForm()
+    private function mockConfideUser()
     {
-        $view = m::mock('Illuminate\View\Environment\View');
-        $view->shouldReceive('make')->with('confide::signup')->andReturn('something')->once();
+        $confide_user = m::mock( 'Illuminate\Auth\UserInterface' );
+        $confide_user->username = 'uname';
+        $confide_user->password = '123123';
+        $confide_user->shouldReceive('where','get', 'orWhere','first', 'all')
+            ->andReturn( $confide_user );
 
-        $this->confide->_view = $view;
-        $this->assertNotEquals( null, $this->confide->MakeSignupForm() );
+        return $confide_user;
+    }
+
+    private function mockApp()
+    {
+        // Mocks the application components that
+        // are not Confide's responsibility
+        $app = array();
+
+        $app['config'] = m::mock( 'Config' );
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'auth.table' )
+            ->andReturn( 'users' );
+
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'auth.model' )
+            ->andReturn( 'User' );
+
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'app.key' )
+            ->andReturn( '123' );
+
+        $app['mail'] = m::mock( 'Mail' );
+        $app['mail']->shouldReceive('send')
+            ->andReturn( null );
+
+        $app['hash'] = m::mock( 'Hash' );
+        $app['hash']->shouldReceive('make')
+            ->andReturn( 'aRandomHash' );
+
+        $app['auth'] = m::mock( 'Auth' );
+        $app['auth']->shouldReceive('login')
+            ->andReturn( true );
+
+        return $app;
+    }
+
+    /**
+     * the ObjectProvider getObject method should
+     * be called with $class to return $object.
+     *
+     * @param string $class
+     * @param mixed $obj
+     * @return void
+     */
+    private function objProviderShouldReturn( $class, $obj )
+    {
+        $obj_provider = m::mock('ObjectProvider');
+        $obj_provider->shouldReceive('getObject')
+            ->with($class)
+            ->andReturn( $obj )
+            ->once();
+        
+        $this->confide->_obj_provider = $obj_provider;
     }
 }
