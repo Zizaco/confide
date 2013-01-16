@@ -2,11 +2,7 @@
 
 use Illuminate\View\Environment;
 use Illuminate\Config\Repository;
-use Zizaco\Confide\ConfideUser;
-use View;
-use DB;
-use Auth;
-use Hash;
+use ObjectProvier;
 
 class Confide
 {
@@ -16,39 +12,29 @@ class Confide
     const VERSION = '0.4';
 
     /**
-     * Illuminate view environment.
+     * Laravel application
      * 
-     * @var Illuminate\View\Environment
+     * @var Illuminate\Foundation\Application
      */
-    public $_view;
+    public $_app;
 
     /**
-     * Illuminate config repository.
+     * Object provider
      * 
-     * @var Illuminate\Config\Repository
+     * @var Zizaco\Confide\ObjectProvider
      */
-    public $_config;
-
-    /**
-     * Illuminate database manager.
-     * 
-     * @var Illuminate\Database\DatabaseManager 
-     */
-    public $_database;
+    public $_obj_provider;
 
     /**
      * Create a new confide instance.
      * 
-     * @param  Illuminate\View\Environment  $view
-     * @param  Illuminate\Config\Repository  $config
-     * @param Illuminate\Database\DatabaseManager  $database
+     * @param  Illuminate\Foundation\Application  $app
      * @return void
      */
-    public function __construct($view, $config, $database)
+    public function __construct($app)
     {
-        $this->_view = $view;
-        $this->_config = $config;
-        $this->_database = $database;
+        $this->_app = $app;
+        $this->_obj_provider = new ObjectProvider;
     }
 
     /**
@@ -62,15 +48,26 @@ class Confide
     }
 
     /**
-     * Returns the model used for authent
+     * Returns the Laravel application
+     * 
+     * @return Illuminate\Foundation\Application
+     */
+    public function app()
+    {
+        return $this->_app;
+    }
+
+    /**
+     * Returns the model set in auth config
      *
      * @return string
      */
     public function model()
     {
-        $model = $this->_config->get('auth.model');
+        $model = $this->_app['config']->get('auth.model');
 
-        return new $model;
+        return $this->_obj_provider->getObject( $model );
+
     }
 
     /**
@@ -80,18 +77,18 @@ class Confide
      */
     public function user()
     {
-        return Auth::user();
+        return $this->_app['auth']->user();
     }
 
     /**
      * Set the user confirmation to true.
      *
-     * @param string  $code
+     * @param string $code
      * @return bool
      */
     public function confirm( $code )
     {
-        $user = ConfideUser::where('confirmation_code', '=', $code)->get()->first();
+        $user = Confide::model()->where('confirmation_code', '=', $code)->get()->first();
         if( $user )
         {
             $user->confirm();
@@ -117,9 +114,9 @@ class Confide
             ->orWhere('username','=',$credentials['email'])
             ->first();
 
-        if ( ! is_null($user) and Hash::check($credentials['password'], $user->password) )
+        if ( ! is_null($user) and $this->_app['hash']->check($credentials['password'], $user->password) )
         {
-            Auth::login( 
+            $this->_app['auth']->login( 
                 $user,
                 isset($credentials['remember']) ? $credentials['remember'] : false 
             );
@@ -136,7 +133,7 @@ class Confide
      */
     public function resetPassword( $email )
     {
-        $user = ConfideUser::where('email', '=', $email)->get()->first();
+        $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
             $user->resetPassword();
@@ -155,7 +152,7 @@ class Confide
      */
     public function logout()
     {
-        Auth::logout();
+        $this->_app['auth']->logout();
     }
 
     /**
@@ -165,7 +162,7 @@ class Confide
      */
     public function makeLoginForm()
     {
-        return $this->_view->make('confide::login');
+        return $this->_app['view']->make('confide::login');
     }
 
     /**
@@ -175,7 +172,7 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->_view->make('confide::signup');
+        return $this->_app['view']->make('confide::signup');
     }
 
     /**
@@ -185,6 +182,6 @@ class Confide
      */
     public function makeForgetPasswordForm()
     {
-        return $this->_view->make('confide::forgot_password');
+        return $this->_app['view']->make('confide::forgot_password');
     }
 }

@@ -34,7 +34,7 @@ class ConfideServiceProvider extends ServiceProvider {
 
 	    App::singleton('confide', function($app)
 		{
-		    return new Confide($app['view'], $app['config'], $app['db']);
+		    return new Confide($app);
 		});
 
 	    $this->commands(
