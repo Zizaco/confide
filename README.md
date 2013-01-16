@@ -6,13 +6,28 @@ Confide is a authentication solution for **Laravel4** made to eliminate repetiti
 
 Confide aims to be simple to use, quick to configure and flexible.
 
+## Features
+
+**Current:**
+- Account confirmation (through confirmation link).
+- Password reset (sending email with new password).
+- Easily render forms for login, signup and password reset.
+- Generate customizable routes for login, signup, password reset, confirmation, etc.
+- Generate a customizable controller that handles the basic user account actions
+- Contains a set of methods to help basic user features.
+- Integrated with the Laravel Auth component/configs.
+
+**Planned:**
+- Captcha in user signup and password reset.
+- General improvements.
+
 ## Quick start
 
 ### Required setup
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "v0.3beta"
+    "zizaco/confide": "<dev-master"
 
 Run the Composer update comand
 
@@ -40,11 +55,21 @@ At the end of `config/app.php` add `'Confide'    => 'Zizaco\Confide\ConfideFacad
 
     ),
 
+### Configuration
+
+Set the properly values to the `config/auth.php`. This values will be used by confide to generate the database migration and to generate controllers and routes.
+
+Set the `address` and `name` from the `from` array in `config/mail.php`. Those will be used to send account confirmation and password reset emails to the users.
+
 ### User model
 
-Now run the Confide migration
+Now generate the Confide migration
 
-    $ php artisan migrate --package zizaco/confide
+    $ php artisan confide:migration
+
+It will generate the `<timestamp>_confide_setup_users_table.php` migration. You may now run it with the artisan migrate command:
+
+    $ php artisan migrate
 
 It will setup a table containing `username`, `email`, `password`, `confirmation_code` and `confirmed` fields, which are the default fields needed for Confide use. Feel free to add more fields to the database.
 

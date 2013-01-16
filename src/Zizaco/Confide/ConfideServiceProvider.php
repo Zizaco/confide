@@ -39,7 +39,8 @@ class ConfideServiceProvider extends ServiceProvider {
 
 	    $this->commands(
 	    	'Zizaco\Confide\ControllerCommand',
-	    	'Zizaco\Confide\RoutesCommand'
+	    	'Zizaco\Confide\RoutesCommand',
+	    	'Zizaco\Confide\MigrationCommand'
 	    );
 	    
 	}

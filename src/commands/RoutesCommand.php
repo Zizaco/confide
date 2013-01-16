@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use View;
+use Config;
 
 class RoutesCommand extends Command {
 
@@ -78,7 +79,7 @@ class RoutesCommand extends Command {
     protected function getOptions()
     {
         return array(
-            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', null),
+            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', Config::get('auth.model')),
         );
     }
 
