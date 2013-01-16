@@ -2,6 +2,7 @@
 
 use Illuminate\View\Environment;
 use Illuminate\Config\Repository;
+use ObjectProvier;
 
 class Confide
 {
@@ -18,6 +19,13 @@ class Confide
     public $_app;
 
     /**
+     * Object provider
+     * 
+     * @var Zizaco\Confide\ObjectProvider
+     */
+    public $_obj_provider;
+
+    /**
      * Create a new confide instance.
      * 
      * @param  Illuminate\Foundation\Application  $app
@@ -26,6 +34,7 @@ class Confide
     public function __construct($app)
     {
         $this->_app = $app;
+        $this->_obj_provider = new ObjectProvider;
     }
 
     /**
@@ -39,7 +48,7 @@ class Confide
     }
 
     /**
-     * Returns the model used for authent
+     * Returns the model set in auth config
      *
      * @return string
      */
@@ -47,7 +56,8 @@ class Confide
     {
         $model = $this->_app['config']->get('auth.model');
 
-        return new $model;
+        return $this->_obj_provider->getObject( $model );
+
     }
 
     /**
