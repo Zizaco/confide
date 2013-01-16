@@ -48,6 +48,16 @@ class Confide
     }
 
     /**
+     * Returns the Laravel application
+     * 
+     * @return Illuminate\Foundation\Application
+     */
+    public function app()
+    {
+        return $this->_app;
+    }
+
+    /**
      * Returns the model set in auth config
      *
      * @return string
@@ -73,7 +83,7 @@ class Confide
     /**
      * Set the user confirmation to true.
      *
-     * @param string  $code
+     * @param string $code
      * @return bool
      */
     public function confirm( $code )

@@ -23,12 +23,25 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
     protected $hidden = array('password');
 
     /**
+     * Laravel application
+     * 
+     * @var Illuminate\Foundation\Application
+     */
+    public static $_app;
+
+    /**
      * Create a new ConfideUser instance.
      */
     public function __construct()
     {
         parent::__construct();
-        $this->table = Config::get('auth.table');
+
+        if ( ! ConfideUser::$_app )
+        {
+            ConfideUser::$_app = Confide::app();
+        }
+
+        $this->table = ConfideUser::$_app['config']->get('auth.table');
     }
 
     /**
@@ -70,11 +83,11 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
      */
     public function resetPassword()
     {
-        $new_password = substr(md5(microtime().Config::get('app.key')),-9);
-        $this->password = Hash::make($new_password);
+        $new_password = substr(md5(microtime().ConfideUser::$_app['config']->get('app.key')),-9);
+        $this->password = ConfideUser::$_app['hash']->make($new_password);
         if ( $this->save() )
         {
-            Mail::send(
+            ConfideUser::$_app['mail']->send(
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
                 function($m){
@@ -100,18 +113,36 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = md5(microtime().Config::get('app.key'));
+            $this->confirmation_code = md5(microtime().ConfideUser::$_app['config']->get('app.key'));
         }
 
-        if ( parent::save($this) )
+        if ( $this->real_save() )
         {
-            Mail::send('confide::emails.confirm', ['user' => $this], function($m)
+            ConfideUser::$_app['mail']->send('confide::emails.confirm', ['user' => $this], function($m)
             {
                 $m->to( $this->email )
                 ->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
             });
 
             return true;
+        }
+    }
+
+    /**
+     * Runs the real eloquent save method or returns
+     * true if it's under testing. Because eloquent
+     * save method is not Confide's responsibility.
+     *
+     * @return bool
+     */
+    private function real_save()
+    {
+        if ( isset($GLOBALS['_phpunit_confide_test']) )
+        {
+            return true;
+        }
+        else{
+            return parent::save($this);
         }
     }
 
