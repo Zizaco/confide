@@ -1,4 +1,4 @@
-
+{{ "\n\n" }}
 // Confide Routes
 Route::get( '{{ lcfirst(substr($name,0,-10)) }}/create',          '{{ $name }}@create');
 Route::post('{{ lcfirst(substr($name,0,-10)) }}',                 '{{ $name }}@store');
