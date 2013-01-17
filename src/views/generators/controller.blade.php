@@ -28,10 +28,17 @@ class {{ $name }} extends BaseController {
     public function store()
     {
         ${{ lcfirst(Config::get('auth.model')) }} = new {{ Config::get('auth.model') }};
+
         ${{ lcfirst(Config::get('auth.model')) }}->username = Input::get( 'username' );
         ${{ lcfirst(Config::get('auth.model')) }}->email = Input::get( 'email' );
-        ${{ lcfirst(Config::get('auth.model')) }}->password = Hash::make(Input::get( 'password' ));
+        ${{ lcfirst(Config::get('auth.model')) }}->password = Input::get( 'password' );
 
+        // The password confirmation will be removed from model
+        // before saving. This field will be used in Ardent's
+        // auto validation.
+        ${{ lcfirst(Config::get('auth.model')) }}->password_confirmation = Input::get( 'password_confirmation' );
+
+        // Save if valid. Password field will be hashed before save
         ${{ lcfirst(Config::get('auth.model')) }}->save();
 
         if ( ${{ lcfirst(Config::get('auth.model')) }}->id )
@@ -40,8 +47,12 @@ class {{ $name }} extends BaseController {
         }
         else
         {
+            // Get validation errors (see Ardent package)
+            $error = ${{ lcfirst(Config::get('auth.model')) }}->getErrors()->all();
+
             return Redirect::action('{{ $name }}@create')
-                ->withInput(Input::except('password'));
+                ->withInput(Input::except('password'))
+                ->with( 'error', $error );
         }
     }
 
