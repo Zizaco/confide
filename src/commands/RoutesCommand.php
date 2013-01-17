@@ -3,8 +3,6 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use View;
-use Config;
 
 class RoutesCommand extends Command {
 
@@ -30,7 +28,7 @@ class RoutesCommand extends Command {
     public function __construct()
     {
         parent::__construct();
-        View::addNamespace('confide',substr(__DIR__,0,-8).'views');
+        app()['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
     }
 
     /**
@@ -79,7 +77,7 @@ class RoutesCommand extends Command {
     protected function getOptions()
     {
         return array(
-            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', Config::get('auth.model')),
+            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', app()['config']->get('auth.model')),
         );
     }
 
@@ -114,7 +112,7 @@ class RoutesCommand extends Command {
     protected function appendRoutes( $name = '' )
     {        
         $routes_file = $this->laravel->path.'/routes.php';
-        $confide_routes = View::make('confide::generators.routes')->with(['name'=>$name])->render();
+        $confide_routes = app()['view']->make('confide::generators.routes')->with(['name'=>$name])->render();
 
         if( file_exists( $routes_file ) )
         {

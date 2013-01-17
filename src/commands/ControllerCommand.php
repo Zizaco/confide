@@ -3,8 +3,6 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use View;
-use Config;
 
 class ControllerCommand extends Command {
 
@@ -30,7 +28,7 @@ class ControllerCommand extends Command {
     public function __construct()
     {
         parent::__construct();
-        View::addNamespace('confide',substr(__DIR__,0,-8).'views');
+        app()['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
     }
 
     /**
@@ -83,7 +81,7 @@ class ControllerCommand extends Command {
     protected function getOptions()
     {
         return array(
-            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', Config::get('auth.model')),
+            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', app()['config']->get('auth.model')),
         );
     }
 
@@ -118,7 +116,7 @@ class ControllerCommand extends Command {
     protected function createController( $name = '' )
     {
         $controller_file = $this->laravel->path."/controllers/$name.php";
-        $output = View::make('confide::generators.controller')->with(['name'=>$name])->render();
+        $output = app()['view']->make('confide::generators.controller')->with(['name'=>$name])->render();
 
         if( ! file_exists( $controller_file ) )
         {
