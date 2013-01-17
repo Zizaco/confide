@@ -13,6 +13,13 @@ class ConfideUser extends Ardent implements UserInterface {
     protected $table = 'users';
 
     /**
+     * Laravel application
+     * 
+     * @var Illuminate\Foundation\Application
+     */
+    public static $_app;
+
+    /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
@@ -20,11 +27,11 @@ class ConfideUser extends Ardent implements UserInterface {
     protected $hidden = array('password');
 
     /**
-     * Laravel application
-     * 
-     * @var Illuminate\Foundation\Application
+     * List of attribute names which should be hashed. (Ardent)
+     *
+     * @var array
      */
-    public static $_app;
+    public static $passwordAttributes = array('password');
 
     /**
      * Ardent validation rules
@@ -34,8 +41,8 @@ class ConfideUser extends Ardent implements UserInterface {
     public static $rules = array(
       'username' => 'required|alpha_dash|between:4,16',
       'email' => 'required|email',
-      'password' => 'required|alpha_dash|between:4,11|confirmed',
-      'password_confirmation' => 'required|alpha_dash|between:4,11',
+      'password' => 'required|between:4,11|confirmed',
+      'password_confirmation' => 'required|between:4,11',
     );
 
     /**
@@ -94,12 +101,12 @@ class ConfideUser extends Ardent implements UserInterface {
         $this->password = static::$_app['hash']->make($new_password);
         if ( $this->save() )
         {
-            static::$_app['mail']->send(
+            static::$_app['mailer']->send(
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
                 function($m){
                     $m->to( $this->email )
-                    ->subject( Lang::get('confide::confide.email.password_reset.subject') );
+                    ->subject( static::$_app['translator']->get('confide::confide.email.password_reset.subject') );
                 }
             );
 
@@ -129,6 +136,15 @@ class ConfideUser extends Ardent implements UserInterface {
             $this->confirmation_code = md5(microtime().static::$_app['config']->get('app.key'));
         }
 
+        /*
+         * Remove password_confirmation field before save to
+         * database.
+         */
+        if ( isset($this->password_confirmation) )
+        {
+            unset( $this->password_confirmation );
+        }
+
         return true;
     }
 
@@ -143,10 +159,10 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( $success  and ! $this->confirmed )
         {
-            static::$_app['mail']->send('confide::emails.confirm', ['user' => $this], function($m)
+            static::$_app['mailer']->send('confide::emails.confirm', ['user' => $this], function($m)
             {
                 $m->to( $this->email )
-                ->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
+                ->subject( static::$_app['translator']->get('confide::confide.email.account_confirmation.subject') );
             });
 
             return true;

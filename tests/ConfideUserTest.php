@@ -62,8 +62,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     public function testShouldResetPassword()
     {
         // Should send an email once
-        ConfideUser::$_app['mail'] = m::mock( 'Mail' );
-        ConfideUser::$_app['mail']->shouldReceive('send')
+        ConfideUser::$_app['mailer'] = m::mock( 'Mail' );
+        ConfideUser::$_app['mailer']->shouldReceive('send')
             ->andReturn( null )
             ->atLeast(1);
 
@@ -82,8 +82,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     public function testShouldGenerateConfirmationCodeOnSave()
     {
         // Should send an email once
-        ConfideUser::$_app['mail'] = m::mock( 'Mail' );
-        ConfideUser::$_app['mail']->shouldReceive('send')
+        ConfideUser::$_app['mailer'] = m::mock( 'Mail' );
+        ConfideUser::$_app['mailer']->shouldReceive('send')
             ->andReturn( null )
             ->once();
 
@@ -132,8 +132,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->with( 'app.key' )
             ->andReturn( '123' );
 
-        $app['mail'] = m::mock( 'Mail' );
-        $app['mail']->shouldReceive('send')
+        $app['mailer'] = m::mock( 'Mail' );
+        $app['mailer']->shouldReceive('send')
             ->andReturn( null );
 
         $app['hash'] = m::mock( 'Hash' );

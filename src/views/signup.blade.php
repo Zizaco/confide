@@ -9,8 +9,8 @@
         <label for="password">{{ Lang::get('confide::confide.password'); }}</label>
         <input placeholder="{{ Lang::get('confide::confide.password'); }}" type="password" name="password" id="password">
 
-        <label for="password2">{{ Lang::get('confide::confide.password2'); }}</label>
-        <input placeholder="{{ Lang::get('confide::confide.password2'); }}" type="password" name="password2" id="password2">
+        <label for="password_confirmation">{{ Lang::get('confide::confide.password_confirmation'); }}</label>
+        <input placeholder="{{ Lang::get('confide::confide.password_confirmation'); }}" type="password" name="password_confirmation" id="password_confirmation">
 
         @if ( Session::get('error') )
             <div class="alert alert-error">
