@@ -18,6 +18,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Generate a customizable controller that handles the basic user account actions
 - Contains a set of methods to help basic user features.
 - Integrated with the Laravel Auth component/configs.
+- Field/model validation (Powered by [Ardent](https://github.com/laravelbook/ardent "Ardent"))
 
 **Planned:**
 - Captcha in user signup and password reset.
@@ -98,7 +99,8 @@ Don't forget to dump composer autoload
 
     $ composer dump-autoload
 
-And you are ready to go. Access `http://yourapp/user/create` to create your first user. Check the `app/routes.php` to see the available routes.
+**And you are ready to go.**
+Access `http://yourapp/user/create` to create your first user. Check the `app/routes.php` to see the available routes.
 
 ## Usage in detail
 
@@ -108,7 +110,7 @@ And you are ready to go. Access `http://yourapp/user/create` to create your firs
 2. Correct model and table names in `config/auth.php`. They will be used by Confide all the time.
 3. `from` configuration in `config/mail.php`.
 
-**Aditional steps:**
+**Configuration:**
 
 1. `ConfideServiceProvider` and `ConfideFacade` entry in `config/app.php` `'providers'` and `'aliases'` respectively.
 2. User model (with the same name as in `config/auth.php`) should extend `ConfideUser` class. This will cause to methods like `resetPassword()`, `confirm()` and a overloaded `save()` to be available.
@@ -120,6 +122,8 @@ And you are ready to go. Access `http://yourapp/user/create` to create your firs
 3. Generate routes matching the controller template throught the artisan command `$ php artisan confide:routes`. Your `routes.php` will **NOT** be overwritten.
 
 ### Advanced
+
+#### Using custom table / model name
 
 You can change the model name that will be authenticated in the `config/auth.php` file.
 Confide uses the values present in that configuration file.
@@ -134,6 +138,29 @@ Then, when dumping the routes, you should use the --controller option to match t
 
     $ php artisan confide::routes --controller Employee
 
+#### Validate model fields
+
+To change the validation rules of the User model you can take a look at [Ardent](https://github.com/laravelbook/ardent#effortless-validation-with-ardent "Ardent Validation Rulez"). For example:
+
+    <?php
+
+    use Zizaco\Confide\ConfideUser;
+
+    class User extends ConfideUser {
+
+        /**
+         * Validation rules
+         */
+        public static $rules = array(
+            'username' => 'required|alpha_dash|between:6,12',
+            'email' => 'required|email',
+            'password' => 'required|between:4,11|confirmed',
+            'password_confirmation' => 'required|between:4,11',
+        );
+
+    }
+
+Feel free to add more fields to your table and to the validation array. Then you should build you own signup form with the aditional fields.
 
 ## License
 
