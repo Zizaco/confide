@@ -1,7 +1,5 @@
 <?php namespace Zizaco\Confide;
 
-use App;
-use Artisan;
 use Illuminate\Support\ServiceProvider;
 
 define('CONFIDE_VERSION', '0.4beta');
@@ -44,7 +42,7 @@ class ConfideServiceProvider extends ServiceProvider {
 	 */
 	private function registerConfide()
 	{
-		App::bind('confide', function($app)
+		$this->app->bind('confide', function($app)
 		{
 		    return new Confide($app);
 		});

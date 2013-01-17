@@ -26,8 +26,11 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testGetVersion()
     {
+        if( ! defined('CONFIDE_VERSION') )
+            define('CONFIDE_VERSION','test');
+
         $is = $this->confide->version();
-        $should_be = 'Confide v'.Confide::VERSION;
+        $should_be = 'Confide v'.CONFIDE_VERSION;
 
         $this->assertEquals( $should_be, $is );
     }

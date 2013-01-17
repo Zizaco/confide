@@ -7,11 +7,6 @@ use ObjectProvier;
 class Confide
 {
     /**
-     * Confide Vesion
-     */
-    const VERSION = '0.4';
-
-    /**
      * Laravel application
      * 
      * @var Illuminate\Foundation\Application
@@ -44,7 +39,7 @@ class Confide
      */
     public function version()
     {
-        return 'Confide v'.Confide::VERSION;
+        return 'Confide v'.CONFIDE_VERSION;
     }
 
     /**

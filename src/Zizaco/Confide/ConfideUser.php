@@ -1,10 +1,6 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\UserInterface;
-use Config;
-use Mail;
-use Hash;
-use Lang;
 
 class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInterface {
 
@@ -36,12 +32,10 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
     {
         parent::__construct();
 
-        if ( ! ConfideUser::$_app )
-        {
-            ConfideUser::$_app = Confide::app();
-        }
+        if ( ! static::$_app )
+            static::$_app = app();
 
-        $this->table = ConfideUser::$_app['config']->get('auth.table');
+        $this->table = static::$_app['config']->get('auth.table');
     }
 
     /**
@@ -83,11 +77,11 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
      */
     public function resetPassword()
     {
-        $new_password = substr(md5(microtime().ConfideUser::$_app['config']->get('app.key')),-9);
-        $this->password = ConfideUser::$_app['hash']->make($new_password);
+        $new_password = substr(md5(microtime().static::$_app['config']->get('app.key')),-9);
+        $this->password = static::$_app['hash']->make($new_password);
         if ( $this->save() )
         {
-            ConfideUser::$_app['mail']->send(
+            static::$_app['mail']->send(
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
                 function($m){
@@ -113,12 +107,12 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = md5(microtime().ConfideUser::$_app['config']->get('app.key'));
+            $this->confirmation_code = md5(microtime().static::$_app['config']->get('app.key'));
         }
 
         if ( $this->real_save() )
         {
-            ConfideUser::$_app['mail']->send('confide::emails.confirm', ['user' => $this], function($m)
+            static::$_app['mail']->send('confide::emails.confirm', ['user' => $this], function($m)
             {
                 $m->to( $this->email )
                 ->subject( Lang::get('confide::confide.email.account_confirmation.subject') );
