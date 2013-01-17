@@ -4,7 +4,7 @@
 
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
 
-Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, and other password reset.
+Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
 
@@ -30,7 +30,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "<dev-master"
+    "zizaco/confide": "dev-master"
 
 Run the Composer update comand
 
