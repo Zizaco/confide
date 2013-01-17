@@ -13,7 +13,11 @@
         <input placeholder="{{ Lang::get('confide::confide.password2'); }}" type="password" name="password2" id="password2">
 
         @if ( Session::get('error') )
-            <div class="alert alert-error">{{ Session::get('error'); }}</div>
+            <div class="alert alert-error">
+                @if ( is_array(Session::get('error')) )
+                    {{ Session::get('error')[0] }}
+                @endif
+            </div>
         @endif
 
         @if ( Session::get('notice') )

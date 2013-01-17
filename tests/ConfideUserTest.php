@@ -26,7 +26,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
          * save method is not Confide's responsibility.
          *
          */
-        $GLOBALS['_phpunit_confide_test'] = true;
+        define('CONFIDE_TEST', true);
     }
 
     public function setUp()
@@ -88,6 +88,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->once();
 
         $this->populateUser();
+        $this->confide_user->confirmation_code = '';
+        $this->confide_user->confirmed = false;
 
         $old_cc = $this->confide_user->confirmation_code;
 

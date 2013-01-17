@@ -1,8 +1,9 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\UserInterface;
+use LaravelBook\Ardent\Ardent;
 
-class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInterface {
+class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * The database table used by the model.
@@ -24,6 +25,18 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
      * @var Illuminate\Foundation\Application
      */
     public static $_app;
+
+    /**
+     * Ardent validation rules
+     *
+     * @var array
+     */
+    public static $rules = array(
+      'username' => 'required|alpha_dash|between:4,16',
+      'email' => 'required|email',
+      'password' => 'required|alpha_dash|between:4,11|confirmed',
+      'password_confirmation' => 'required|alpha_dash|between:4,11',
+    );
 
     /**
      * Create a new ConfideUser instance.
@@ -97,20 +110,38 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
         }
     }
 
+    public function save( $rules = array(), $customMessages = array(), Closure $beforeSave = null, Closure $afterSave = null )
+    {
+        return $this->real_save( $rules, $customMessages, $beforeSave, $afterSave );
+    }
+
     /**
-     * Saves the user. Generate a confirmation code if
-     * is a new user.
+     * Ardent method overloading:
+     * Before save the user. Generate a confirmation
+     * code if is a new user.
      *
      * @return bool
      */
-    public function save()
+    public function beforeSave()
     {
         if ( empty($this->id) )
         {
             $this->confirmation_code = md5(microtime().static::$_app['config']->get('app.key'));
         }
 
-        if ( $this->real_save() )
+        return true;
+    }
+
+    /**
+     * Ardent method overloading:
+     * After save, delivers the confirmation link email.
+     * code if is a new user.
+     *
+     * @return bool
+     */
+    public function afterSave( $success )
+    {
+        if ( $success  and ! $this->confirmed )
         {
             static::$_app['mail']->send('confide::emails.confirm', ['user' => $this], function($m)
             {
@@ -124,19 +155,22 @@ class ConfideUser extends \Illuminate\Database\Eloquent\Model implements UserInt
 
     /**
      * Runs the real eloquent save method or returns
-     * true if it's under testing. Because eloquent
-     * save method is not Confide's responsibility.
+     * true if it's under testing. Because Eloquent
+     * and Ardent save methods are not Confide's
+     * responsibility.
      *
      * @return bool
      */
-    private function real_save()
+    private function real_save( $rules, $customMessages, $beforeSave, $afterSave )
     {
-        if ( isset($GLOBALS['_phpunit_confide_test']) )
+        if ( defined('CONFIDE_TEST') )
         {
+            $this->beforeSave();
+            $this->afterSave( true );
             return true;
         }
         else{
-            return parent::save($this);
+            return parent::save( $rules, $customMessages, $beforeSave, $afterSave );
         }
     }
 
