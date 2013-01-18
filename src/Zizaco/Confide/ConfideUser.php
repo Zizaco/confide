@@ -34,6 +34,14 @@ class ConfideUser extends Ardent implements UserInterface {
     public static $passwordAttributes = array('password');
 
     /**
+     * This way the model will automatically replace the plain-text password
+     * attribute (from $passwordAttributes) with the hash checksum on save
+     *
+     * @var bool
+     */
+    public $autoHashPasswordAttributes = true;
+
+    /**
      * Ardent validation rules
      *
      * @var array
