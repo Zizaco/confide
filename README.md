@@ -18,7 +18,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Generate a customizable controller that handles the basic user account actions
 - Contains a set of methods to help basic user features.
 - Integrated with the Laravel Auth component/configs.
-- Field/model validation (Powered by [Ardent](https://github.com/laravelbook/ardent "Ardent"))
+- Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent"))
 
 **Planned:**
 - Captcha in user signup and password reset.
@@ -140,7 +140,7 @@ Then, when dumping the routes, you should use the --controller option to match t
 
 #### Validate model fields
 
-To change the validation rules of the User model you can take a look at [Ardent](https://github.com/laravelbook/ardent#effortless-validation-with-ardent "Ardent Validation Rulez"). For example:
+To change the validation rules of the User model you can take a look at [Ardent](http://laravelbook.github.com/ardent/#validation "Ardent Validation Rulez"). For example:
 
     <?php
 
