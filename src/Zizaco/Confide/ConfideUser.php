@@ -109,6 +109,8 @@ class ConfideUser extends Ardent implements UserInterface {
         $this->password = static::$_app['hash']->make($new_password);
         if ( $this->save() )
         {
+            $this->fixViewHint();
+
             static::$_app['mailer']->send(
                 'confide::emails.passwordreset',
                 ['user' => $this, 'new_password' => $new_password],
@@ -167,6 +169,8 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( $success  and ! $this->confirmed )
         {
+            $this->fixViewHint();
+
             static::$_app['mailer']->send('confide::emails.confirm', ['user' => $this], function($m)
             {
                 $m->to( $this->email )
@@ -198,4 +202,9 @@ class ConfideUser extends Ardent implements UserInterface {
         }
     }
 
+    private function fixViewHint()
+    {
+        if (isset(static::$_app['view.finder']))
+            static::$_app['view.finder']->addNamespace('confide', __DIR__.'/../../views');
+    }
 }
