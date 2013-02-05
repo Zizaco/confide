@@ -19,7 +19,7 @@ return array(
         'title' => 'Login',
         'desc' => 'Enter your credentials',
         'forgot_password' => '(forgot password)',
-        'remamber' => 'Remamber me',
+        'remember' => 'Remamber me',
         'submit' => 'Login',
     ),
 

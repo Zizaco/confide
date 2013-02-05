@@ -19,7 +19,7 @@ return array(
         'title' => 'Entrar',
         'desc' => 'Entre suas credenciais',
         'forgot_password' => '(esqueci minha senha)',
-        'remamber' => 'Continuar conectado',
+        'remember' => 'Continuar conectado',
         'submit' => 'Entrar',
     ),
 
