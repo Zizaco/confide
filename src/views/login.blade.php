@@ -11,7 +11,7 @@
         </label>
         <input tabindex="2" placeholder="{{ Lang::get('confide::confide.password'); }}" type="password" name="password" id="password">
 
-        <label for="remember" class="checkbox">{{ Lang::get('confide::confide.login.remamber'); }}
+        <label for="remember" class="checkbox">{{ Lang::get('confide::confide.login.remember'); }}
             <input type="hidden" name="remember" value="0">
             <input tabindex="4" type="checkbox" name="remember" id="remember" value="1">
         </label>

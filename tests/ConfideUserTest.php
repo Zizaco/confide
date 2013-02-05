@@ -57,6 +57,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $this->populateUser();
 
         $this->assertTrue( $this->confide_user->confirm() );
+
+        $this->assertEquals( 1, $this->confide_user->confirmed );
     }
 
     public function testShouldResetPassword()

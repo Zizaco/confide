@@ -94,7 +94,7 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function confirm()
     {
-        $this->confirmed = true;
+        $this->confirmed = 1;
         return $this->save();
     }
 
@@ -176,9 +176,9 @@ class ConfideUser extends Ardent implements UserInterface {
                 $m->to( $this->email )
                 ->subject( static::$_app['translator']->get('confide::confide.email.account_confirmation.subject') );
             });
-
-            return true;
         }
+
+        return true;
     }
 
     /**
