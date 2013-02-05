@@ -106,7 +106,9 @@ class ConfideUser extends Ardent implements UserInterface {
     public function resetPassword()
     {
         $new_password = substr(md5(microtime().static::$_app['config']->get('app.key')),-9);
-        $this->password = static::$_app['hash']->make($new_password);
+        $this->password = $new_password;
+        $this->password_confirmation = $new_password;
+
         if ( $this->save() )
         {
             $this->fixViewHint();
