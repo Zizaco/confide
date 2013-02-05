@@ -164,9 +164,10 @@ class ConfideUser extends Ardent implements UserInterface {
      * After save, delivers the confirmation link email.
      * code if is a new user.
      *
+     * @param bool $forced Indicates whether the user is being saved forcefully
      * @return bool
      */
-    public function afterSave( $success )
+    public function afterSave( $success,  $forced = false )
     {
         if ( $success  and ! $this->confirmed )
         {
