@@ -137,6 +137,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * Before save the user. Generate a confirmation
      * code if is a new user.
      *
+     * @param bool $forced Indicates whether the user is being saved forcefully
      * @return bool
      */
     public function beforeSave( $forced = false )
