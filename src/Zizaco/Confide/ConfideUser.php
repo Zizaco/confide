@@ -139,7 +139,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return bool
      */
-    public function beforeSave()
+    public function beforeSave( $forced = false )
     {
         if ( empty($this->id) )
         {
