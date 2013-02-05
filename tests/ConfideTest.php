@@ -91,13 +91,25 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $hash = m::mock('Illuminate\Hashing\HasherInterface');
         $hash->shouldReceive('check')
             ->andReturn( true )
-            ->once();
+            ->times(2); // 2 successfull logins
         $this->confide->_app['hash'] = $hash;
 
         $this->objProviderShouldReturn( 'User', $confide_user );
 
         $this->assertTrue( 
             $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ) )
+        );
+
+        // Should not login with unconfirmed user.
+        $this->assertFalse( 
+            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ), true )
+        );
+
+        $confide_user->confirmed = 1;
+
+        // Should login because now the user is confirmed
+        $this->assertTrue( 
+            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ), true )
         );
     }
 
@@ -144,6 +156,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $confide_user = m::mock( 'Illuminate\Auth\UserInterface' );
         $confide_user->username = 'uname';
         $confide_user->password = '123123';
+        $confide_user->confirmed = 0;
         $confide_user->shouldReceive('where','get', 'orWhere','first', 'all')
             ->andReturn( $confide_user );
 
@@ -197,8 +210,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $obj_provider = m::mock('ObjectProvider');
         $obj_provider->shouldReceive('getObject')
             ->with($class)
-            ->andReturn( $obj )
-            ->once();
+            ->andReturn( $obj );
         
         $this->confide->_obj_provider = $obj_provider;
     }

@@ -100,16 +100,17 @@ class Confide
      * password and username or email.
      *
      * @param  array $arguments
+     * @param  bool $confirmed_only
      * @return void
      */
-    public function logAttempt( $credentials )
+    public function logAttempt( $credentials, $confirmed_only = false )
     {
         $user = $this->model()
             ->where('email','=',$credentials['email'])
             ->orWhere('username','=',$credentials['email'])
             ->first();
 
-        if ( ! is_null($user) and $this->_app['hash']->check($credentials['password'], $user->password) )
+        if ( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->_app['hash']->check($credentials['password'], $user->password) )
         {
             $this->_app['auth']->login( 
                 $user,
@@ -117,6 +118,10 @@ class Confide
             );
 
             return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
