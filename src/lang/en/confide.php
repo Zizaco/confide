@@ -19,7 +19,7 @@ return array(
         'title' => 'Login',
         'desc' => 'Enter your credentials',
         'forgot_password' => '(forgot password)',
-        'remember' => 'Remamber me',
+        'remember' => 'Remember me',
         'submit' => 'Login',
     ),
 
@@ -31,6 +31,7 @@ return array(
     'alerts' => array(
         'account_created' => 'Your account has been successfuly created. Please check your email for the instructions on how to confirm your account.',
         'wrong_credentials' => 'Incorrect username, email or password.',
+        'not confirmed' => 'Your account may not be confirmed. Check your email for the confirmation link',
         'confirmation' => 'Your account has been confirmed! You may now login.',
         'wrong_confirmation' => 'Wrong confirmation code.',
         'password_reset' => 'A new password has been sent to your email.',

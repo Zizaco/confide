@@ -31,6 +31,7 @@ return array(
     'alerts' => array(
         'account_created' => 'Sua conta foi criada com sucesso! Por favor verifique em seu e-mail as instruções para confirmar a sua conta.',
         'wrong_credentials' => 'Nome de usuário ou senha incorretos.',
+        'not confirmed' => 'Sua conta pode não estar confirmada. Verifique seu email e procure pelo link de confirmação',
         'confirmation' => 'Sua conta foi confirmada! Você pode entrar agora.',
         'wrong_confirmation' => 'Código de confirmação incorreto.',
         'password_reset' => 'Um novo password foi enviado ao seu e-mail.',
