@@ -1,4 +1,5 @@
 {{ '<?php' }}
+<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,9 @@ class {{ $name }} extends BaseController {
 
         if ( ${{ lcfirst(Config::get('auth.model')) }}->id )
         {
-            return Redirect::action('{{ $name }}@login');
+            // Redirect with success message, You may replace "Lang::get(..." for your custom message.
+            return Redirect::action('{{ $name }}@login')
+                ->with( 'notice', Lang::get('confide::confide.alerts.account_created'); )
         }
         else
         {
@@ -72,11 +75,14 @@ class {{ $name }} extends BaseController {
     public function do_login()
     {
         $input = array(
-            'email' => Input::get( 'email' ),
+            'email'    => Input::get( 'email' ), // May be the username too
             'password' => Input::get( 'password' ),
             'remamber' => Input::get( 'remember' ),
         );
 
+        // If you wish to only allow login from confirmed users, call logAttempt
+        // with the second parameter as true.
+        // logAttempt will check if the 'email' perhaps is the username.
         if ( Confide::logAttempt( $input ) ) 
         {
             return Redirect::to('/');

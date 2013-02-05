@@ -29,6 +29,7 @@ return array(
     ),
 
     'alerts' => array(
+        'account_created' => 'Your account has been successfuly created. Please check your email for the instructions on how to confirm your account.',
         'wrong_credentials' => 'Incorrect username, email or password.',
         'confirmation' => 'Your account has been confirmed! You may now login.',
         'wrong_confirmation' => 'Wrong confirmation code.',

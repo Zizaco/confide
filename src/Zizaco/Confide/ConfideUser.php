@@ -202,6 +202,13 @@ class ConfideUser extends Ardent implements UserInterface {
         }
     }
 
+    /**
+     * Add the namespace 'confide::' to view hints.
+     * this makes possible to send emails using package views from
+     * the command line.
+     *
+     * @return void
+     */
     private function fixViewHint()
     {
         if (isset(static::$_app['view.finder']))
