@@ -50,7 +50,6 @@ class ConfideUser extends Ardent implements UserInterface {
       'username' => 'required|alpha_dash|between:4,16',
       'email' => 'required|email',
       'password' => 'required|between:4,11|confirmed',
-      'password_confirmation' => 'required|between:4,11',
     );
 
     /**
@@ -202,6 +201,17 @@ class ConfideUser extends Ardent implements UserInterface {
             return true;
         }
         else{
+
+            /*
+             * This will make sure that a non modified password
+             * will not trigger validation error.
+             */
+            if( empty($rules) && $this->password == $this->getOriginal('password') )
+            {
+                $rules = static::$rules;
+                $rules['password'] = 'required';
+            }
+
             return parent::save( $rules, $customMessages, $beforeSave, $afterSave );
         }
     }
