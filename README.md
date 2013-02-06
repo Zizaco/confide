@@ -15,10 +15,10 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Password reset (sending email with new password).
 - Easily render forms for login, signup and password reset.
 - Generate customizable routes for login, signup, password reset, confirmation, etc.
-- Generate a customizable controller that handles the basic user account actions
+- Generate a customizable controller that handles the basic user account actions.
 - Contains a set of methods to help basic user features.
 - Integrated with the Laravel Auth component/configs.
-- Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent"))
+- Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 
 **Planned:**
 - Captcha in user signup and password reset.

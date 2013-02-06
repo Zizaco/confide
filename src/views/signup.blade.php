@@ -1,4 +1,5 @@
 <form method="POST" action="{{ (URL::action('UserController@store')) ?: '/user' ; }}" accept-charset="UTF-8">
+    <input type="hidden" name="csrf_token" value="{{ Session::getToken() }}">
     <fieldset>
         <label for="username">{{ Lang::get('confide::confide.username'); }}</label>
         <input placeholder="{{ Lang::get('confide::confide.username'); }}" type="text" name="username" id="username" value="{{ Input::old('username') }}">
