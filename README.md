@@ -155,12 +155,23 @@ To change the validation rules of the User model you can take a look at [Ardent]
             'username' => 'required|alpha_dash|between:6,12',
             'email' => 'required|email',
             'password' => 'required|between:4,11|confirmed',
-            'password_confirmation' => 'required|between:4,11',
         );
 
     }
 
 Feel free to add more fields to your table and to the validation array. Then you should build you own signup form with the aditional fields.
+
+#### RESTful controller
+
+If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) user controller you can use the aditional `--restful` or `-r` option.
+
+    $ php artisan confide::controller --restful
+
+Will result in a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers)
+
+Then, when dumping the routes, you should use the --restful option to match the existing controller.
+
+    $ php artisan confide::routes --restful
 
 ## License
 
