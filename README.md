@@ -163,7 +163,7 @@ Feel free to add more fields to your table and to the validation array. Then you
 
 #### RESTful controller
 
-If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) user controller you can use the aditional `--restful` or `-r` option.
+If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) you can use the aditional `--restful` or `-r` option.
 
     $ php artisan confide::controller --restful
 
@@ -179,4 +179,6 @@ Confide is free software distributed under the terms of the MIT license
 
 ## Aditional information
 
-Any questions, feel free to contact me.
+Any questions, feel free to contact me or ask [here](http://forums.laravel.io/viewtopic.php?id=4658)
+
+Any issues, please [report here](https://github.com/Zizaco/confide/issues)
