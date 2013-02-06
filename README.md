@@ -130,13 +130,13 @@ Confide uses the values present in that configuration file.
 
 To change the controller name when dumping the default controller template you can use the --name option.
 
-    $ php artisan confide::controller --name Employee
+    $ php artisan confide:controller --name Employee
 
 Will result in `EmployeeController`
 
 Then, when dumping the routes, you should use the --controller option to match the existing controller.
 
-    $ php artisan confide::routes --controller Employee
+    $ php artisan confide:routes --controller Employee
 
 #### Validate model fields
 
@@ -165,13 +165,13 @@ Feel free to add more fields to your table and to the validation array. Then you
 
 If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) you can use the aditional `--restful` or `-r` option.
 
-    $ php artisan confide::controller --restful
+    $ php artisan confide:controller --restful
 
 Will result in a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers)
 
 Then, when dumping the routes, you should use the --restful option to match the existing controller.
 
-    $ php artisan confide::routes --restful
+    $ php artisan confide:routes --restful
 
 ## License
 
