@@ -39,11 +39,23 @@ class RoutesCommand extends Command {
     public function fire()
     {
         $name = $this->prepareName($this->option('controller'));
+        $restful = $this->option('restful');
 
         $this->line('');
         $this->info( "Routes file: app/routes.php" );
-        $message = "The default Confide routes (to use with the Controller template)".
-        " will be appended to your routes.php file.";
+
+        if(! $restful)
+        {
+            $message = "The default Confide routes (to use with the Controller template)".
+            " will be appended to your routes.php file.";
+        }
+        else
+        {
+            $message = "A single route to handle every action in a RESTful controller".
+            " will be appended to your routes.php file. This may be used with a confide".
+            " controller generated using [-r|--restful] option.";
+        }
+        
 
         $this->comment( $message );
         $this->line('');
@@ -53,7 +65,7 @@ class RoutesCommand extends Command {
             $this->line('');
 
             $this->info( "Appending routes..." );
-            if( $this->appendRoutes( $name ) )
+            if( $this->appendRoutes( $name, $restful ) )
             {
                 $this->info( "app/routes.php Patched successfully!" );
             }
@@ -78,6 +90,7 @@ class RoutesCommand extends Command {
     {
         return array(
             array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', app()['config']->get('auth.model')),
+            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
         );
     }
 
@@ -109,10 +122,13 @@ class RoutesCommand extends Command {
      * @param  string $name
      * @return bool
      */
-    protected function appendRoutes( $name = '' )
+    protected function appendRoutes( $name = '', $restful = false )
     {        
         $routes_file = $this->laravel->path.'/routes.php';
-        $confide_routes = app()['view']->make('confide::generators.routes')->with(['name'=>$name])->render();
+        $confide_routes = app()['view']->make('confide::generators.routes')
+            ->with(['name'=>$name])
+            ->with(['restful'=>$restful])
+            ->render();
 
         if( file_exists( $routes_file ) )
         {

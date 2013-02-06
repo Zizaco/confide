@@ -1,4 +1,4 @@
-<form method="POST" action="{{ URL::action('UserController@do_login'); }}" accept-charset="UTF-8">
+<form method="POST" action="{{ URL::action('UserController@do_login') ?: 'login'; }}" accept-charset="UTF-8">
     <fieldset>
         <label for="email">{{ Lang::get('confide::confide.username_e_mail'); }}</label>
         <input tabindex="1" placeholder="{{ Lang::get('confide::confide.username_e_mail'); }}" type="text" name="email" id="email" value="{{ Input::old('email') }}">
@@ -6,7 +6,7 @@
         <label for="password">
             {{ Lang::get('confide::confide.password'); }}
             <small>
-                <a href="{{ URL::action('UserController@forgot_password'); }}">{{ Lang::get('confide::confide.login.forgot_password'); }}</a>
+                <a href="{{ (URL::action('UserController@forgot_password')) ?: 'forgot'; }}">{{ Lang::get('confide::confide.login.forgot_password'); }}</a>
             </small>
         </label>
         <input tabindex="2" placeholder="{{ Lang::get('confide::confide.password'); }}" type="password" name="password" id="password">

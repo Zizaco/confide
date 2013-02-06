@@ -39,10 +39,11 @@ class ControllerCommand extends Command {
     public function fire()
     {
         $name = $this->prepareName($this->option('name'));
+        $restful = $this->option('restful');
 
         $this->line('');
-        $this->info( "Controller name: $name" );
-        $message = "An authentication controller template with the name $name.php".
+        $this->info( "Controller name: $name".(($restful) ? "\nRESTful: Yes" : '') );
+        $message = "An authentication ".(($restful) ? 'RESTful ' : '')."controller template with the name $name.php".
         " will be created in app/controllers directory and will NOT overwrite any ".
         " file.";
 
@@ -54,7 +55,7 @@ class ControllerCommand extends Command {
             $this->line('');
 
             $this->info( "Creating $name..." );
-            if( $this->createController( $name ) )
+            if( $this->createController( $name, $restful ) )
             {
                 $this->info( "$name.php Successfully created!" );
             }
@@ -82,6 +83,7 @@ class ControllerCommand extends Command {
     {
         return array(
             array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', app()['config']->get('auth.model')),
+            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
         );
     }
 
@@ -113,10 +115,13 @@ class ControllerCommand extends Command {
      * @param  string $name
      * @return bool
      */
-    protected function createController( $name = '' )
+    protected function createController( $name = '', $restful = false )
     {
         $controller_file = $this->laravel->path."/controllers/$name.php";
-        $output = app()['view']->make('confide::generators.controller')->with(['name'=>$name])->render();
+        $output = app()['view']->make('confide::generators.controller')
+            ->with(['name'=>$name])
+            ->with(['restful'=>$restful])
+            ->render();
 
         if( ! file_exists( $controller_file ) )
         {
