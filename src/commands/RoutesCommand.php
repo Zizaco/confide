@@ -126,8 +126,8 @@ class RoutesCommand extends Command {
     {        
         $routes_file = $this->laravel->path.'/routes.php';
         $confide_routes = app()['view']->make('confide::generators.routes')
-            ->with(['name'=>$name])
-            ->with(['restful'=>$restful])
+            ->with('name', $name)
+            ->with('restful', $restful)
             ->render();
 
         if( file_exists( $routes_file ) )

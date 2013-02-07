@@ -119,8 +119,8 @@ class ControllerCommand extends Command {
     {
         $controller_file = $this->laravel->path."/controllers/$name.php";
         $output = app()['view']->make('confide::generators.controller')
-            ->with(['name'=>$name])
-            ->with(['restful'=>$restful])
+            ->with('name', $name)
+            ->with('restful', $restful)
             ->render();
 
         if( ! file_exists( $controller_file ) )

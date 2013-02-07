@@ -1,6 +1,7 @@
 {{ "\n\n" }}
 @if (! $restful)
-// Confide Routes
+
+// Confide routes
 Route::get( '{{ lcfirst(substr($name,0,-10)) }}/create',          '{{ $name }}@create');
 Route::post('{{ lcfirst(substr($name,0,-10)) }}',                 '{{ $name }}@store');
 Route::get( '{{ lcfirst(substr($name,0,-10)) }}/login',           '{{ $name }}@login');
@@ -10,5 +11,7 @@ Route::get( '{{ lcfirst(substr($name,0,-10)) }}/forgot_password', '{{ $name }}@f
 Route::post('{{ lcfirst(substr($name,0,-10)) }}/reset_password',  '{{ $name }}@reset_password');
 Route::get( '{{ lcfirst(substr($name,0,-10)) }}/logout',          '{{ $name }}@logout');
 @else
+
+// Confide RESTful route
 Route::controller( 'user', '{{ $name }}');
 @endif

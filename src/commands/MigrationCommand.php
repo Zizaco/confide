@@ -90,7 +90,7 @@ class MigrationCommand extends Command {
     protected function createMigration( $table = 'users' )
     {
         $migration_file = $this->laravel->path."/database/migrations/".date('Y_m_d_His')."_confide_setup_users_table.php";
-        $output = app()['view']->make('confide::generators.migration')->with(['table'=>$table])->render();
+        $output = app()['view']->make('confide::generators.migration')->with('table', $table)->render();
 
         if( ! file_exists( $migration_file ) )
         {

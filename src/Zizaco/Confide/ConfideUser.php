@@ -114,7 +114,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
             static::$_app['mailer']->send(
                 'confide::emails.passwordreset',
-                ['user' => $this, 'new_password' => $new_password],
+                array('user' => $this, 'new_password' => $new_password),
                 function($m){
                     $m->to( $this->email )
                     ->subject( static::$_app['translator']->get('confide::confide.email.password_reset.subject') );
@@ -174,7 +174,7 @@ class ConfideUser extends Ardent implements UserInterface {
         {
             $this->fixViewHint();
 
-            static::$_app['mailer']->send('confide::emails.confirm', ['user' => $this], function($m)
+            static::$_app['mailer']->send('confide::emails.confirm', array('user' => $this), function($m)
             {
                 $m->to( $this->email )
                 ->subject( static::$_app['translator']->get('confide::confide.email.account_confirmation.subject') );
