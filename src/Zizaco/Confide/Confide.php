@@ -21,6 +21,14 @@ class Confide
     public $_obj_provider;
 
     /**
+     * Defines how many login failed tries may be done within
+     * two minutes.
+     * 
+     * @var integer
+     */
+    protected $throttle_limit = 9;
+
+    /**
      * Create a new confide instance.
      * 
      * @param  Illuminate\Foundation\Application  $app
@@ -105,18 +113,49 @@ class Confide
      */
     public function logAttempt( $credentials, $confirmed_only = false )
     {
-        $user = $this->model()
-            ->where('email','=',$credentials['email'])
-            ->orWhere('username','=',$credentials['email'])
-            ->first();
+        // Throttle login attempts
+        $attempt_key = 'confide_flogin_attempt_'.$credentials['email'];
+        $attempts = $this->_app['cache']->get($attempt_key, 0);
 
-        if ( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->_app['hash']->check($credentials['password'], $user->password) )
+        if( $attempts < $this->throttle_limit )
         {
-            $this->_app['auth']->login( 
-                $user,
-                isset($credentials['remember']) ? $credentials['remember'] : false 
-            );
+            // Try to login normally
+            $user = $this->model()
+                ->where('email','=',$credentials['email'])
+                ->orWhere('username','=',$credentials['email'])
+                ->first();
 
+            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->_app['hash']->check($credentials['password'], $user->password) )
+            {
+                $this->_app['auth']->login( 
+                    $user,
+                    isset($credentials['remember']) ? $credentials['remember'] : false 
+                );
+
+                return true;
+            }
+        }
+
+        $this->_app['cache']->put($attempt_key, $attempts+1, 2); // used throttling login attempts
+
+        return false;
+    }
+
+    /**
+     * Checks if the credentials has been throttled by too
+     * much failed login attempts
+     * 
+     * @param array $credentials
+     * @return mixed Value.
+     */
+    public function isThrottled( $credentials )
+    {
+        // Check how many failed tries have been done
+        $attempt_key = 'confide_flogin_attempt_'.$credentials['email'];
+        $attempts = $this->_app['cache']->get($attempt_key, 0);
+
+        if( $attempts >= $this->throttle_limit )
+        {
             return true;
         }
         else

@@ -83,7 +83,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( $this->confide->confirm( '123123' ) );
     }
 
-    public function testShouldlogAttempt()
+    public function testShouldLogAttempt()
     {
         $confide_user = $this->mockConfideUser();
 
@@ -110,6 +110,36 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         // Should login because now the user is confirmed
         $this->assertTrue( 
             $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ), true )
+        );
+    }
+
+    public function testShouldThrottleLogAttempt()
+    {
+        $tries = 15;
+
+        $confide_user = $this->mockConfideUser();
+        $confide_user->shouldReceive('get','first')
+            ->andReturn( null );
+
+        $this->objProviderShouldReturn( 'User', $confide_user );
+
+        $this->confide->_app['hash']->shouldReceive('check')
+            ->andReturn( false );
+
+        for ($i=0; $i < $tries; $i++) { 
+
+            // Simulates cache values
+            $this->useCacheForThrottling($i);
+        
+            // Make shure the login is not happening anyway
+            $this->assertFalse(
+                $this->confide->logAttempt( array('email'=>'wrong', 'password'=>'wrong') )
+            );
+        }
+
+        // Check if the credentials has been throttled
+        $this->assertTrue(
+            $this->confide->isThrottled( array('email'=>'wrong', 'password'=>'wrong') )
         );
     }
 
@@ -190,11 +220,27 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['hash']->shouldReceive('make')
             ->andReturn( 'aRandomHash' );
 
+        $app['cache'] = m::mock( 'cache' );
+        $app['cache']->shouldReceive('get')
+            ->andReturn( 0 );
+        $app['cache']->shouldReceive('put');
+
         $app['auth'] = m::mock( 'Auth' );
         $app['auth']->shouldReceive('login')
             ->andReturn( true );
 
         return $app;
+    }
+
+    private function useCacheForThrottling( $value )
+    {
+        $cache = m::mock('Illuminate\Cache\Store');
+        $cache->shouldReceive('put')
+            ->with( "confide_flogin_attempt_wrong", $value+1, 2 )
+            ->once();
+        $cache->shouldReceive('get')
+            ->andReturn( $value );
+        $this->confide->_app['cache'] = $cache;
     }
 
     /**
