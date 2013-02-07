@@ -114,7 +114,7 @@ class Confide
     public function logAttempt( $credentials, $confirmed_only = false )
     {
         // Throttle login attempts
-        $attempt_key = 'confide_flogin_attempt_'.$credentials['email'];
+        $attempt_key = $this->attemptCacheKey( $credentials );
         $attempts = $this->_app['cache']->get($attempt_key, 0);
 
         if( $attempts < $this->throttle_limit )
@@ -151,7 +151,7 @@ class Confide
     public function isThrottled( $credentials )
     {
         // Check how many failed tries have been done
-        $attempt_key = 'confide_flogin_attempt_'.$credentials['email'];
+        $attempt_key = $this->attemptCacheKey( $credentials );
         $attempts = $this->_app['cache']->get($attempt_key, 0);
 
         if( $attempts >= $this->throttle_limit )
@@ -222,5 +222,20 @@ class Confide
     public function makeForgetPasswordForm()
     {
         return $this->_app['view']->make('confide::forgot_password');
+    }
+
+    /**
+     * Returns the name of the cache key that will be used
+     * to store the failed attempts
+     *
+     * @param array $credentials.
+     * @return string.
+     */
+    private function attemptCacheKey( $credentials )
+    {
+        return 'confide_flogin_attempt_'
+            .$this->_app['request']->server('REMOTE_ADDR')
+            .$this->_app['request']->server('HTTP_X_FORWARDED_FOR')
+            .$credentials['email'];
     }
 }

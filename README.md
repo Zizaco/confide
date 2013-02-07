@@ -19,6 +19,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Contains a set of methods to help basic user features.
 - Integrated with the Laravel Auth component/configs.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
+- Login throttling.
 
 **Planned:**
 - Captcha in user signup and password reset.

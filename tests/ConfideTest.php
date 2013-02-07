@@ -220,7 +220,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['hash']->shouldReceive('make')
             ->andReturn( 'aRandomHash' );
 
-        $app['cache'] = m::mock( 'cache' );
+        $app['cache'] = m::mock( 'Cache' );
         $app['cache']->shouldReceive('get')
             ->andReturn( 0 );
         $app['cache']->shouldReceive('put');
@@ -228,6 +228,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['auth'] = m::mock( 'Auth' );
         $app['auth']->shouldReceive('login')
             ->andReturn( true );
+
+        $app['request'] = m::mock( 'Request' );
+        $app['request']->shouldReceive('server')
+            ->andReturn( null );
 
         return $app;
     }
