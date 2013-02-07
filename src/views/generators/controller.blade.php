@@ -96,7 +96,15 @@ class {{ $name }} extends BaseController {
         }
         else
         {
-            $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
+            if( Confide::isThrottled( $input ) )
+            {
+                $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');
+            }
+            else
+            {
+                $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
+            }
+
             @if (! $restful)
             return Redirect::action('{{ $name }}@login')
             @else
