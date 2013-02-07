@@ -96,6 +96,7 @@ class {{ $name }} extends BaseController {
         }
         else
         {
+            // Check if there was too many login attempts
             if( Confide::isThrottled( $input ) )
             {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');
