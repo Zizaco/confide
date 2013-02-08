@@ -21,6 +21,8 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 - Login throttling.
 
+If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
+
 **Planned:**
 - Captcha in user signup and password reset.
 - General improvements.
@@ -173,6 +175,12 @@ Will result in a [RESTful controller](https://github.com/laravel/docs/blob/maste
 Then, when dumping the routes, you should use the --restful option to match the existing controller.
 
     $ php artisan confide:routes --restful
+    
+#### User roles and permissions
+
+In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
+
+See [Entrust](https://github.com/Zizaco/entrust)
 
 ## License
 
