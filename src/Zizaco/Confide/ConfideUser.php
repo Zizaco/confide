@@ -112,14 +112,7 @@ class ConfideUser extends Ardent implements UserInterface {
         {
             $this->fixViewHint();
 
-            static::$_app['mailer']->send(
-                'confide::emails.passwordreset',
-                array('user' => $this, 'new_password' => $new_password),
-                function($m){
-                    $m->to( $this->email )
-                    ->subject( static::$_app['translator']->get('confide::confide.email.password_reset.subject') );
-                }
-            );
+            $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset' );
 
             return true;
         }
@@ -172,13 +165,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( $success  and ! $this->confirmed )
         {
-            $this->fixViewHint();
-
-            static::$_app['mailer']->send('confide::emails.confirm', array('user' => $this), function($m)
-            {
-                $m->to( $this->email )
-                ->subject( static::$_app['translator']->get('confide::confide.email.account_confirmation.subject') );
-            });
+            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', 'confide::emails.confirm' );
         }
 
         return true;
@@ -227,5 +214,26 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if (isset(static::$_app['view.finder']))
             static::$_app['view.finder']->addNamespace('confide', __DIR__.'/../../views');
+    }
+
+    /**
+     * Send email using the lang sentence as subject and the viewname
+     * 
+     * @param mixed $subject_translation
+     * @param mixed $view_name
+     * @return voi.
+     */
+    private function sendEmail( $subject_translation, $view_name )
+    {
+        if ( static::$_app['config']->getEnvironment() == 'testing' )
+            return;
+
+        $this->fixViewHint();
+
+        static::$_app['mailer']->send($view_name, array('user' => $this), function($m) use ($subject_translation)
+        {
+            $m->to( $this->email )
+            ->subject( static::$_app['translator']->get($subject_translation) );
+        });
     }
 }
