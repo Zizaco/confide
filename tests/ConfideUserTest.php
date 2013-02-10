@@ -129,6 +129,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['config']->shouldReceive( 'get' )
             ->with( 'auth.table' )
             ->andReturn( 'users' );
+        $app['config']->shouldReceive( 'getEnvironment' )
+            ->andReturn( 'testing' );
 
         $app['config']->shouldReceive( 'get' )
             ->with( 'app.key' )
