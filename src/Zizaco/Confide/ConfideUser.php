@@ -112,7 +112,7 @@ class ConfideUser extends Ardent implements UserInterface {
         {
             $this->fixViewHint();
 
-            $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset' );
+            $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('new_password'=>$new_password, 'user'=>$this) );
 
             return true;
         }
@@ -165,7 +165,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( $success  and ! $this->confirmed )
         {
-            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', 'confide::emails.confirm' );
+            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', 'confide::emails.confirm', array('user' => $this) );
         }
 
         return true;
@@ -223,14 +223,14 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param mixed $view_name
      * @return voi.
      */
-    private function sendEmail( $subject_translation, $view_name )
+    private function sendEmail( $subject_translation, $view_name, $params = array() )
     {
         if ( static::$_app['config']->getEnvironment() == 'testing' )
             return;
 
         $this->fixViewHint();
 
-        static::$_app['mailer']->send($view_name, array('user' => $this), function($m) use ($subject_translation)
+        static::$_app['mailer']->send($view_name, $params, function($m) use ($subject_translation)
         {
             $m->to( $this->email )
             ->subject( static::$_app['translator']->get($subject_translation) );
