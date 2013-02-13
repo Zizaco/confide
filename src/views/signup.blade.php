@@ -16,7 +16,7 @@
         @if ( Session::get('error') )
             <div class="alert alert-error">
                 @if ( is_array(Session::get('error')) )
-                    {{{ Session::get('error')[0] }}}
+                    {{{ head(Session::get('error')) }}}
                 @endif
             </div>
         @endif

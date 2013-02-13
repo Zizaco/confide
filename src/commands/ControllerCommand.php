@@ -28,7 +28,8 @@ class ControllerCommand extends Command {
     public function __construct()
     {
         parent::__construct();
-        app()['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
+        $app = app();
+        $app['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
     }
 
     /**
@@ -117,8 +118,10 @@ class ControllerCommand extends Command {
      */
     protected function createController( $name = '', $restful = false )
     {
+        $app = app();
+
         $controller_file = $this->laravel->path."/controllers/$name.php";
-        $output = app()['view']->make('confide::generators.controller')
+        $output = $app['view']->make('confide::generators.controller')
             ->with('name', $name)
             ->with('restful', $restful)
             ->render();

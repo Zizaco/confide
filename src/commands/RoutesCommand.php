@@ -28,7 +28,8 @@ class RoutesCommand extends Command {
     public function __construct()
     {
         parent::__construct();
-        app()['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
+        $app = app();
+        $app['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
     }
 
     /**
@@ -124,8 +125,9 @@ class RoutesCommand extends Command {
      */
     protected function appendRoutes( $name = '', $restful = false )
     {        
+        $app = app();
         $routes_file = $this->laravel->path.'/routes.php';
-        $confide_routes = app()['view']->make('confide::generators.routes')
+        $confide_routes = $app['view']->make('confide::generators.routes')
             ->with('name', $name)
             ->with('restful', $restful)
             ->render();
