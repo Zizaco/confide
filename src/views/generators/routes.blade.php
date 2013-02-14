@@ -1,4 +1,4 @@
-{{ "\n\n" }}
+{{{ "\n\n" }}}
 @if (! $restful)
 // Confide Routes
 Route::get( '{{ lcfirst(substr($name,0,-10)) }}/create',          '{{ $name }}@create');
