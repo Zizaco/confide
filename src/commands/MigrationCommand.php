@@ -77,8 +77,10 @@ class MigrationCommand extends Command {
      */
     protected function getOptions()
     {
+        $app = app();
+
         return array(
-            array('table', null, InputOption::VALUE_OPTIONAL, 'Table name.', app()['config']->get('auth.table')),
+            array('table', null, InputOption::VALUE_OPTIONAL, 'Table name.', $app['config']->get('auth.table')),
         );
     }
 

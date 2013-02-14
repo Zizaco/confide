@@ -82,8 +82,10 @@ class ControllerCommand extends Command {
      */
     protected function getOptions()
     {
+        $app = app();
+
         return array(
-            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', app()['config']->get('auth.model')),
+            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', $app['config']->get('auth.model')),
             array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
         );
     }
