@@ -52,7 +52,7 @@ return array(
         'password_reset' => array(
             'subject' => 'Troca de senha',
             'greetings' => 'Olá :name',
-            'body' => 'Sua senha foi alterada para :password',
+            'body' => 'Acesse o link a seguir para trocar a sua senha',
             'farewell' => 'Att',
         ),
     ),

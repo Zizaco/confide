@@ -52,7 +52,7 @@ return array(
         'password_reset' => array(
             'subject' => 'Password Reset',
             'greetings' => 'Hello :name',
-            'body' => 'Your password has been changed to :password',
+            'body' => 'Access the following link to change your password',
             'farewell' => 'Regards',
         ),
     ),
