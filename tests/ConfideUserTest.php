@@ -73,12 +73,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
 
         $old_password = $this->confide_user->password;
 
-        $this->assertTrue( $this->confide_user->resetPassword() );
-
-        $new_password = $this->confide_user->password;
-
-        // Should have generated a new password code
-        $this->assertNotEquals( $old_password, $new_password );
+        $this->assertTrue( $this->confide_user->forgotPassword() );
     }
 
     public function testShouldGenerateConfirmationCodeOnSave()
@@ -143,6 +138,14 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['hash'] = m::mock( 'Hash' );
         $app['hash']->shouldReceive('make')
             ->andReturn( 'aRandomHash' );
+
+        $app['db'] = m::mock( 'DatabaseManager' );
+        $app['db']->shouldReceive('connection')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('table')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('insert')
+            ->andReturn( $app['db'] );
 
         return $app;
     }

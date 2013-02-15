@@ -178,7 +178,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         $this->assertNotEquals( null, $this->confide->MakeLoginForm() );
         $this->assertNotEquals( null, $this->confide->makeSignupForm() );
-        $this->assertNotEquals( null, $this->confide->makeForgetPasswordForm() );
+        $this->assertNotEquals( null, $this->confide->makeForgotPasswordForm() );
     }
 
     private function mockConfideUser()
@@ -232,6 +232,19 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['request'] = m::mock( 'Request' );
         $app['request']->shouldReceive('server')
             ->andReturn( null );
+
+        $app['db'] = m::mock( 'DatabaseManager' );
+        $app['db']->shouldReceive('connection')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('table')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('select')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('where')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('first')
+            ->andReturn( $app['db'] );
+        $app['db']->email = 'test@example.com';
 
         return $app;
     }
