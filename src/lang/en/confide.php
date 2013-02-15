@@ -29,14 +29,16 @@ return array(
     ),
 
     'alerts' => array(
-        'account_created' => 'Your account has been successfuly created. Please check your email for the instructions on how to confirm your account.',
+        'account_created' => 'Your account has been successfully created. Please check your email for the instructions on how to confirm your account.',
         'too_many_attempts' => 'Too many attempts. Try again in few minutes.',
         'wrong_credentials' => 'Incorrect username, email or password.',
         'not confirmed' => 'Your account may not be confirmed. Check your email for the confirmation link',
         'confirmation' => 'Your account has been confirmed! You may now login.',
         'wrong_confirmation' => 'Wrong confirmation code.',
-        'password_reset' => 'A new password has been sent to your email.',
-        'wrong_password_reset' => 'User not found.',
+        'password_forget' => 'The information regarding password reset was sent to your email.',
+        'wrong_password_forget' => 'User not found.',
+        'password_reset' => 'Your password has been changed successfully.',
+        'wrong_password_reset' => 'Invalid password. Try again',
     ),
 
     'email' => array(

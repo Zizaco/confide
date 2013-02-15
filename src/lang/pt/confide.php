@@ -35,8 +35,10 @@ return array(
         'not confirmed' => 'Sua conta pode não estar confirmada. Verifique seu email e procure pelo link de confirmação',
         'confirmation' => 'Sua conta foi confirmada! Você pode entrar agora.',
         'wrong_confirmation' => 'Código de confirmação incorreto.',
-        'password_reset' => 'Uma nova senha foi enviada ao seu e-mail.',
-        'wrong_password_reset' => 'Usuário não encontrado.',
+        'password_forget' => 'As informações para a troca de senha foram enviadas ao seu e-mail.',
+        'wrong_password_forget' => 'Usuário não encontrado.',
+        'password_reset' => 'Sua senha foi alterada com sucesso.',
+        'wrong_password_reset' => 'Senha inválida. Tente novamente.',
     ),
 
     'email' => array(
