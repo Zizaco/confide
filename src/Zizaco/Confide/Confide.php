@@ -170,12 +170,37 @@ class Confide
      * @param string  $email
      * @return bool
      */
-    public function resetPassword( $email )
+    public function forgotPassword( $email )
     {
         $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
             $user->resetPassword();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Reset user password
+     *
+     * @return string
+     */
+    public function resetPassword( $params )
+    {
+        $token = array_get($params, 'token', '');
+        
+        $email = DB::table('password_reminders')
+            ->select('email')->where('token','=',$token)
+            ->first();
+
+        $user = Confide::model()->where('email', '=', $email)->get()->first();
+        if( $user )
+        {
+            $user->resetPassword( $params );
             return true;
         }
         else
@@ -219,9 +244,19 @@ class Confide
      *
      * @return Illuminate\View\View
      */
-    public function makeForgetPasswordForm()
+    public function makeForgotPasswordForm()
     {
         return $this->_app['view']->make('confide::forgot_password');
+    }
+
+    /**
+     * Display the forget password view
+     *
+     * @return Illuminate\View\View
+     */
+    public function makeResetPasswordForm( $token )
+    {
+        return $this->_app['view']->make('confide::reset_password', array('token'=>$token));
     }
 
     /**

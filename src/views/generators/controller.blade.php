@@ -1,5 +1,4 @@
 {{{ '<?php' }}}
-<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -152,7 +151,7 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'forgot_password' : 'getForgot' }}()
     {
-        return Confide::makeForgetPasswordForm();
+        return Confide::makeForgotPasswordForm();
     }
 
     /**
@@ -161,7 +160,7 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'do_forgot_password' : 'postForgot' }}()
     {
-        if( Confide::forgetPassword( Input::get( 'email' ) ) )
+        if( Confide::forgotPassword( Input::get( 'email' ) ) )
         {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
             @if (! $restful)

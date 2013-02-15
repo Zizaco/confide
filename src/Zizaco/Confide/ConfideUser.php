@@ -102,18 +102,33 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return string
      */
-    public function resetPassword()
+    public function forgotPassword()
     {
-        $new_password = substr(md5(microtime().static::$_app['config']->get('app.key')),-9);
-        $this->password = $new_password;
-        $this->password_confirmation = $new_password;
+        $token = substr(md5(microtime().static::$_app['config']->get('app.key')),-16);
+
+        DB::table('password_reminders')->insert(array(
+            'email'=> $this->email,
+            'token'=> $token,
+            'created_at'=> new DateTime
+        ));
+
+        $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('user'=>$this, 'token'=>$token) );
+
+        return true;
+    }
+
+    /**
+     * Reset user password
+     *
+     * @return string
+     */
+    public function resetPassword( $params )
+    {
+        $this->password = array_get($params, 'password', '');
+        $this->password_confirmation = array_get($params, 'password_confirmation', '');
 
         if ( $this->save() )
         {
-            $this->fixViewHint();
-
-            $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('new_password'=>$new_password, 'user'=>$this) );
-
             return true;
         }
         else{
