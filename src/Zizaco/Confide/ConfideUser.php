@@ -98,7 +98,7 @@ class ConfideUser extends Ardent implements UserInterface {
     }
 
     /**
-     * Reset user password and sends in user e-mail
+     * Send email with information about password reset
      *
      * @return string
      */
@@ -118,7 +118,7 @@ class ConfideUser extends Ardent implements UserInterface {
     }
 
     /**
-     * Reset user password
+     * Change user password
      *
      * @return string
      */

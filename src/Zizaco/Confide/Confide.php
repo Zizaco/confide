@@ -165,7 +165,7 @@ class Confide
     }
 
     /**
-     * Reset the user password and send email to user
+     * Send email with information about password reset
      *
      * @param string  $email
      * @return bool
@@ -185,7 +185,7 @@ class Confide
     }
 
     /**
-     * Reset user password
+     * Change user password
      *
      * @return string
      */

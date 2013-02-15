@@ -155,7 +155,7 @@ class {{ $name }} extends BaseController {
     }
 
     /**
-     * Attempt to send reset password link to the given email
+     * Attempt to send change password link to the given email
      *
      */
     public function {{ (! $restful) ? 'do_forgot_password' : 'postForgot' }}()
@@ -184,7 +184,7 @@ class {{ $name }} extends BaseController {
     }
 
     /**
-     * Shows the reset password form with the given token
+     * Shows the change password form with the given token
      *
      */
     public function {{ (! $restful) ? 'reset_password' : 'getReset' }}( $token )
@@ -193,7 +193,7 @@ class {{ $name }} extends BaseController {
     }
 
     /**
-     * Attempt reset password of the user
+     * Attempt change password of the user
      *
      */
     public function {{ (! $restful) ? 'do_reset_password' : 'postReset' }}()
