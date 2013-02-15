@@ -106,7 +106,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         $token = substr(md5(microtime().static::$_app['config']->get('app.key')),-16);
 
-        \DB::table('password_reminders')->insert(array(
+        static::$_app['db']->connection()->table('password_reminders')->insert(array(
             'email'=> $this->email,
             'token'=> $token,
             'created_at'=> new \DateTime

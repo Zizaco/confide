@@ -193,7 +193,7 @@ class Confide
     {
         $token = array_get($params, 'token', '');
         
-        $email = \DB::table('password_reminders')
+        $email = $this->_app['db']->connection()->table('password_reminders')
             ->select('email')->where('token','=',$token)
             ->first();
 
