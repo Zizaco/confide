@@ -1,4 +1,5 @@
 {{{ '<?php' }}}
+<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -155,12 +156,57 @@ class {{ $name }} extends BaseController {
     }
 
     /**
-     * Attempt to reset password with given email
+     * Attempt to send reset password link to the given email
      *
      */
-    public function {{ (! $restful) ? 'reset_password' : 'postForgot' }}()
+    public function {{ (! $restful) ? 'do_forgot_password' : 'postForgot' }}()
     {
-        if( Confide::resetPassword( Input::get( 'email' ) ) )
+        if( Confide::forgetPassword( Input::get( 'email' ) ) )
+        {
+            $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
+            @if (! $restful)
+            return Redirect::action('{{ $name }}@login')
+            @else
+            return Redirect::to('user/login')
+            @endif
+                ->with( 'notice', $notice_msg );
+        }
+        else
+        {
+            $error_msg = Lang::get('confide::confide.alerts.wrong_password_forgot');
+            @if (! $restful)
+            return Redirect::action('{{ $name }}@forgot_password')
+            @else
+            return Redirect::to('user/forgot')
+            @endif
+                ->withInput()
+                ->with( 'error', $error_msg );
+        }
+    }
+
+    /**
+     * Shows the reset password form with the given token
+     *
+     */
+    public function {{ (! $restful) ? 'reset_password' : 'getReset' }}( $token )
+    {
+        return Confide::makeResetPasswordForm( $token );
+    }
+
+    /**
+     * Attempt reset password of the user
+     *
+     */
+    public function {{ (! $restful) ? 'do_reset_password' : 'postReset' }}()
+    {
+        $input = array(
+            'token'=>Input::get( 'token' ),
+            'password'=>Input::get( 'password' ),
+            'password_confirmation'=>Input::get( 'password_confirmation' ),
+        )
+
+        // By passing an array with the token, password and confirmation
+        if( Confide::resetPassword( $input ) )
         {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
             @if (! $restful)
@@ -174,9 +220,9 @@ class {{ $name }} extends BaseController {
         {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
             @if (! $restful)
-            return Redirect::action('{{ $name }}@forgot_password')
+            return Redirect::action('{{ $name }}@reset_password')
             @else
-            return Redirect::to('user/forgot')
+            return Redirect::to('user/reset')
             @endif
                 ->withInput()
                 ->with( 'error', $error_msg );
