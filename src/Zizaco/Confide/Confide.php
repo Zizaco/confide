@@ -175,7 +175,7 @@ class Confide
         $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
-            $user->resetPassword();
+            $user->forgotPassword();
             return true;
         }
         else
@@ -193,15 +193,17 @@ class Confide
     {
         $token = array_get($params, 'token', '');
         
-        $email = DB::table('password_reminders')
+        $email = \DB::table('password_reminders')
             ->select('email')->where('token','=',$token)
             ->first();
+
+        if ($email)
+            $email = $email->email;
 
         $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
-            $user->resetPassword( $params );
-            return true;
+            return $user->resetPassword( $params );
         }
         else
         {

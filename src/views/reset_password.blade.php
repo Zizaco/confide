@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (URL::action('UserController@do_forgot_password')) ?: '/user/forgot' }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (URL::action('UserController@do_reset_password')) ?: '/user/reset' }}}" accept-charset="UTF-8">
     <input type="hidden" name="token" value="{{{ $token }}}">
 
     <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
@@ -14,4 +14,8 @@
     @if ( Session::get('notice') )
         <div class="alert">{{{ Session::get('notice') }}}</div>
     @endif
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.forgot.submit') }}}</button>
+    </div>
 </form>

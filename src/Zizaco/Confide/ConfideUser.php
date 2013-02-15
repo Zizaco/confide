@@ -106,10 +106,10 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         $token = substr(md5(microtime().static::$_app['config']->get('app.key')),-16);
 
-        DB::table('password_reminders')->insert(array(
+        \DB::table('password_reminders')->insert(array(
             'email'=> $this->email,
             'token'=> $token,
-            'created_at'=> new DateTime
+            'created_at'=> new \DateTime
         ));
 
         $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('user'=>$this, 'token'=>$token) );

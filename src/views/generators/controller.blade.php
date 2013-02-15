@@ -202,7 +202,7 @@ class {{ $name }} extends BaseController {
             'token'=>Input::get( 'token' ),
             'password'=>Input::get( 'password' ),
             'password_confirmation'=>Input::get( 'password_confirmation' ),
-        )
+        );
 
         // By passing an array with the token, password and confirmation
         if( Confide::resetPassword( $input ) )
@@ -219,7 +219,7 @@ class {{ $name }} extends BaseController {
         {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
             @if (! $restful)
-            return Redirect::action('{{ $name }}@reset_password')
+            return Redirect::action('{{ $name }}@reset_password', array('token'=>$input['token']))
             @else
             return Redirect::to('user/reset')
             @endif
