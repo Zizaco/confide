@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (URL::action('UserController@reset_password')) ?: '/user/forgot' }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (URL::action('UserController@do_forgot_password')) ?: '/user/forgot' }}}" accept-charset="UTF-8">
     <input type="hidden" name="csrf_token" value="{{{ Session::getToken() }}}">
 
     <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>
