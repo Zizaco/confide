@@ -70,9 +70,10 @@ Set the `address` and `name` from the `from` array in `config/mail.php`. Those w
 
 ### User model
 
-Now generate the Confide migration
+Now generate the Confide migration and the reminder password table migration:
 
     $ php artisan confide:migration
+    $ php artisan auth:reminders
 
 It will generate the `<timestamp>_confide_setup_users_table.php` migration. You may now run it with the artisan migrate command:
 
