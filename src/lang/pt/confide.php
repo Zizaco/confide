@@ -35,8 +35,10 @@ return array(
         'not confirmed' => 'Sua conta pode não estar confirmada. Verifique seu email e procure pelo link de confirmação',
         'confirmation' => 'Sua conta foi confirmada! Você pode entrar agora.',
         'wrong_confirmation' => 'Código de confirmação incorreto.',
-        'password_reset' => 'Uma nova senha foi enviada ao seu e-mail.',
-        'wrong_password_reset' => 'Usuário não encontrado.',
+        'password_forgot' => 'As informações para a troca de senha foram enviadas ao seu e-mail.',
+        'wrong_password_forgot' => 'Usuário não encontrado.',
+        'password_reset' => 'Sua senha foi alterada com sucesso.',
+        'wrong_password_reset' => 'Senha inválida. Tente novamente.',
     ),
 
     'email' => array(
@@ -50,7 +52,7 @@ return array(
         'password_reset' => array(
             'subject' => 'Troca de senha',
             'greetings' => 'Olá :name',
-            'body' => 'Sua senha foi alterada para :password',
+            'body' => 'Acesse o link a seguir para trocar a sua senha',
             'farewell' => 'Att',
         ),
     ),

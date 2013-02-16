@@ -47,8 +47,8 @@ class ConfideUser extends Ardent implements UserInterface {
      * @var array
      */
     public static $rules = array(
-      'username' => 'required|alpha_dash|between:4,16|unique:users',
-      'email' => 'required|email|unique:users',
+      'username' => 'required|alpha_dash|between:4,16',
+      'email' => 'required|email',
       'password' => 'required|between:4,11|confirmed',
     );
 
@@ -98,22 +98,37 @@ class ConfideUser extends Ardent implements UserInterface {
     }
 
     /**
-     * Reset user password and sends in user e-mail
+     * Send email with information about password reset
      *
      * @return string
      */
-    public function resetPassword()
+    public function forgotPassword()
     {
-        $new_password = substr(md5(microtime().static::$_app['config']->get('app.key')),-9);
-        $this->password = $new_password;
-        $this->password_confirmation = $new_password;
+        $token = substr(md5(microtime().static::$_app['config']->get('app.key')),-16);
+
+        static::$_app['db']->connection()->table('password_reminders')->insert(array(
+            'email'=> $this->email,
+            'token'=> $token,
+            'created_at'=> new \DateTime
+        ));
+
+        $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('user'=>$this, 'token'=>$token) );
+
+        return true;
+    }
+
+    /**
+     * Change user password
+     *
+     * @return string
+     */
+    public function resetPassword( $params )
+    {
+        $this->password = array_get($params, 'password', '');
+        $this->password_confirmation = array_get($params, 'password_confirmation', '');
 
         if ( $this->save() )
         {
-            $this->fixViewHint();
-
-            $this->sendEmail( 'confide::confide.email.password_reset.subject', 'confide::emails.passwordreset', array('new_password'=>$new_password, 'user'=>$this) );
-
             return true;
         }
         else{
