@@ -13,7 +13,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 **Current:**
 - Account confirmation (through confirmation link).
-- Password reset (sending email with new password).
+- Password reset (sending email with a change password link).
 - Easily render forms for login, signup and password reset.
 - Generate customizable routes for login, signup, password reset, confirmation, etc.
 - Generate a customizable controller that handles the basic user account actions.
@@ -70,7 +70,7 @@ Set the `address` and `name` from the `from` array in `config/mail.php`. Those w
 
 ### User model
 
-Now generate the Confide migration
+Now generate the Confide migration and the reminder password table migration:
 
     $ php artisan confide:migration
 
