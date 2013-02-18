@@ -21,14 +21,6 @@ class Confide
     public $objectRepository;
 
     /**
-     * Defines how many login failed tries may be done within
-     * two minutes.
-     * 
-     * @var integer
-     */
-    protected $throttle_limit = 9;
-
-    /**
      * Create a new confide instance.
      * 
      * @return void
@@ -136,7 +128,7 @@ class Confide
         $attempt_key = $this->attemptCacheKey( $credentials );
         $attempts = $this->app['cache']->get($attempt_key, 0);
 
-        if( $attempts >= $this->throttle_limit )
+        if( $attempts >= $this->app['config']->get('confide::throttle_limit') )
         {
             return true;
         }
@@ -210,7 +202,7 @@ class Confide
      */
     public function makeLoginForm()
     {
-        return $this->app['view']->make('confide::login');
+        return $this->app['view']->make( $this->app['config']->get('confide::login_form') );
     }
 
     /**
@@ -220,7 +212,7 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->app['view']->make('confide::signup');
+        return $this->app['view']->make( $this->app['config']->get('confide::signup_form') );
     }
 
     /**
@@ -230,7 +222,7 @@ class Confide
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app['view']->make('confide::forgot_password');
+        return $this->app['view']->make( $this->app['config']->get('confide::forgot_password_form') );
     }
 
     /**
@@ -240,7 +232,7 @@ class Confide
      */
     public function makeResetPasswordForm( $token )
     {
-        return $this->app['view']->make('confide::reset_password', array('token'=>$token));
+        return $this->app['view']->make( $this->app['config']->get('confide::reset_password_form') , array('token'=>$token));
     }
 
     /**
@@ -270,7 +262,7 @@ class Confide
         $attempt_key = $this->attemptCacheKey( $credentials );
         $attempts = $this->app['cache']->get($attempt_key, 0);
 
-        return $attempts >= $this->throttle_limit;
+        return $attempts >= $this->app['config']->get('confide::throttle_limit');
     }
 
     /**

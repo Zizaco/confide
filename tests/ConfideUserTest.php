@@ -140,12 +140,20 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['config']->shouldReceive( 'get' )
             ->with( 'auth.table' )
             ->andReturn( 'users' );
+
         $app['config']->shouldReceive( 'getEnvironment' )
             ->andReturn( 'production' );
 
         $app['config']->shouldReceive( 'get' )
             ->with( 'app.key' )
             ->andReturn( '123' );
+
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'confide::throttle_limit' )
+            ->andReturn( 9 );
+
+        $app['config']->shouldReceive( 'get' )
+            ->andReturn( 'confide::login' );
 
         $app['mailer'] = m::mock( 'Mail' );
         $app['mailer']->shouldReceive('send')
@@ -158,12 +166,16 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['db'] = m::mock( 'DatabaseManager' );
         $app['db']->shouldReceive('connection')
             ->andReturn( $app['db'] );
+            
         $app['db']->shouldReceive('table')
             ->andReturn( $app['db'] );
+            
         $app['db']->shouldReceive('insert')
             ->andReturn( $app['db'] );
+            
         $app['db']->shouldReceive('where')
             ->andReturn( $app['db'] );
+            
         $app['db']->shouldReceive('update')
             ->andReturn( true );
 
