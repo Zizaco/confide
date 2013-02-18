@@ -17,7 +17,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * 
      * @var Illuminate\Foundation\Application
      */
-    public static $_app;
+    public static $app;
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -59,10 +59,10 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         parent::__construct();
 
-        if ( ! static::$_app )
-            static::$_app = app();
+        if ( ! static::$app )
+            static::$app = app();
 
-        $this->table = static::$_app['config']->get('auth.table');
+        $this->table = static::$app['config']->get('auth.table');
     }
 
     /**
@@ -94,7 +94,11 @@ class ConfideUser extends Ardent implements UserInterface {
     public function confirm()
     {
         $this->confirmed = 1;
-        return $this->save();
+
+        // Executes directly using query builder 
+        DB::table($this->table)
+            ->where($this->getKeyName(), $this->getKey())
+            ->update(array('confirmed'=>1));
     }
 
     /**
@@ -104,9 +108,9 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function forgotPassword()
     {
-        $token = substr(md5(microtime().static::$_app['config']->get('app.key')),-16);
+        $token = substr(md5(microtime().static::$app['config']->get('app.key')),-16);
 
-        static::$_app['db']->connection()->table('password_reminders')->insert(array(
+        static::$app['db']->connection()->table('password_reminders')->insert(array(
             'email'=> $this->email,
             'token'=> $token,
             'created_at'=> new \DateTime
@@ -136,6 +140,16 @@ class ConfideUser extends Ardent implements UserInterface {
         }
     }
 
+    /**
+     * Overwrite the Ardent save method. Saves model into
+     * database
+     * 
+     * @param array   $rules:array
+     * @param array   $customMessages
+     * @param closure $beforeSave
+     * @param callable $afterSave
+     * @return bool
+     */
     public function save( $rules = array(), $customMessages = array(), Closure $beforeSave = null, Closure $afterSave = null )
     {
         return $this->real_save( $rules, $customMessages, $beforeSave, $afterSave );
@@ -153,7 +167,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = md5(microtime().static::$_app['config']->get('app.key'));
+            $this->confirmation_code = md5(microtime().static::$app['config']->get('app.key'));
         }
 
         /*
@@ -194,7 +208,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return bool
      */
-    private function real_save( $rules, $customMessages, $beforeSave, $afterSave )
+    protected function real_save( $rules = array(), $customMessages = array(), Closure $beforeSave = null, Closure $afterSave = null )
     {
         if ( defined('CONFIDE_TEST') )
         {
@@ -225,10 +239,10 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return void
      */
-    private function fixViewHint()
+    protected function fixViewHint()
     {
-        if (isset(static::$_app['view.finder']))
-            static::$_app['view.finder']->addNamespace('confide', __DIR__.'/../../views');
+        if (isset(static::$app['view.finder']))
+            static::$app['view.finder']->addNamespace('confide', __DIR__.'/../../views');
     }
 
     /**
@@ -238,17 +252,17 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param mixed $view_name
      * @return voi.
      */
-    private function sendEmail( $subject_translation, $view_name, $params = array() )
+    protected function sendEmail( $subject_translation, $view_name, $params = array() )
     {
-        if ( static::$_app['config']->getEnvironment() == 'testing' )
+        if ( static::$app['config']->getEnvironment() == 'testing' )
             return;
 
         $this->fixViewHint();
 
-        static::$_app['mailer']->send($view_name, $params, function($m) use ($subject_translation)
+        static::$app['mailer']->send($view_name, $params, function($m) use ($subject_translation)
         {
             $m->to( $this->email )
-            ->subject( static::$_app['translator']->get($subject_translation) );
+            ->subject( static::$app['translator']->get($subject_translation) );
         });
     }
 }
