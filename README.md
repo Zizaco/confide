@@ -142,6 +142,14 @@ Then, when dumping the routes, you should use the --controller option to match t
 
     $ php artisan confide:routes --controller Employee
 
+#### Using custom form or emails
+
+First, publish the config files:
+
+    $ php artisan config:publish zizaco/confide
+
+Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
+
 #### Validate model fields
 
 To change the validation rules of the User model you can take a look at [Ardent](http://laravelbook.github.com/ardent/#validation "Ardent Validation Rulez"). For example:

@@ -203,6 +203,13 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->with( 'app.key' )
             ->andReturn( '123' );
 
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'confide::throttle_limit' )
+            ->andReturn( 9 );
+
+        $app['config']->shouldReceive( 'get' )
+            ->andReturn( 'confide::login' );
+
         $app['mail'] = m::mock( 'Mail' );
         $app['mail']->shouldReceive('send')
             ->andReturn( null );
