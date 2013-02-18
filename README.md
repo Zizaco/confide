@@ -183,6 +183,28 @@ In order not to bloat Confide with not related features, the role and permission
 
 See [Entrust](https://github.com/Zizaco/entrust)
 
+## Troubleshooting
+
+__[Exception] SQLSTATE[HY000]: General error: 1364 Field 'confirmation_code' doesn't have a default value...__
+
+If you overwrite the `beforeSave()` method in your model, make sure to call `parent::beforeSave()`:
+
+    public function beforeSave( $forced = false ){
+
+        parent::beforeSave( $forced) // Don't forget this
+
+        // Your stuff
+    }
+
+__Confirmation link is not sent when user signup__
+
+Same as above. If you overwrite the `afterSave()` method in your model, make sure to call `parent::afterSave()`:
+
+__Users are able to login without confirming account__
+
+If you want only confirmed users to login, in your `UserController`, instead of simply calling `logAttempt( $input )`, call `logAttempt( $input, true )`. The second parameter stands for _"confirmed_only"_.
+
+
 ## License
 
 Confide is free software distributed under the terms of the MIT license

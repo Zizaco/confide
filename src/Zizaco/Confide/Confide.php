@@ -11,14 +11,14 @@ class Confide
      * 
      * @var Illuminate\Foundation\Application
      */
-    public $_app;
+    public $app;
 
     /**
-     * Object provider
+     * Object repository
      * 
      * @var Zizaco\Confide\ObjectProvider
      */
-    public $_obj_provider;
+    public $objectRepository;
 
     /**
      * Defines how many login failed tries may be done within
@@ -31,23 +31,12 @@ class Confide
     /**
      * Create a new confide instance.
      * 
-     * @param  Illuminate\Foundation\Application  $app
      * @return void
      */
-    public function __construct($app)
+    public function __construct()
     {
-        $this->_app = $app;
-        $this->_obj_provider = new ObjectProvider;
-    }
-
-    /**
-     * Returns the current version
-     *
-     * @return string
-     */
-    public function version()
-    {
-        return 'Confide v'.CONFIDE_VERSION;
+        $this->app = app();
+        $this->objectRepository = new ObjectProvider;
     }
 
     /**
@@ -57,7 +46,7 @@ class Confide
      */
     public function app()
     {
-        return $this->_app;
+        return $this->app;
     }
 
     /**
@@ -67,9 +56,9 @@ class Confide
      */
     public function model()
     {
-        $model = $this->_app['config']->get('auth.model');
+        $model = $this->app['config']->get('auth.model');
 
-        return $this->_obj_provider->getObject( $model );
+        return $this->objectRepository->getObject( $model );
 
     }
 
@@ -80,7 +69,7 @@ class Confide
      */
     public function user()
     {
-        return $this->_app['auth']->user();
+        return $this->app['auth']->user();
     }
 
     /**
@@ -94,8 +83,7 @@ class Confide
         $user = Confide::model()->where('confirmation_code', '=', $code)->get()->first();
         if( $user )
         {
-            $user->confirm();
-            return true;
+            return $user->confirm();
         }
         else
         {
@@ -113,30 +101,24 @@ class Confide
      */
     public function logAttempt( $credentials, $confirmed_only = false )
     {
-        // Throttle login attempts
-        $attempt_key = $this->attemptCacheKey( $credentials );
-        $attempts = $this->_app['cache']->get($attempt_key, 0);
 
-        if( $attempts < $this->throttle_limit )
+        if(! $this->reachedThrottleLimit( $credentials ) )
         {
-            // Try to login normally
             $user = $this->model()
                 ->where('email','=',$credentials['email'])
                 ->orWhere('username','=',$credentials['email'])
                 ->first();
 
-            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->_app['hash']->check($credentials['password'], $user->password) )
+            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->app['hash']->check($credentials['password'], $user->password) )
             {
-                $this->_app['auth']->login( 
-                    $user,
-                    isset($credentials['remember']) ? $credentials['remember'] : false 
-                );
+                $remember = isset($credentials['remember']) ? $credentials['remember'] : false;
 
+                $this->app['auth']->login( $user, $remember );
                 return true;
             }
         }
 
-        $this->_app['cache']->put($attempt_key, $attempts+1, 2); // used throttling login attempts
+        $this->throttleCount( $credentials );
 
         return false;
     }
@@ -152,7 +134,7 @@ class Confide
     {
         // Check how many failed tries have been done
         $attempt_key = $this->attemptCacheKey( $credentials );
-        $attempts = $this->_app['cache']->get($attempt_key, 0);
+        $attempts = $this->app['cache']->get($attempt_key, 0);
 
         if( $attempts >= $this->throttle_limit )
         {
@@ -193,7 +175,7 @@ class Confide
     {
         $token = array_get($params, 'token', '');
         
-        $email = $this->_app['db']->connection()->table('password_reminders')
+        $email = $this->app['db']->connection()->table('password_reminders')
             ->select('email')->where('token','=',$token)
             ->first();
 
@@ -218,7 +200,7 @@ class Confide
      */
     public function logout()
     {
-        $this->_app['auth']->logout();
+        $this->app['auth']->logout();
     }
 
     /**
@@ -228,7 +210,7 @@ class Confide
      */
     public function makeLoginForm()
     {
-        return $this->_app['view']->make('confide::login');
+        return $this->app['view']->make('confide::login');
     }
 
     /**
@@ -238,7 +220,7 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->_app['view']->make('confide::signup');
+        return $this->app['view']->make('confide::signup');
     }
 
     /**
@@ -248,7 +230,7 @@ class Confide
      */
     public function makeForgotPasswordForm()
     {
-        return $this->_app['view']->make('confide::forgot_password');
+        return $this->app['view']->make('confide::forgot_password');
     }
 
     /**
@@ -258,7 +240,7 @@ class Confide
      */
     public function makeResetPasswordForm( $token )
     {
-        return $this->_app['view']->make('confide::reset_password', array('token'=>$token));
+        return $this->app['view']->make('confide::reset_password', array('token'=>$token));
     }
 
     /**
@@ -268,11 +250,40 @@ class Confide
      * @param array $credentials.
      * @return string.
      */
-    private function attemptCacheKey( $credentials )
+    protected function attemptCacheKey( $credentials )
     {
         return 'confide_flogin_attempt_'
-            .$this->_app['request']->server('REMOTE_ADDR')
-            .$this->_app['request']->server('HTTP_X_FORWARDED_FOR')
+            .$this->app['request']->server('REMOTE_ADDR')
+            .$this->app['request']->server('HTTP_X_FORWARDED_FOR')
             .$credentials['email'];
+    }
+
+    /**
+     * Checks if the current IP / email has reached the throttle
+     * limit
+     * 
+     * @param array $credentials
+     * @return bool Value.
+     */
+    protected function reachedThrottleLimit( $credentials )
+    {
+        $attempt_key = $this->attemptCacheKey( $credentials );
+        $attempts = $this->app['cache']->get($attempt_key, 0);
+
+        return $attempts >= $this->throttle_limit;
+    }
+
+    /**
+     * Increment IP / email throttle count
+     * 
+     * @param array $credentials
+     * @return void
+     */
+    protected function throttleCount( $credentials )
+    {
+        $attempt_key = $this->attemptCacheKey( $credentials );
+        $attempts = $this->app['cache']->get($attempt_key, 0);
+
+        $this->app['cache']->put($attempt_key, $attempts+1, 2); // used throttling login attempts
     }
 }
