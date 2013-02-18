@@ -31,7 +31,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
-        ConfideUser::$_app = $this->mockApp();
+        ConfideUser::$app = $this->mockApp();
 
         $this->confide_user = new ConfideUser;
     }
@@ -56,16 +56,16 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     {
         $this->populateUser();
 
-        $this->assertTrue( $this->confide_user->confirm() );
+        $this->assertNotEquals( 0, $this->confide_user->confirm() );
 
         $this->assertEquals( 1, $this->confide_user->confirmed );
     }
 
-    public function testShouldResetPassword()
+    public function testShouldSendForgotPassword()
     {
         // Should send an email once
-        ConfideUser::$_app['mailer'] = m::mock( 'Mail' );
-        ConfideUser::$_app['mailer']->shouldReceive('send')
+        ConfideUser::$app['mailer'] = m::mock( 'Mail' );
+        ConfideUser::$app['mailer']->shouldReceive('send')
             ->andReturn( null )
             ->atLeast(1);
 
@@ -76,11 +76,27 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( $this->confide_user->forgotPassword() );
     }
 
+    public function testShouldChangePassword()
+    {
+        $credentials = array( 'email'=>'mail@sample.com', 'password'=>'987987' );
+
+        $this->populateUser();
+
+        $old_password = $this->confide_user->password;
+
+        $this->assertTrue( $this->confide_user->resetPassword( $credentials ) );
+
+        $new_password = $this->confide_user->password;
+
+        // Should have generated a new password code
+        $this->assertNotEquals( $old_password, $new_password );
+    }
+
     public function testShouldGenerateConfirmationCodeOnSave()
     {
         // Should send an email once
-        ConfideUser::$_app['mailer'] = m::mock( 'Mail' );
-        ConfideUser::$_app['mailer']->shouldReceive('send')
+        ConfideUser::$app['mailer'] = m::mock( 'Mail' );
+        ConfideUser::$app['mailer']->shouldReceive('send')
             ->andReturn( null )
             ->once();
 
@@ -146,6 +162,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( $app['db'] );
         $app['db']->shouldReceive('insert')
             ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('where')
+            ->andReturn( $app['db'] );
+        $app['db']->shouldReceive('update')
+            ->andReturn( true );
 
         return $app;
     }
