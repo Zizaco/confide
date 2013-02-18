@@ -96,7 +96,7 @@ class ConfideUser extends Ardent implements UserInterface {
         $this->confirmed = 1;
 
         // Executes directly using query builder 
-        DB::table($this->table)
+        return static::$app['db']->table($this->table)
             ->where($this->getKeyName(), $this->getKey())
             ->update(array('confirmed'=>1));
     }

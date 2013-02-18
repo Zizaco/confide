@@ -252,7 +252,7 @@ class Confide
      */
     protected function attemptCacheKey( $credentials )
     {
-        return 'confide_failedlogin_attempt_'
+        return 'confide_flogin_attempt_'
             .$this->app['request']->server('REMOTE_ADDR')
             .$this->app['request']->server('HTTP_X_FORWARDED_FOR')
             .$credentials['email'];

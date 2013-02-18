@@ -20,19 +20,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
     public function setUp()
     {
         $app = $this->mockApp();
+        $this->confide = new Confide();
 
-        $this->confide = new Confide($app);
-    }
-
-    public function testGetVersion()
-    {
-        if( ! defined('CONFIDE_VERSION') )
-            define('CONFIDE_VERSION','test');
-
-        $is = $this->confide->version();
-        $should_be = 'Confide v'.CONFIDE_VERSION;
-
-        $this->assertEquals( $should_be, $is );
+        // Set the app attribute with mock
+        $this->confide->app = $app;
     }
 
     public function testGetModel()
@@ -43,7 +34,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->with('auth.model')
             ->andReturn( 'User' )
             ->once();
-        $this->confide->_app['config'] = $config;
+        $this->confide->app['config'] = $config;
 
         // Mocks an user
         $confide_user = $this->mockConfideUser();
@@ -66,7 +57,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $auth->shouldReceive('user')
             ->andReturn( $confide_user )
             ->once();
-        $this->confide->_app['auth'] = $auth;
+        $this->confide->app['auth'] = $auth;
 
         $this->assertEquals( $confide_user, $this->confide->user() );
     }
@@ -92,7 +83,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $hash->shouldReceive('check')
             ->andReturn( true )
             ->times(2); // 2 successfull logins
-        $this->confide->_app['hash'] = $hash;
+        $this->confide->app['hash'] = $hash;
 
         $this->objProviderShouldReturn( 'User', $confide_user );
 
@@ -123,7 +114,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         $this->objProviderShouldReturn( 'User', $confide_user );
 
-        $this->confide->_app['hash']->shouldReceive('check')
+        $this->confide->app['hash']->shouldReceive('check')
             ->andReturn( false );
 
         for ($i=0; $i < $tries; $i++) { 
@@ -162,7 +153,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $auth->shouldReceive('logout')
             ->once();
 
-        $this->confide->_app['auth'] = $auth;
+        $this->confide->app['auth'] = $auth;
         $this->assertEquals( null, $this->confide->logout() );
     }
 
@@ -174,7 +165,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->andReturn( 'Content' )
             ->times( 3 );
 
-        $this->confide->_app['view'] = $view;
+        $this->confide->app['view'] = $view;
 
         $this->assertNotEquals( null, $this->confide->MakeLoginForm() );
         $this->assertNotEquals( null, $this->confide->makeSignupForm() );
@@ -257,7 +248,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->once();
         $cache->shouldReceive('get')
             ->andReturn( $value );
-        $this->confide->_app['cache'] = $cache;
+        $this->confide->app['cache'] = $cache;
     }
 
     /**
@@ -275,6 +266,6 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->with($class)
             ->andReturn( $obj );
         
-        $this->confide->_obj_provider = $obj_provider;
+        $this->confide->objectRepository = $obj_provider;
     }
 }
