@@ -72,7 +72,18 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'login' : 'getLogin' }}()
     {
-        return Confide::makeLoginForm();
+        if( Confide::user() )
+        {
+            // If user is logged, redirect to internal 
+            // page, change it to '/admin', '/dashboard' or something
+            return Redirect::to('/');
+        }
+        else
+        {
+            // By passing the 'r' querystring to makeLoginForm
+            // the user will be redirected to this route after login
+            return Confide::makeLoginForm( Input::get('r') );
+        }
     }
 
     /**
@@ -92,7 +103,16 @@ class {{ $name }} extends BaseController {
         // logAttempt will check if the 'email' perhaps is the username.
         if ( Confide::logAttempt( $input ) ) 
         {
-            return Redirect::to('/');
+            // If credentials are correct, redirect to internal 
+            // page, change it to '/admin', '/dashboard' or something
+            $destiny = '/';
+
+            // But if the 'r' parameter is set, then redirect to it
+            $redirect_to = Input::get('r');
+            $destiny = ($redirect_to) ?: $destiny;
+
+            // Redirect
+            return Redirect::to( $destiny );
         }
         else
         {
