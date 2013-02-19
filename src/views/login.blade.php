@@ -1,5 +1,6 @@
 <form method="POST" action="{{{ URL::action('UserController@do_login') ?: '/user/login' }}}" accept-charset="UTF-8">
     <input type="hidden" name="csrf_token" value="{{{ Session::getToken() }}}">
+    <input type="hidden" name="r" value="{{{ $redirect_to }}}">
     <fieldset>
         <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
         <input tabindex="1" placeholder="{{{ Lang::get('confide::confide.username_e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
