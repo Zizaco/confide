@@ -243,7 +243,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return void
      */
-    protected function fixViewHint()
+    protected static function fixViewHint()
     {
         if (isset(static::$app['view.finder']))
             static::$app['view.finder']->addNamespace('confide', __DIR__.'/../../views');
@@ -261,7 +261,7 @@ class ConfideUser extends Ardent implements UserInterface {
         if ( static::$app['config']->getEnvironment() == 'testing' )
             return;
 
-        $this->fixViewHint();
+        static::fixViewHint();
 
         static::$app['mailer']->send($view_name, $params, function($m) use ($subject_translation)
         {
