@@ -80,9 +80,7 @@ class {{ $name }} extends BaseController {
         }
         else
         {
-            // By passing the 'r' querystring to makeLoginForm
-            // the user will be redirected to this route after login
-            return Confide::makeLoginForm( Input::get('r') );
+            return Confide::makeLoginForm();
         }
     }
 
@@ -103,16 +101,16 @@ class {{ $name }} extends BaseController {
         // logAttempt will check if the 'email' perhaps is the username.
         if ( Confide::logAttempt( $input ) ) 
         {
-            // If credentials are correct, redirect to internal 
-            // page, change it to '/admin', '/dashboard' or something
-            $destiny = '/';
-
-            // But if the 'r' parameter is set, then redirect to it
-            $redirect_to = Input::get('r');
-            $destiny = ($redirect_to) ?: $destiny;
-
-            // Redirect
-            return Redirect::to( $destiny );
+            // If the session 'loginRedirect' is set, then redirect
+            // to that route. Otherwise redirect to '/'
+            $r = Session::get('loginRedirect');
+            if (!empty($r))
+            {
+                Session::forget('loginRedirect');
+                return Redirect::to($r);
+            }
+            
+            return Redirect::to('/'); // change it to '/admin', '/dashboard' or something
         }
         else
         {

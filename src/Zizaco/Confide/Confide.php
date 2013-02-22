@@ -198,15 +198,11 @@ class Confide
     /**
      * Display the default login view
      *
-     * @param string  $route The route that the user tried to access while guest
      * @return Illuminate\View\View
      */
-    public function makeLoginForm( $route = null )
+    public function makeLoginForm()
     {
-        return $this->app['view']->make(
-            $this->app['config']->get('confide::login_form'),
-            array('redirect_to'=>(($route) ?: ''))
-        );
+        return $this->app['view']->make($this->app['config']->get('confide::login_form'));
     }
 
     /**

@@ -21,6 +21,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Integrated with the Laravel Auth component/configs.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 - Login throttling.
+- Redirecting to previous route after authentication.
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
 
@@ -190,6 +191,37 @@ Then, when dumping the routes, you should use the --restful option to match the 
 In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
 
 See [Entrust](https://github.com/Zizaco/entrust)
+
+#### Redirecting to previous route after login
+
+When defining your filter you should set the `'loginRedirect'` session variable. For example:
+
+    // filters.php
+
+    Route::filter('auth', function()
+    {
+        if ( Auth::guest() ) // If the user is not logged in
+        {
+            // Set the loginRedirect session variable
+            Session::put( 'loginRedirect', Request::url() );
+
+            // Redirect back to user login
+            return Redirect::to( 'user/login' );
+        }
+    });
+
+    // Only authenticated users will be able to access routes that begins with
+    // 'admin'. Ex: 'admin/posts', 'admin/categories'.
+    Route::when('admin*', 'auth'); 
+
+or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
+
+    // filters.php
+
+    Entrust::routeNeedsRole( 'admin*', 'Admin', function(){
+        Session::put( 'loginRedirect', Request::url() );
+        return Redirect::to( 'user/login' );
+    } );
 
 ## Troubleshooting
 
