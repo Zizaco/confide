@@ -122,7 +122,7 @@ Access `http://yourapp/user/create` to create your first user. Check the `app/ro
 
 **Optional steps:**
 
-1. Use `Confide` facade to dump login and signup forms easly with `makeLoginForm()` and `makeSignupForm()`. You can render the forms within your views by doing `{{ Confide::makeLoginForm()->render() }}`.
+1. Use `Confide` facade to dump login and signup forms easly with `makeLoginForm()` and `makeSignupForm()`. You can render the forms within your views by doing `{{{ Confide::makeLoginForm()->render() }}}`.
 2. Generate a controller with the template contained in Confide throught the artisan command `$ php artisan confide:controller`. If a controller with the same name exists it will **NOT** be overwritten.
 3. Generate routes matching the controller template throught the artisan command `$ php artisan confide:routes`. Your `routes.php` will **NOT** be overwritten.
 
@@ -133,7 +133,7 @@ Access `http://yourapp/user/create` to create your first user. Check the `app/ro
 You can change the model name that will be authenticated in the `config/auth.php` file.
 Confide uses the values present in that configuration file.
 
-To change the controller name when dumping the default controller template you can use the --name option.
+To change the controller name when dumping the default controller template you can use the --name option.F
 
     $ php artisan confide:controller --name Employee
 
