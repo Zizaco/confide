@@ -1,5 +1,6 @@
 <form method="POST" action="{{{ (URL::action('UserController@do_reset_password')) ?: '/user/reset' }}}" accept-charset="UTF-8">
     <input type="hidden" name="token" value="{{{ $token }}}">
+    <input type="hidden" name="csrf_token" value="{{{ Session::getToken() }}}">
 
     <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
     <input placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
