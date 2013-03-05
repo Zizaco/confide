@@ -98,7 +98,6 @@ class Confide
         {
             $user = $this->model()
                 ->where('email','=',$credentials['email'])
-                ->orWhere('username','=',$credentials['email'])
                 ->first();
 
             if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->app['hash']->check($credentials['password'], $user->password) )

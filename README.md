@@ -79,7 +79,7 @@ It will generate the `<timestamp>_confide_setup_users_table.php` migration. You 
 
     $ php artisan migrate
 
-It will setup a table containing `username`, `email`, `password`, `confirmation_code` and `confirmed` fields, which are the default fields needed for Confide use. Feel free to add more fields to the database.
+It will setup a table containing `email`, `password`, `confirmation_code` and `confirmed` fields, which are the default fields needed for Confide use. Feel free to add more fields to the database.
 
 Change your User model in `app/models/User.php` to:
 
@@ -165,7 +165,6 @@ To change the validation rules of the User model you can take a look at [Ardent]
          * Validation rules
          */
         public static $rules = array(
-            'username' => 'required|alpha_dash|between:6,12',
             'email' => 'required|email',
             'password' => 'required|between:4,11|confirmed',
         );
