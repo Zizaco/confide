@@ -89,18 +89,19 @@ class Confide
      *
      * @param  array $credentials
      * @param  bool $confirmed_only
-     * @param  mixed $identity_column
+     * @param  mixed $identity_columns
      * @return void
      */
-    public function logAttempt( $credentials, $confirmed_only = false, $identity_column = 'username' )
+    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('username', 'email') )
     {
         if(! $this->reachedThrottleLimit( $credentials ) )
         {
             $user_model = $this->model();
 
-            if(is_array($identity_column))
+            if(is_array($identity_columns))
             {
-                foreach ($identity_column as $i => $column) {
+                $identity_columns = array_values($identity_columns);
+                foreach ($identity_columns as $i => $column) {
 
                     if($i == 0)
                     {
@@ -115,9 +116,9 @@ class Confide
                 $user = $user_model->first();
             }
 
-            elseif(is_string($identity_column))
+            elseif(is_string($identity_columns))
             {
-                $user = $user_model->where($identity_column,'=',$credentials[$identity_column])->first();
+                $user = $user_model->where($identity_columns,'=',$credentials[$identity_columns])->first();
             }
 
             if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->app['hash']->check($credentials['password'], $user->password) )
