@@ -85,21 +85,41 @@ class Confide
 
     /**
      * Attempt to log a user into the application with
-     * password and username or email.
+     * password and identity field(s), usually email or username.
      *
-     * @param  array $arguments
+     * @param  array $credentials
      * @param  bool $confirmed_only
+     * @param  mixed $identity_columns
      * @return void
      */
-    public function logAttempt( $credentials, $confirmed_only = false )
+    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('username', 'email') )
     {
-
         if(! $this->reachedThrottleLimit( $credentials ) )
         {
-            $user = $this->model()
-                ->where('email','=',$credentials['email'])
-                ->orWhere('username','=',$credentials['email'])
-                ->first();
+            $user_model = $this->model();
+
+            if(is_array($identity_columns))
+            {
+                $identity_columns = array_values($identity_columns);
+                foreach ($identity_columns as $i => $column) {
+
+                    if($i == 0)
+                    {
+                        $user_model = $user_model->where($column,'=',$credentials[$column]);
+                    }
+                    else
+                    {
+                        $user_model = $user_model->orWhere($column,'=',$credentials[$column]);
+                    }
+
+                }
+                $user = $user_model->first();
+            }
+
+            elseif(is_string($identity_columns))
+            {
+                $user = $user_model->where($identity_columns,'=',$credentials[$identity_columns])->first();
+            }
 
             if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->app['hash']->check($credentials['password'], $user->password) )
             {

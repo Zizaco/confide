@@ -88,19 +88,19 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->objProviderShouldReturn( 'User', $confide_user );
 
         $this->assertTrue( 
-            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ) )
+            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ) )
         );
 
         // Should not login with unconfirmed user.
         $this->assertFalse( 
-            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ), true )
+            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ), true )
         );
 
         $confide_user->confirmed = 1;
 
         // Should login because now the user is confirmed
         $this->assertTrue( 
-            $this->confide->logAttempt( array( 'email'=>'username', 'password'=>'123123' ), true )
+            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ), true )
         );
     }
 
@@ -124,7 +124,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         
             // Make shure the login is not happening anyway
             $this->assertFalse(
-                $this->confide->logAttempt( array('email'=>'wrong', 'password'=>'wrong') )
+                $this->confide->logAttempt( array('email'=>'wrong', 'username'=>'wrong', 'password'=>'wrong') )
             );
         }
 
