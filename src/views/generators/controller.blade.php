@@ -92,8 +92,9 @@ class {{ $name }} extends BaseController {
     {
         $input = array(
             'email'    => Input::get( 'email' ), // May be the username too
+            'username' => Input::get( 'email' ), // so we have to pass both
             'password' => Input::get( 'password' ),
-            'remamber' => Input::get( 'remember' ),
+            'remember' => Input::get( 'remember' ),
         );
 
         // If you wish to only allow login from confirmed users, call logAttempt
