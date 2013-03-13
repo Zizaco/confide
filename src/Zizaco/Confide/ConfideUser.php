@@ -168,7 +168,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = md5(microtime().static::$app['config']->get('app.key'));
+            $this->confirmation_code = substr(md5(microtime().static::$app['config']->get('app.key')),-8);
         }
 
         /*
