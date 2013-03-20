@@ -1,4 +1,4 @@
-{{{ "\n\n" }}}
+{{ "\n\n" }}
 @if (! $restful)
 
 // Confide routes
