@@ -18,7 +18,7 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'create' : 'getCreate' }}()
     {
-        return Confide::makeSignupForm();
+        return View::make(Config::get('confide::signup_form'));
     }
 
     /**
@@ -80,7 +80,7 @@ class {{ $name }} extends BaseController {
         }
         else
         {
-            return Confide::makeLoginForm();
+            return View::make(Config::get('confide::login_form'));
         }
     }
 
@@ -170,7 +170,7 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'forgot_password' : 'getForgot' }}()
     {
-        return Confide::makeForgotPasswordForm();
+        return View::make(Config::get('confide::forgot_password_form'));
     }
 
     /**
@@ -208,7 +208,8 @@ class {{ $name }} extends BaseController {
      */
     public function {{ (! $restful) ? 'reset_password' : 'getReset' }}( $token )
     {
-        return Confide::makeResetPasswordForm( $token );
+        return View::make(Config::get('confide::reset_password_form'))
+                ->with('token', $token);
     }
 
     /**
