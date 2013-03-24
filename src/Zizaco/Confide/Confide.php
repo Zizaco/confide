@@ -216,36 +216,6 @@ class Confide
     }
 
     /**
-     * Display the default login view
-     *
-     * @return Illuminate\View\View
-     */
-    public function makeLoginForm()
-    {
-        return $this->app['view']->make($this->app['config']->get('confide::login_form'));
-    }
-
-    /**
-     * Display the default signup view
-     *
-     * @return Illuminate\View\View
-     */
-    public function makeSignupForm()
-    {
-        return $this->app['view']->make( $this->app['config']->get('confide::signup_form') );
-    }
-
-    /**
-     * Display the forget password view
-     *
-     * @return Illuminate\View\View
-     */
-    public function makeForgotPasswordForm()
-    {
-        return $this->app['view']->make( $this->app['config']->get('confide::forgot_password_form') );
-    }
-
-    /**
      * Display the forget password view
      *
      * @return Illuminate\View\View
