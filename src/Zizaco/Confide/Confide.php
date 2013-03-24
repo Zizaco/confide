@@ -216,16 +216,6 @@ class Confide
     }
 
     /**
-     * Display the forget password view
-     *
-     * @return Illuminate\View\View
-     */
-    public function makeResetPasswordForm( $token )
-    {
-        return $this->app['view']->make( $this->app['config']->get('confide::reset_password_form') , array('token'=>$token));
-    }
-
-    /**
      * Returns the name of the cache key that will be used
      * to store the failed attempts
      *
