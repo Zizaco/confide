@@ -100,10 +100,16 @@ class Confide
 
             if(is_array($identity_columns))
             {
+                // Check that the passed in array contained the correct columns #45
+                foreach($identity_columns as $key => $identity_column) {
+                    if(! array_key_exists($identity_column, $credentials)) {
+                        unset($identity_columns[$key]);
+                    }
+                }
                 $identity_columns = array_values($identity_columns);
-                foreach ($identity_columns as $i => $column) {
+                foreach ($identity_columns as $key => $column) {
 
-                    if($i == 0)
+                    if($key == 0)
                     {
                         $user_model = $user_model->where($column,'=',$credentials[$column]);
                     }
