@@ -2,7 +2,7 @@
 
 use Illuminate\View\Environment;
 use Illuminate\Config\Repository;
-use ObjectProvier;
+use ObjectProvider;
 
 class Confide
 {
