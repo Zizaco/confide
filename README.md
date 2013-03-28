@@ -173,6 +173,21 @@ To change the validation rules of the User model you can take a look at [Ardent]
 
 Feel free to add more fields to your table and to the validation array. Then you should build you own signup form with the aditional fields.
 
+#### Passing additional information to the make methods
+
+If you want to pass additional parameters to the forms, you can use an alternate syntax to achieve this. 
+
+Instead of using the make method:
+    
+    Confide::makeResetPasswordForm( $token ):
+
+You would use:
+
+    View::make(Config::get('confide::reset_password_form'))
+        ->with('token', $token);
+        
+It produces the same output, but you would be able to add more inputs using 'with' just like any other view.
+
 #### RESTful controller
 
 If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) you can use the aditional `--restful` or `-r` option.
