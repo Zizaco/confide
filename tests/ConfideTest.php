@@ -157,6 +157,21 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( null, $this->confide->logout() );
     }
 
+    public function testShouldMakeForms()
+    {
+        // Make shure view make method is called 3 times
+        $view = m::mock('Illuminate\View\Environment\View');
+        $view->shouldReceive('make')
+            ->andReturn( 'Content' )
+            ->times( 3 );
+
+        $this->confide->app['view'] = $view;
+
+        $this->assertNotEquals( null, $this->confide->MakeLoginForm() );
+        $this->assertNotEquals( null, $this->confide->makeSignupForm() );
+        $this->assertNotEquals( null, $this->confide->makeForgotPasswordForm() );
+    }
+
     private function mockConfideUser()
     {
         $confide_user = m::mock( 'Illuminate\Auth\UserInterface' );
