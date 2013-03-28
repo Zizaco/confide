@@ -224,6 +224,7 @@ class Confide
     /**
      * Display the default login view
      *
+     * @deprecated
      * @return Illuminate\View\View
      */
     public function makeLoginForm()
@@ -234,6 +235,7 @@ class Confide
     /**
      * Display the default signup view
      *
+     * @deprecated
      * @return Illuminate\View\View
      */
     public function makeSignupForm()
@@ -244,6 +246,7 @@ class Confide
     /**
      * Display the forget password view
      *
+     * @deprecated
      * @return Illuminate\View\View
      */
     public function makeForgotPasswordForm()
@@ -254,6 +257,7 @@ class Confide
     /**
      * Display the forget password view
      *
+     * @deprecated
      * @return Illuminate\View\View
      */
     public function makeResetPasswordForm( $token )
