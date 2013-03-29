@@ -151,7 +151,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param callable $afterSave
      * @return bool
      */
-    public function save( array $rules = array(), $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
+    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
     {
         return $this->real_save( $rules, $customMessages, $beforeSave, $afterSave );
     }
