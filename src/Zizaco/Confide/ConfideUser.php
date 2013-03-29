@@ -231,7 +231,7 @@ class ConfideUser extends Ardent implements UserInterface {
                 $rules['password'] = 'required';
             }
 
-            return parent::save( $rules, $customMessages, $beforeSave, $afterSave );
+            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );
         }
     }
 
