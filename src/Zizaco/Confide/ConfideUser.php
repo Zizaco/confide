@@ -153,7 +153,7 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
     {
-        return $this->real_save( $rules, $customMessages, $beforeSave, $afterSave );
+        return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
     }
 
     /**
@@ -211,7 +211,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return bool
      */
-    protected function real_save( $rules = array(), $customMessages = array(), Closure $beforeSave = null, Closure $afterSave = null )
+    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
     {
         if ( defined('CONFIDE_TEST') )
         {
@@ -231,7 +231,7 @@ class ConfideUser extends Ardent implements UserInterface {
                 $rules['password'] = 'required';
             }
 
-            return parent::save( $rules, $customMessages, $beforeSave, $afterSave );
+            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );
         }
     }
 
