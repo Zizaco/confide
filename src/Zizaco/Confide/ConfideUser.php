@@ -47,7 +47,8 @@ class ConfideUser extends Ardent implements UserInterface {
      * @var array
      */
     public static $rules = array(
-      'email' => 'required|email',
+      'username' => 'unique:users',
+      'email' => 'required|email|unique:users',
       'password' => 'required|between:4,11|confirmed',
     );
 

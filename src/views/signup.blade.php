@@ -4,7 +4,7 @@
         <label for="username">{{{ Lang::get('confide::confide.username') }}}</label>
         <input placeholder="{{{ Lang::get('confide::confide.username') }}}" type="text" name="username" id="username" value="{{{ Input::old('username') }}}">
 
-        <label for="email">{{{ Lang::get('confide::confide.e_mail') }}} <small>{{{ Lang::get('confide::confide.signup.confirmation_required') }}}</small></label>
+        <label for="email">{{{ Lang::get('confide::confide.e_mail') }}} <small>{{ Lang::get('confide::confide.signup.confirmation_required') }}</small></label>
         <input placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
 
         <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
@@ -16,13 +16,13 @@
         @if ( Session::get('error') )
             <div class="alert alert-error">
                 @if ( is_array(Session::get('error')) )
-                    {{{ head(Session::get('error')) }}}
+                    {{ head(Session::get('error')) }}
                 @endif
             </div>
         @endif
 
         @if ( Session::get('notice') )
-            <div class="alert">{{{ Session::get('notice') }}}</div>
+            <div class="alert">{{ Session::get('notice') }}</div>
         @endif
 
         <div class="form-actions">
