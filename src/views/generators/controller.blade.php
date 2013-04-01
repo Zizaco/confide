@@ -54,7 +54,7 @@ class {{ $name }} extends BaseController {
         else
         {
             // Get validation errors (see Ardent package)
-            $error = ${{ lcfirst(Config::get('auth.model')) }}->errors()->all();
+            $error = ${{ lcfirst(Config::get('auth.model')) }}->errors()->all(':message');
 
             @if (! $restful)
             return Redirect::action('{{ $name }}@create')
