@@ -126,6 +126,7 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * Change user password
      *
+     * @param $params
      * @return string
      */
     public function resetPassword( $params )
@@ -145,11 +146,12 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * Overwrite the Ardent save method. Saves model into
      * database
-     * 
-     * @param array   $rules:array
-     * @param array   $customMessages
+     *
+     * @param array $rules:array
+     * @param array $customMessages
+     * @param array $options
      * @param closure $beforeSave
-     * @param callable $afterSave
+     * @param callable|\Zizaco\Confide\Closure $afterSave
      * @return bool
      */
     public function save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
@@ -189,6 +191,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * After save, delivers the confirmation link email.
      * code if is a new user.
      *
+     * @param bool $success
      * @param bool $forced Indicates whether the user is being saved forcefully
      * @return bool
      */
@@ -210,6 +213,11 @@ class ConfideUser extends Ardent implements UserInterface {
      * and Ardent save methods are not Confide's
      * responsibility.
      *
+     * @param array $rules
+     * @param array $customMessages
+     * @param array $options
+     * @param Closure $beforeSave
+     * @param Closure $afterSave
      * @return bool
      */
     protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
@@ -251,9 +259,10 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * Send email using the lang sentence as subject and the viewname
-     * 
+     *
      * @param mixed $subject_translation
      * @param mixed $view_name
+     * @param array $params
      * @return voi.
      */
     protected function sendEmail( $subject_translation, $view_name, $params = array() )
