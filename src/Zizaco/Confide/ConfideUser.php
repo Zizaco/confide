@@ -282,6 +282,13 @@ class ConfideUser extends Ardent implements UserInterface {
         });
     }
 
+    /**
+     * Generates UUID and checks it for uniqueness against a table/column.
+     *
+     * @param  $table
+     * @param  $field
+     * @return string
+     */
     protected function generateUuid($table, $field)
     {
         // Generate Uuid
