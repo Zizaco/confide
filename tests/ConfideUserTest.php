@@ -175,7 +175,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             
         $app['db']->shouldReceive('where')
             ->andReturn( $app['db'] );
-            
+
+        $app['db']->shouldReceive('first')
+            ->andReturn( $app['db'] );
+
         $app['db']->shouldReceive('update')
             ->andReturn( true );
 

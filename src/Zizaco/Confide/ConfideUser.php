@@ -2,6 +2,7 @@
 
 use Illuminate\Auth\UserInterface;
 use LaravelBook\Ardent\Ardent;
+use J20\Uuid;
 
 class ConfideUser extends Ardent implements UserInterface {
 
@@ -108,7 +109,7 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function forgotPassword()
     {
-        $token = substr(md5(microtime().static::$app['config']->get('app.key')),-16);
+        $token = $this->generateUuid('password_reminders', 'token');
 
         static::$app['db']->connection()->table('password_reminders')->insert(array(
             'email'=> $this->email,
@@ -171,7 +172,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = substr(md5(microtime().static::$app['config']->get('app.key')),-8);
+            $this->confirmation_code = $this->generateUuid($this->table, 'confirmation_code');
         }
 
         /*
@@ -279,5 +280,19 @@ class ConfideUser extends Ardent implements UserInterface {
             $m->to( $user->email )
             ->subject( ConfideUser::$app['translator']->get($subject_translation) );
         });
+    }
+
+    protected function generateUuid($table, $field)
+    {
+        // Generate Uuid
+        $uuid = Uuid\Uuid::v4(false);
+        // Check that it is unique
+        $currentConfirmationCode = static::$app['db']->table($table)->where($field, $uuid)->first();
+        // If it isn't unique, try again. Make sure we're not Mocking.
+        if($currentConfirmationCode != NULL && !is_a($currentConfirmationCode, 'Mockery\Mock')) {
+           $uuid =  $this->generateUuid($table, $field);
+        }
+
+        return $uuid;
     }
 }
