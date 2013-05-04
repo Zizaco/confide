@@ -2,6 +2,7 @@
 
 use Illuminate\View\Environment;
 use Illuminate\Config\Repository;
+use InvalidArgumentException;
 use Zizaco\Confide\ObjectProvider;
 
 class Confide
@@ -263,6 +264,21 @@ class Confide
     public function makeResetPasswordForm( $token )
     {
         return $this->app['view']->make( $this->app['config']->get('confide::reset_password_form') , array('token'=>$token));
+    }
+
+    /**
+     * @param $controllerAction
+     * @return string
+     */
+    public function checkAction( $controllerAction )
+    {
+        try {
+            $url = $this->app['url']->action($controllerAction);
+        } catch( InvalidArgumentException $e ) {
+            return '';
+        }
+
+        return $url;
     }
 
     /**
