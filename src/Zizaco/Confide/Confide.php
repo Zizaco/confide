@@ -267,15 +267,17 @@ class Confide
     }
 
     /**
+     * Check whether the controller's action exists.
+     * Returns the url if it does. Otherwise false.
      * @param $controllerAction
      * @return string
      */
-    public function checkAction( $controllerAction )
+    public function checkAction( $action, $parameters = array(), $absolute = true )
     {
         try {
-            $url = $this->app['url']->action($controllerAction);
+            $url = $this->app['url']->action($action, $params);
         } catch( InvalidArgumentException $e ) {
-            return '';
+            return false;
         }
 
         return $url;
