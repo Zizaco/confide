@@ -275,7 +275,7 @@ class Confide
     public function checkAction( $action, $parameters = array(), $absolute = true )
     {
         try {
-            $url = $this->app['url']->action($action, $params);
+            $url = $this->app['url']->action($action, $parameters, $absolute);
         } catch( InvalidArgumentException $e ) {
             return false;
         }
