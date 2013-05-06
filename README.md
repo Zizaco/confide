@@ -236,6 +236,12 @@ or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
         Session::put( 'loginRedirect', Request::url() );
         return Redirect::to( 'user/login' );
     } );
+    
+#### Validating a route
+
+If you want to validate whether a route exists, the `Confide::checkAction` function is what you are looking for.
+
+Currently it is used within the views to determine Non-RESTful vs RESTful routes.
 
 ## Troubleshooting
 
