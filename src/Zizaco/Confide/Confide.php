@@ -186,6 +186,21 @@ class Confide
     }
 
     /**
+     * Checks to see if the user has a valid token.
+     * 
+     * @param $token
+     * @return bool
+     */
+    public function isValidToken( $token )
+    {
+        $count = $this->app['db']->connection()->table('password_reminders')
+            ->where('token','=',$token)
+            ->count();
+
+        return ($count != 0);
+    }
+
+    /**
      * Change user password
      *
      * @return string
