@@ -150,11 +150,11 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $rules:array
      * @param array $customMessages
      * @param array $options
-     * @param closure $beforeSave
-     * @param callable|\Zizaco\Confide\Closure $afterSave
+     * @param \Closure $beforeSave
+     * @param \Closure $afterSave
      * @return bool
      */
-    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
+    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
         return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
     }
@@ -216,11 +216,11 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $rules
      * @param array $customMessages
      * @param array $options
-     * @param Closure $beforeSave
-     * @param Closure $afterSave
+     * @param \Closure $beforeSave
+     * @param \Closure $afterSave
      * @return bool
      */
-    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), Closure $beforeSave = null, Closure $afterSave = null )
+    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
         if ( defined('CONFIDE_TEST') )
         {
