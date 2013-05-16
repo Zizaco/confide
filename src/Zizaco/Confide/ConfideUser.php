@@ -55,10 +55,10 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * Create a new ConfideUser instance.
      */
-    public function __construct()
+    public function __construct( array $attributes = array() )
     {
-        parent::__construct();
-
+        parent::__construct( $attributes );
+    
         if ( ! static::$app )
             static::$app = app();
 
