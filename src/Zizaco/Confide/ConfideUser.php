@@ -88,6 +88,7 @@ class ConfideUser extends Ardent implements UserInterface {
     public function getUserFromCredsIdentity($credentials, $identity_columns = array('username', 'email'))
     {
         $user = null;
+        $userModel = new $this;
 
         if (is_array($identity_columns)) {
             // Check that the passed in array contained the correct columns #45
@@ -101,17 +102,17 @@ class ConfideUser extends Ardent implements UserInterface {
 
                 if($key == 0)
                 {
-                    $user_model = $this->where($column,'=',$credentials[$column]);
+                    $userModel = $userModel->where($column,'=',$credentials[$column]);
                 }
                 else
                 {
-                    $user_model = $this->orWhere($column,'=',$credentials[$column]);
+                    $userModel = $userModel->orWhere($column,'=',$credentials[$column]);
                 }
 
             }
-            $user = $user_model->first();
+            $user = $userModel->first();
         } elseif (is_string($identity_columns)) {
-            $user = $this->where($identity_columns,'=',$credentials[$identity_columns])->first();
+            $user = $userModel->where($identity_columns,'=',$credentials[$identity_columns])->first();
         }
 
         return $user;
