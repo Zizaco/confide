@@ -117,6 +117,28 @@ class ConfideUser extends Ardent implements UserInterface {
         return $user;
     }
 
+    public function checkUserExists($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = $this->getUserFromCredsIdentity($credentials, $identity_columns);
+
+        if (! empty($user)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isConfirmed($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = $this->getUserFromCredsIdentity($credentials, $identity_columns);
+
+        if (! is_null($user) and $user->confirmed) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Confirm the user (usually means that the user)
      * email is valid.

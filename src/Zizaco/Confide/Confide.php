@@ -84,18 +84,6 @@ class Confide
         }
     }
 
-    public function isConfirmed($credentials, $identity_columns = array('username', 'email'))
-    {
-        $user = $this->model()
-            ->getUserFromCredsIdentity($credentials, $identity_columns);
-
-        if (! is_null($user) && $user->confirmed) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Attempt to log a user into the application with
      * password and identity field(s), usually email or username.

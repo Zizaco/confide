@@ -115,10 +115,16 @@ class {{ $name }} extends BaseController {
         }
         else
         {
+            ${{ lcfirst(Config::get('auth.model')) }} = new {{ Config::get('auth.model') }};
+
             // Check if there was too many login attempts
             if( Confide::isThrottled( $input ) )
             {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');
+            }
+            elseif( ${{ lcfirst(Config::get('auth.model')) }}->checkUserExists( $input ) and ! ${{ lcfirst(Config::get('auth.model')) }}->isConfirmed( $input ) )
+            {
+                $err_msg = Lang::get('confide::confide.alerts.not_confirmed');
             }
             else
             {
