@@ -186,6 +186,21 @@ class Confide
     }
 
     /**
+     * Checks to see if the user has a valid token.
+     * 
+     * @param $token
+     * @return bool
+     */
+    public function isValidToken( $token )
+    {
+        $count = $this->app['db']->connection()->table('password_reminders')
+            ->where('token','=',$token)
+            ->count();
+
+        return ($count != 0);
+    }
+
+    /**
      * Change user password
      *
      * @return string
@@ -204,7 +219,19 @@ class Confide
         $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
-            return $user->resetPassword( $params );
+            if($user->resetPassword( $params ))
+            {
+                // Password reset success, remove token from database
+                $this->app['db']->connection()->table('password_reminders')
+                    ->where('token', '=', $token)
+                    ->delete();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
