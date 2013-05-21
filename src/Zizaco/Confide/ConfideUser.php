@@ -327,7 +327,7 @@ class ConfideUser extends Ardent implements UserInterface {
         if(empty($rules)) {
             $rules = $this->getUpdateRules();
         }
-        return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+        return $this->save( $rules, $customMessages, $options, $beforeSave, $afterSave );
     }
 
     /**
