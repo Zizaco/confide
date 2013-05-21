@@ -243,6 +243,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['db']->shouldReceive('first')
             ->andReturn( $app['db'] );
         $app['db']->email = 'test@example.com';
+        $app['db']->shouldReceive('delete')
+        ->andReturn( true );
 
         return $app;
     }
