@@ -151,6 +151,18 @@ First, publish the config files:
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
+#### Update an object
+
+To update a user already in the database you'll want to either pass in an different rule set or use the amend function.
+
+    $user = new User;
+    $user->username = 'newuser';
+
+    // Save
+    $user->save($this->getUpdateRules());
+    // Or amend
+    $this->amend();
+
 #### Validate model fields
 
 To change the validation rules of the User model you can take a look at [Ardent](http://laravelbook.github.com/ardent/#validation "Ardent Validation Rulez"). For example:
@@ -171,7 +183,7 @@ To change the validation rules of the User model you can take a look at [Ardent]
 
     }
 
-Feel free to add more fields to your table and to the validation array. Then you should build you own signup form with the aditional fields.
+Feel free to add more fields to your table and to the validation array. Then you should build your own sign-up form with the additional fields.
 
 #### Passing additional information to the make methods
 

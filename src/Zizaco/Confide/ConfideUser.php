@@ -48,8 +48,22 @@ class ConfideUser extends Ardent implements UserInterface {
      * @var array
      */
     public static $rules = array(
-      'email' => 'required|email',
-      'password' => 'required|between:4,11|confirmed',
+        'username' => 'required|alpha_dash|unique:users',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|between:4,11|confirmed',
+        'password_confirmation' => 'between:4,11',
+    );
+
+    /**
+     * Rules for when updating a user.
+     *
+     * @var array
+     */
+    protected $updateRules = array(
+        'username' => 'required|alpha_dash',
+        'email' => 'required|email',
+        'password' => 'between:4,11|confirmed',
+        'password_confirmation' => 'between:4,11',
     );
 
     /**
@@ -300,6 +314,23 @@ class ConfideUser extends Ardent implements UserInterface {
     }
 
     /**
+     * Alias of save but uses updateRules instead of rules.
+     * @param array $rules
+     * @param array $customMessages
+     * @param array $options
+     * @param callable $beforeSave
+     * @param callable $afterSave
+     * @return bool
+     */
+    public function amend( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
+    {
+        if(empty($rules)) {
+            $rules = $this->getUpdateRules();
+        }
+        return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+    }
+
+    /**
      * Add the namespace 'confide::' to view hints.
      * this makes possible to send emails using package views from
      * the command line.
@@ -355,5 +386,15 @@ class ConfideUser extends Ardent implements UserInterface {
         }
 
         return $uuid;
+    }
+
+    public function getUpdateRules()
+    {
+        return $this->updateRules;
+    }
+
+    public function setUpdateRules($set)
+    {
+        $this->updateRules = $set;
     }
 }
