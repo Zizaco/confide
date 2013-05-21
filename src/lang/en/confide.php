@@ -7,6 +7,7 @@ return array(
     'password_confirmation' => 'Confirm Password',
     'e_mail' => 'Email',
     'username_e_mail' => 'Username or Email',
+    'recaptcha' => 'The :attribute field is not correct.',
 
     'signup' => array(
         'title' => 'Signup',

@@ -33,10 +33,11 @@ class {{ $name }} extends BaseController {
         ${{ lcfirst(Config::get('auth.model')) }}->email = Input::get( 'email' );
         ${{ lcfirst(Config::get('auth.model')) }}->password = Input::get( 'password' );
 
-        // The password confirmation will be removed from model
+        // The password confirmation and recaptcha will be removed from model
         // before saving. This field will be used in Ardent's
         // auto validation.
         ${{ lcfirst(Config::get('auth.model')) }}->password_confirmation = Input::get( 'password_confirmation' );
+        ${{ lcfirst(Config::get('auth.model')) }}->recaptcha_response_field = Input::get( 'recaptcha_response_field' );
 
         // Save if valid. Password field will be hashed before save
         ${{ lcfirst(Config::get('auth.model')) }}->save();
