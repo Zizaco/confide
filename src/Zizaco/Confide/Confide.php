@@ -73,13 +73,25 @@ class Confide
      */
     public function confirm( $code )
     {
-        $user = Confide::model()->where('confirmation_code', '=', $code)->get()->first();
+        $user = $this->model()->where('confirmation_code', '=', $code)->get()->first();
         if( $user )
         {
             return $user->confirm();
         }
         else
         {
+            return false;
+        }
+    }
+
+    public function isConfirmed($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = $this->model()
+            ->getUserFromCredsIdentity($credentials, $identity_columns);
+
+        if (! is_null($user) && $user->confirmed) {
+            return true;
+        } else {
             return false;
         }
     }
@@ -97,38 +109,11 @@ class Confide
     {
         if(! $this->reachedThrottleLimit( $credentials ) )
         {
-            $user_model = $this->model();
+            $user = $this->model()
+                ->getUserFromCredsIdentity($credentials, $identity_columns);
 
-            if(is_array($identity_columns))
-            {
-                // Check that the passed in array contained the correct columns #45
-                foreach($identity_columns as $key => $identity_column) {
-                    if(! array_key_exists($identity_column, $credentials)) {
-                        unset($identity_columns[$key]);
-                    }
-                }
-                $identity_columns = array_values($identity_columns);
-                foreach ($identity_columns as $key => $column) {
-
-                    if($key == 0)
-                    {
-                        $user_model = $user_model->where($column,'=',$credentials[$column]);
-                    }
-                    else
-                    {
-                        $user_model = $user_model->orWhere($column,'=',$credentials[$column]);
-                    }
-
-                }
-                $user = $user_model->first();
-            }
-
-            elseif(is_string($identity_columns))
-            {
-                $user = $user_model->where($identity_columns,'=',$credentials[$identity_columns])->first();
-            }
-
-            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and $this->app['hash']->check($credentials['password'], $user->password) )
+            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and
+                $this->app['hash']->check($credentials['password'], $user->password) )
             {
                 $remember = isset($credentials['remember']) ? $credentials['remember'] : false;
 

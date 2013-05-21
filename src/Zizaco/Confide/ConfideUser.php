@@ -15,7 +15,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * Laravel application
-     * 
+     *
      * @var Illuminate\Foundation\Application
      */
     public static $app;
@@ -58,7 +58,7 @@ class ConfideUser extends Ardent implements UserInterface {
     public function __construct( array $attributes = array() )
     {
         parent::__construct( $attributes );
-    
+
         if ( ! static::$app )
             static::$app = app();
 
@@ -85,6 +85,38 @@ class ConfideUser extends Ardent implements UserInterface {
         return $this->password;
     }
 
+    public function getUserFromCredsIdentity($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = null;
+
+        if (is_array($identity_columns)) {
+            // Check that the passed in array contained the correct columns #45
+            foreach($identity_columns as $key => $identity_column) {
+                if(! array_key_exists($identity_column, $credentials)) {
+                    unset($identity_columns[$key]);
+                }
+            }
+            $identity_columns = array_values($identity_columns);
+            foreach ($identity_columns as $key => $column) {
+
+                if($key == 0)
+                {
+                    $user_model = $this->where($column,'=',$credentials[$column]);
+                }
+                else
+                {
+                    $user_model = $this->orWhere($column,'=',$credentials[$column]);
+                }
+
+            }
+            $user = $user_model->first();
+        } elseif (is_string($identity_columns)) {
+            $user = $this->where($identity_columns,'=',$credentials[$identity_columns])->first();
+        }
+
+        return $user;
+    }
+
     /**
      * Confirm the user (usually means that the user)
      * email is valid.
@@ -95,7 +127,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         $this->confirmed = 1;
 
-        // Executes directly using query builder 
+        // Executes directly using query builder
         return static::$app['db']->table($this->table)
             ->where($this->getKeyName(), $this->getKey())
             ->update(array('confirmed'=>1));
@@ -200,7 +232,7 @@ class ConfideUser extends Ardent implements UserInterface {
         if ( $success  and ! $this->confirmed )
         {
             $view = static::$app['config']->get('confide::email_account_confirmation');
-            
+
             $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
         }
 

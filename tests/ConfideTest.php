@@ -178,7 +178,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $confide_user->username = 'uname';
         $confide_user->password = '123123';
         $confide_user->confirmed = 0;
-        $confide_user->shouldReceive('where','get', 'orWhere','first', 'all')
+        $confide_user->shouldReceive('where','get', 'orWhere','first', 'all','getUserFromCredsIdentity')
             ->andReturn( $confide_user );
 
         return $confide_user;
@@ -243,8 +243,9 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['db']->shouldReceive('first')
             ->andReturn( $app['db'] );
         $app['db']->email = 'test@example.com';
+
         $app['db']->shouldReceive('delete')
-        ->andReturn( true );
+            ->andReturn( true );
 
         return $app;
     }
