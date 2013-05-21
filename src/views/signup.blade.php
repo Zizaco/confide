@@ -13,6 +13,8 @@
         <label for="password_confirmation">{{{ Lang::get('confide::confide.password_confirmation') }}}</label>
         <input placeholder="{{{ Lang::get('confide::confide.password_confirmation') }}}" type="password" name="password_confirmation" id="password_confirmation">
 
+        {{ Form::captcha() }}
+
         @if ( Session::get('error') )
             <div class="alert alert-error">
                 @if ( is_array(Session::get('error')) )
