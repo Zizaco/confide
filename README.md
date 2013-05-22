@@ -151,9 +151,9 @@ First, publish the config files:
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
-#### Update an object
+#### Update an User
 
-To update a user already in the database you'll want to either pass in an different rule set or use the amend function.
+To update an user already in the database you'll want to either pass in an different rule set or use the amend function.
 
     $user = new User;
     $user->username = 'newuser';
@@ -164,7 +164,7 @@ To update a user already in the database you'll want to either pass in an differ
     $this->amend();
 
 Further if you'd like to make sure the updated user uses unique from the original rule, you'll want
-to pass in the old user and the new user to the `prepareRules` function. You can use it like this.
+to pass in the old user and the new user to the `prepareRules` function. You can use it like this:
 
     $oldUser = $user->find(1)->first();
     $user = clone $oldUser;
@@ -180,7 +180,7 @@ to pass in the old user and the new user to the `prepareRules` function. You can
 This will compare the two users and where they differ set the update rule to the original unique rule.
 
 `prepareRules` also takes a third param which can be a rule set to use to update the updateRules array. By default it
-uses the rules array with the user class.
+uses the rules array within the user class.
 
 #### Validate model fields
 
