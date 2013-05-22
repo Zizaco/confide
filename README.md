@@ -163,6 +163,25 @@ To update a user already in the database you'll want to either pass in an differ
     // Or amend
     $this->amend();
 
+Further if you'd like to make sure the updated user uses unique from the original rule, you'll want
+to pass in the old user and the new user to the `prepareRules` function. You can use it like this.
+
+    $oldUser = $user->find(1)->first();
+    $user = clone $oldUser;
+    $user->username = 'newuser';
+
+    $user->prepareRules($oldUser, $user);
+
+    // Save
+    $user->save($this->getUpdateRules());
+    // Or amend
+    $this->amend();
+
+This will compare the two users and where they differ set the update rule to the original unique rule.
+
+`prepareRules` also takes a third param which can be a rule set to use to update the updateRules array. By default it
+uses the rules array with the user class.
+
 #### Validate model fields
 
 To change the validation rules of the User model you can take a look at [Ardent](http://laravelbook.github.com/ardent/#validation "Ardent Validation Rulez"). For example:
