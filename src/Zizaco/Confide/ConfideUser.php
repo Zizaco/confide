@@ -3,6 +3,7 @@
 use Illuminate\Auth\UserInterface;
 use LaravelBook\Ardent\Ardent;
 use J20\Uuid;
+use Greggilbert\Recaptcha\RecaptchaServiceProvider;
 
 class ConfideUser extends Ardent implements UserInterface {
 
@@ -52,6 +53,7 @@ class ConfideUser extends Ardent implements UserInterface {
         'email' => 'required|email|unique:users',
         'password' => 'required|between:4,11|confirmed',
         'password_confirmation' => 'between:4,11',
+        'recaptcha_response_field' => 'required|recaptcha',
     );
 
     /**
@@ -64,6 +66,7 @@ class ConfideUser extends Ardent implements UserInterface {
         'email' => 'required|email',
         'password' => 'between:4,11|confirmed',
         'password_confirmation' => 'between:4,11',
+        'recaptcha_response_field' => 'required|recaptcha',
     );
 
     /**
@@ -244,12 +247,16 @@ class ConfideUser extends Ardent implements UserInterface {
         }
 
         /*
-         * Remove password_confirmation field before save to
+         * Remove password_confirmation & recaptcha_response_field fields before save to
          * database.
          */
         if ( isset($this->password_confirmation) )
         {
             unset( $this->password_confirmation );
+        }
+        if ( isset($this->recaptcha_response_field) )
+        {
+            unset( $this->recaptcha_response_field );
         }
 
         return true;

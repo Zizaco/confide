@@ -2,17 +2,25 @@
     <input type="hidden" name="csrf_token" value="{{{ Session::getToken() }}}">
 
     <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>
-    <div class="input-append">
-        <input placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
+    <input placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
 
-        <input class="btn" type="submit" value="{{{ Lang::get('confide::confide.forgot.submit') }}}">
-    </div>
+    {{ Form::captcha() }}
 
     @if ( Session::get('error') )
-        <div class="alert alert-error">{{{ Session::get('error') }}}</div>
+        <div class="alert alert-error">
+            @if ( is_array(Session::get('error')) )
+                {{ head(Session::get('error')) }}
+            @else
+                {{{ Session::get('error') }}}
+            @endif
+        </div>
     @endif
 
     @if ( Session::get('notice') )
         <div class="alert">{{{ Session::get('notice') }}}</div>
     @endif
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.forgot.submit') }}}</button>
+    </div>
 </form>
