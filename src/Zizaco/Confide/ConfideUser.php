@@ -53,7 +53,6 @@ class ConfideUser extends Ardent implements UserInterface {
         'email' => 'required|email|unique:users',
         'password' => 'required|between:4,11|confirmed',
         'password_confirmation' => 'between:4,11',
-        'recaptcha_response_field' => 'required|recaptcha',
     );
 
     /**
@@ -66,7 +65,6 @@ class ConfideUser extends Ardent implements UserInterface {
         'email' => 'required|email',
         'password' => 'between:4,11|confirmed',
         'password_confirmation' => 'between:4,11',
-        'recaptcha_response_field' => 'required|recaptcha',
     );
 
     /**
@@ -78,6 +76,12 @@ class ConfideUser extends Ardent implements UserInterface {
 
         if ( ! static::$app )
             static::$app = app();
+
+        // if user is using ReCaptcha, we also need to add it as a Validation rules
+        if(static::$app['config']->get('confide::use_recaptcha'))
+        {
+            static::$rules['recaptcha_response_field'] = 'required|recaptcha';
+        }
 
         $this->table = static::$app['config']->get('auth.table');
     }

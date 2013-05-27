@@ -4,7 +4,9 @@
     <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>
     <input placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
 
-    {{ Form::captcha() }}
+    @if( $use_recaptcha )
+        {{ Form::captcha() }}
+    @endif
 
     @if ( Session::get('error') )
         <div class="alert alert-error">

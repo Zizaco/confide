@@ -139,6 +139,16 @@ class Confide
     }
 
     /**
+     * Checks if user want to use ReCaptcha
+     * 
+     * @return bool
+     */
+    public function isUsingReCaptcha()
+    {
+        return $this->app['config']->get('confide::use_recaptcha');
+    }
+
+    /**
      * Send email with information about password reset
      *
      * @param string  $email
@@ -241,7 +251,8 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->app['view']->make( $this->app['config']->get('confide::signup_form') );
+        return $this->app['view']->make( $this->app['config']->get('confide::signup_form') )
+            ->with('use_recaptcha', $this->app['config']->get('confide::use_recaptcha'));
     }
 
     /**
@@ -252,7 +263,8 @@ class Confide
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app['view']->make( $this->app['config']->get('confide::forgot_password_form') );
+        return $this->app['view']->make( $this->app['config']->get('confide::forgot_password_form') )
+            ->with('use_recaptcha', $this->app['config']->get('confide::use_recaptcha'));
     }
 
     /**
