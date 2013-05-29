@@ -4,7 +4,7 @@ use Zizaco\Confide\Confide;
 use Zizaco\Confide\ConfideRepository;
 use Mockery as m;
 
-class ConfideTest extends PHPUnit_Framework_TestCase {
+class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
 
     /**
      * ConfideRepository instance
