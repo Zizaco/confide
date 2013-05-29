@@ -164,9 +164,7 @@ class Confide
      */
     public function isValidToken( $token )
     {
-        $count = $this->app['db']->connection()->table('password_reminders')
-            ->where('token','=',$token)
-            ->count();
+        $count = $this->repo->getPasswordRemindersCount( $token );
 
         return ($count != 0);
     }
@@ -179,23 +177,15 @@ class Confide
     public function resetPassword( $params )
     {
         $token = array_get($params, 'token', '');
-        
-        $email = $this->app['db']->connection()->table('password_reminders')
-            ->select('email')->where('token','=',$token)
-            ->first();
+        $email = $this->repo->getEmailByReminderToken( $token );
+        $user = $this->repo->getUserByMail( $email );
 
-        if ($email)
-            $email = $email->email;
-
-        $user = Confide::model()->where('email', '=', $email)->get()->first();
         if( $user )
         {
             if($user->resetPassword( $params ))
             {
                 // Password reset success, remove token from database
-                $this->app['db']->connection()->table('password_reminders')
-                    ->where('token', '=', $token)
-                    ->delete();
+                $this->repo->deleteEmailByReminderToken( $token );
 
                 return true;
             }

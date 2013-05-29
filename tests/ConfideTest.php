@@ -138,7 +138,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         );
     }
 
-    public function testShouldResetPassword()
+    public function testShouldForgotPassword()
     {
         // Mocks an User object
         $confide_user = $this->mockConfideUser();
@@ -155,6 +155,54 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $result = $this->confide->forgotPassword( 'user@sample.com' );
 
         $this->assertTrue( $result );
+    }
+
+    public function testIsValidToken()
+    {
+        // Mocks the repository
+        // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('getPasswordRemindersCount')
+            ->with( '123' )
+            ->andReturn(true)
+            ->once();
+
+        $this->assertTrue( $this->confide->isValidToken('123') );
+    }
+
+    public function testShouldResetPassword()
+    {
+        $params = array( 'token'=>'123', 'user'=>'somebody' );
+
+        // Mocks an User object
+        $confide_user = $this->mockConfideUser();
+        $confide_user->shouldReceive('resetPassword')
+            ->with( $params )
+            ->andReturn(true)
+            ->once();
+
+        // Mocks the repository
+        // Repository should run methods related to password reset
+        $this->confide->repo
+            ->shouldReceive('getEmailByReminderToken')
+            ->with( '123' )
+            ->andReturn('somebody@sample.com')
+            ->once()
+
+            ->getMock()
+            ->shouldReceive('getUserByMail')
+            ->with( 'somebody@sample.com' )
+            ->andReturn($confide_user)
+            ->once()
+
+            ->getMock()
+            ->shouldReceive('deleteEmailByReminderToken')
+            ->with( '123' )
+            ->andReturn(true)
+            ->once();
+
+        $this->assertTrue(
+            $this->confide->resetPassword( $params )
+        );
     }
 
     public function testShouldLogout()
