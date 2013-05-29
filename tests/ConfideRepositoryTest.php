@@ -47,20 +47,6 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->assertInstanceOf('_mockedUser', $user);
     }
 
-    public function testShouldGetUser()
-    {
-        $confide_user = new _mockedUser;
-
-        // Laravel auth component should return user
-        $auth = m::mock('Illuminate\Auth\Guard');
-        $auth->shouldReceive('user')
-            ->andReturn( $confide_user )
-            ->once();
-        $this->repo->app['auth'] = $auth;
-
-        $this->assertEquals( $confide_user, $this->repo->user() );
-    }
-
     public function testShouldConfirm()
     {
         // Make sure that our user will recieve confirm

@@ -37,16 +37,6 @@ class ConfideRepository
     }
 
     /**
-     * Get the currently authenticated user or null.
-     *
-     * @return Zizaco\Confide\ConfideUser|null
-     */
-    public function user()
-    {
-        return $this->app['auth']->user();
-    }
-
-    /**
      * Set the user confirmation to true.
      *
      * @param string $code
