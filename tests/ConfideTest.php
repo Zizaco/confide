@@ -1,6 +1,7 @@
 <?php
 
 use Zizaco\Confide\Confide;
+use Zizaco\Confide\ConfideRepository;
 use Mockery as m;
 
 class ConfideTest extends PHPUnit_Framework_TestCase {
@@ -19,8 +20,11 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function setUp()
     {
+        // Mocks the application and the repository
         $app = $this->mockApp();
-        $this->confide = new Confide();
+        $repo = m::mock(new ConfideRepository);
+
+        $this->confide = new Confide($repo);
 
         // Set the app attribute with mock
         $this->confide->app = $app;
@@ -28,24 +32,18 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testGetModel()
     {
-        // Make shure it grabbed the model from config
-        $config = m::mock('Illuminate\Config\Repository');
-        $config->shouldReceive('get')
-            ->with('auth.model')
-            ->andReturn( 'User' )
+        // Mocks an User object
+        $modelObject = $this->mockConfideUser();
+
+        // Mocks the repository
+        // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('model')
+            ->andReturn($modelObject)
             ->once();
-        $this->confide->app['config'] = $config;
-
-        // Mocks an user
-        $confide_user = $this->mockConfideUser();
-
-        // Make shure the object provider returns the
-        // user object when called
-        $this->objProviderShouldReturn( 'User', $confide_user );
 
         $user = $this->confide->model();
 
-        $this->assertNotNull( $user );
+        $this->assertEquals( $modelObject, $user );
     }
 
     public function testShouldGetUser()
@@ -64,12 +62,13 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testShouldConfirm()
     {
-        $confide_user = $this->mockConfideUser();
-        $confide_user->shouldReceive('confirm')
-            ->andReturn( true )
+        // Mocks the repository
+        // Confirm method of repository should be called with confirm code
+        // The actual confirmation is tested within ConfideRepositoryTest ;)
+        $this->confide->repo->shouldReceive('confirm')
+            ->with('123123')
+            ->andReturn(true)
             ->once();
-
-        $this->objProviderShouldReturn( 'User', $confide_user );
 
         $this->assertTrue( $this->confide->confirm( '123123' ) );
     }
@@ -81,11 +80,13 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         // Considering a valid hash check from hash component
         $hash = m::mock('Illuminate\Hashing\HasherInterface');
         $hash->shouldReceive('check')
-            ->andReturn( true )
-            ->times(2); // 2 successfull logins
+            ->andReturn( true );
         $this->confide->app['hash'] = $hash;
 
-        $this->objProviderShouldReturn( 'User', $confide_user );
+        // Mocks the repository
+        // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('model')
+            ->andReturn($confide_user);
 
         $this->assertTrue( 
             $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ) )
@@ -112,7 +113,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $confide_user->shouldReceive('get','first')
             ->andReturn( null );
 
-        $this->objProviderShouldReturn( 'User', $confide_user );
+        // Mocks the repository
+        // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('model')
+            ->andReturn($confide_user);
 
         $this->confide->app['hash']->shouldReceive('check')
             ->andReturn( false );
@@ -136,14 +140,21 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testShouldResetPassword()
     {
+        // Mocks an User object
         $confide_user = $this->mockConfideUser();
-        $confide_user->shouldReceive('resetPassword')
-            ->andReturn( true )
+        $confide_user->shouldReceive('forgotPassword')
             ->once();
 
-        $this->objProviderShouldReturn( 'User', $confide_user );
+        // Mocks the repository
+        // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('getUserByMail')
+            ->with( 'user@sample.com' )
+            ->andReturn($confide_user)
+            ->once();
 
-        $this->assertTrue( $this->confide->resetPassword( 'mail@sample.com' ) );
+        $result = $this->confide->forgotPassword( 'user@sample.com' );
+
+        $this->assertTrue( $result );
     }
 
     public function testShouldLogout()
@@ -206,6 +217,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $app['config']->shouldReceive( 'get' )
             ->with( 'confide::throttle_limit' )
             ->andReturn( 9 );
+
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'confide::password_field', 'password' )
+            ->andReturn( 'password' );
 
         $app['config']->shouldReceive( 'get' )
             ->andReturn( 'confide::login' );

@@ -15,21 +15,22 @@ class Confide
     public $app;
 
     /**
-     * Object repository
+     * Confide repository instance
      * 
-     * @var Zizaco\Confide\ObjectProvider
+     * @var Zizaco\Confide\ConfideRepository
      */
-    public $objectRepository;
+    public $repo;
 
     /**
      * Create a new confide instance.
-     * 
+     *
+     * @param  ConfideRepository $repo A "repository" to abstract all the database interaction.
      * @return void
      */
-    public function __construct()
+    public function __construct(ConfideRepository $repo)
     {
+        $this->repo = $repo;
         $this->app = app();
-        $this->objectRepository = new ObjectProvider;
     }
 
     /**
@@ -43,16 +44,13 @@ class Confide
     }
 
     /**
-     * Returns the model set in auth config
+     * Returns an object of the model set in auth config
      *
-     * @return string
+     * @return object
      */
     public function model()
     {
-        $model = $this->app['config']->get('auth.model');
-
-        return $this->objectRepository->getObject( $model );
-
+        return $this->repo->model();
     }
 
     /**
@@ -73,15 +71,7 @@ class Confide
      */
     public function confirm( $code )
     {
-        $user = $this->model()->where('confirmation_code', '=', $code)->get()->first();
-        if( $user )
-        {
-            return $user->confirm();
-        }
-        else
-        {
-            return false;
-        }
+        return $this->repo->confirm( $code );
     }
 
     /**
@@ -100,10 +90,16 @@ class Confide
             $user = $this->model()
                 ->getUserFromCredsIdentity($credentials, $identity_columns);
 
-            $passwordField =  (!is_null($this->app['config']->get('confide::password_field'))) ? $this->app['config']->get('confide::password_field') : 'password';
+            $passwordField = $this->app['config']->get('confide::password_field', 'password');
 
-            if( ! is_null($user) and ($user->confirmed or !$confirmed_only ) and
-                $this->app['hash']->check($credentials['password'], $user->$passwordField) )
+            if(
+                ! is_null($user) and
+                ($user->confirmed or ! $confirmed_only ) and
+                $this->app['hash']->check(
+                    $credentials['password'],
+                    $user->$passwordField
+                )
+            )
             {
                 $remember = isset($credentials['remember']) ? $credentials['remember'] : false;
 
@@ -148,7 +144,7 @@ class Confide
      */
     public function forgotPassword( $email )
     {
-        $user = Confide::model()->where('email', '=', $email)->get()->first();
+        $user = $this->repo->getUserByMail( $email );
         if( $user )
         {
             $user->forgotPassword();
