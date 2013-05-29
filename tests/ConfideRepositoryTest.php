@@ -89,6 +89,120 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( $this->repo->confirm( '123123' ) );
     }
 
+    public function testShouldGetByEmail()
+    {
+        // Make sure that our user will recieve confirm
+        $confide_user = m::mock(new _mockedUser);
+        $confide_user->shouldReceive('where') // Should query for the model
+            ->with('email', '=', 'lol@sample.com')
+            ->andReturn( $confide_user )
+            ->once()
+            
+            ->getMock()->shouldReceive('get')
+            ->andReturn( $confide_user )
+            ->once()
+            
+            ->getMock()->shouldReceive('first')
+            ->andReturn( $confide_user )
+            ->once();
+
+        // This will make sure that the mocked user will be returned
+        // when calling `model()` (that will occur inside `repo->confirm()`)
+        $this->repo->model = $confide_user;
+
+        $this->assertEquals( $confide_user, $this->repo->getUserByMail( 'lol@sample.com' ) );
+    }
+
+    public function testShouldGetPasswordRemindersCountByToken()
+    {
+        // Make sure that our user will recieve confirm
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection') // Should query for the password reminders with the given token
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with('password_reminders')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('where')
+            ->with('token', '=', '456456')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('count')
+            ->andReturn( 1 )
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        $this->assertEquals( 1, $this->repo->getPasswordRemindersCount( '456456' ) );
+    }
+
+    public function testShouldGetPasswordReminderEmailByToken()
+    {
+        // Make sure that our user will recieve confirm
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection') // Should query for the password reminders with the given token
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with('password_reminders')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('select')
+            ->with('email')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('where')
+            ->with('token', '=', '456456')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('first')
+            ->andReturn('lol@sample.com')
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        $this->assertEquals( 'lol@sample.com', $this->repo->getEmailByReminderToken( '456456' ) );
+    }
+
+    public function testShouldDeletePasswordReminderEmailByToken()
+    {
+        // Make sure that our user will recieve confirm
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection') // Should query for the password reminders with the given token
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with('password_reminders')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('select')
+            ->with('email')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('where')
+            ->with('token', '=', '456456')
+            ->andReturn( $database )
+            ->once()
+            
+            ->getMock()->shouldReceive('delete')
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        $this->assertNull( $this->repo->deleteEmailByReminderToken( '456456' ) );
+    }
+
     /**
      * Returns a mocked ConfideUser object for testing purposes
      * only

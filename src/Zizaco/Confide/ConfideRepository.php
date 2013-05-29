@@ -64,4 +64,62 @@ class ConfideRepository
             return false;
         }
     }
+
+    /**
+     * Find a user by the given email
+     * 
+     * @param  string $email The email to be used in the query
+     * @return object        User object
+     */
+    public function getUserByMail( $email )
+    {
+        $user = $this->model()->where('email', '=', $email)->get()->first();
+
+        return $user;
+    }
+
+    /**
+     * Get password reminders count by the given token
+     * 
+     * @param  string $token
+     * @return int    Password reminders count
+     */
+    public function getPasswordRemindersCount( $token )
+    {
+        $count = $this->app['db']->connection()->table('password_reminders')
+            ->where('token','=',$token)->count();
+
+        return $count;
+    }
+
+    /**
+     * Get email of password reminder by the given token
+     * 
+     * @param  string $token
+     * @return string Email
+     */
+    public function getEmailByReminderToken( $token )
+    {
+        $email = $this->app['db']->connection()->table('password_reminders')
+            ->select('email')->where('token','=',$token)
+            ->first();
+
+        if ($email && is_object($email))
+            $email = $email->email;
+
+        return $email;
+    }
+
+    /**
+     * Remove password reminder from database by the given token
+     * 
+     * @param  string $token
+     * @return void
+     */
+    public function deleteEmailByReminderToken( $token )
+    {
+        $email = $this->app['db']->connection()->table('password_reminders')
+            ->select('email')->where('token','=',$token)
+            ->delete();
+    }
 }
