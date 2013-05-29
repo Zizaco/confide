@@ -165,7 +165,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->once();
 
         $this->confide->app['auth'] = $auth;
-        $this->assertEquals( null, $this->confide->logout() );
+        $this->assertNull( $this->confide->logout() );
     }
 
     public function testShouldMakeForms()
@@ -178,9 +178,22 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         $this->confide->app['view'] = $view;
 
-        $this->assertNotEquals( null, $this->confide->MakeLoginForm() );
-        $this->assertNotEquals( null, $this->confide->makeSignupForm() );
-        $this->assertNotEquals( null, $this->confide->makeForgotPasswordForm() );
+        $this->assertNotNull( $this->confide->MakeLoginForm() );
+        $this->assertNotNull( $this->confide->makeSignupForm() );
+        $this->assertNotNull( $this->confide->makeForgotPasswordForm() );
+    }
+
+    public function testShouldCheckAction()
+    {
+        // Make shure auth logout method is called
+        $url = m::mock('Url');
+        $url->shouldReceive('action')
+            ->with('a@b','b','c')
+            ->andReturn('a/b')
+            ->once();
+
+        $this->confide->app['url'] = $url;
+        $this->assertNotNull( $this->confide->checkAction('a@b','b','c') );
     }
 
     private function mockConfideUser()
