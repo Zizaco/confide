@@ -44,7 +44,7 @@ class ConfideServiceProvider extends ServiceProvider {
 	{
 		$this->app->bind('confide', function($app)
 		{
-		    return new Confide($app);
+		    return new Confide($app->make('Zizaco\Confide\ConfideRepository'));
 		});
 	}
 
