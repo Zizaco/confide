@@ -29,7 +29,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
     public function testGetModel()
     {
-        // Make shure it grabbed the model from config
+        // Make sure to return the wanted value from config
         $config = m::mock('Illuminate\Config\Repository');
         $config->shouldReceive('get')
             ->with('auth.model')
@@ -45,6 +45,48 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         // Assert the result
         $this->assertInstanceOf('_mockedUser', $user);
+    }
+
+    public function testShouldGetUser()
+    {
+        $confide_user = new _mockedUser;
+
+        // Laravel auth component should return user
+        $auth = m::mock('Illuminate\Auth\Guard');
+        $auth->shouldReceive('user')
+            ->andReturn( $confide_user )
+            ->once();
+        $this->repo->app['auth'] = $auth;
+
+        $this->assertEquals( $confide_user, $this->repo->user() );
+    }
+
+    public function testShouldConfirm()
+    {
+        // Make sure that our user will recieve confirm
+        $confide_user = m::mock(new _mockedUser);
+        $confide_user->shouldReceive('confirm') // Should receive confirm
+            ->andReturn( true )
+            ->once()
+            
+            ->getMock()->shouldReceive('where') // Should query for the model
+            ->with('confirmation_code', '=', '123123')
+            ->andReturn( $confide_user )
+            ->once()
+            
+            ->getMock()->shouldReceive('get')
+            ->andReturn( $confide_user )
+            ->once()
+            
+            ->getMock()->shouldReceive('first')
+            ->andReturn( $confide_user )
+            ->once();
+
+        // This will make sure that the mocked user will be returned
+        // when calling `model()` (that will occur inside `repo->confirm()`)
+        $this->repo->model = $confide_user;
+
+        $this->assertTrue( $this->repo->confirm( '123123' ) );
     }
 
     /**
@@ -84,7 +126,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         $app['config']->shouldReceive( 'get' )
             ->with( 'auth.model' )
-            ->andReturn( 'User' );
+            ->andReturn( '_mockedUser' );
 
         $app['config']->shouldReceive( 'get' )
             ->with( 'app.key' )
