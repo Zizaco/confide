@@ -2,6 +2,12 @@
 
 class ConfideRepository
 {
+    /**
+     * Laravel application
+     * 
+     * @var Illuminate\Foundation\Application
+     */
+    public $app;
 
     /**
      * Name of the model that should be used to retrieve your users.
@@ -11,6 +17,16 @@ class ConfideRepository
      * @var string
      */
     public $model;
+
+    /**
+     * Create a new ConfideRepository
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->app = app();
+    }
 
     /**
      * Returns the model set in auth config
