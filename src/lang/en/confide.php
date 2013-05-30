@@ -46,7 +46,7 @@ return array(
         'account_confirmation' => array(
             'subject' => 'Account Confirmation',
             'greetings' => 'Hello :name',
-            'body' => 'Please access the link bellow to confirm your account.',
+            'body' => 'Please access the link below to confirm your account.',
             'farewell' => 'Regards',
         ),
 
