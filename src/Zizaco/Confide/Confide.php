@@ -90,14 +90,12 @@ class Confide
             $user = $this->model()
                 ->getUserFromCredsIdentity($credentials, $identity_columns);
 
-            $passwordField = $this->app['config']->get('confide::password_field', 'password');
-
             if(
                 ! is_null($user) and
                 ($user->confirmed or ! $confirmed_only ) and
                 $this->app['hash']->check(
                     $credentials['password'],
-                    $user->$passwordField
+                    $user->password
                 )
             )
             {
