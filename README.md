@@ -22,11 +22,11 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 - Login throttling.
 - Redirecting to previous route after authentication.
+- ReCaptcha (optional) in user signup and password reset. 
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
 
 **Planned:**
-- Captcha in user signup and password reset.
 - General improvements.
 
 ## Quick start
@@ -35,6 +35,7 @@ If you are looking for user roles and permissions see [Entrust](https://github.c
 
 In the `require` key of `composer.json` file add the following
 
+    "greggilbert/recaptcha": "dev-master",
     "zizaco/confide": "dev-master"
 
 Run the Composer update comand
@@ -48,6 +49,7 @@ In your `config/app.php` add `'Zizaco\Confide\ConfideServiceProvider'` to the en
         'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         ...
+        'Greggilbert\Recaptcha\RecaptchaServiceProvider', 
         'Zizaco\Confide\ConfideServiceProvider',
 
     ),
@@ -68,6 +70,34 @@ At the end of `config/app.php` add `'Confide'    => 'Zizaco\Confide\ConfideFacad
 Set the properly values to the `config/auth.php`. This values will be used by confide to generate the database migration and to generate controllers and routes.
 
 Set the `address` and `name` from the `from` array in `config/mail.php`. Those will be used to send account confirmation and password reset emails to the users.
+
+<a name="recaptcha"></a>
+## ReCaptcha
+A reCAPTCHA Validator for Laravel 4.
+
+To use reCAPTCHA, you first need to enable (true) it in your `app/config/packages/zizaco/confide/config.php`
+```
+    /*
+    |--------------------------------------------------------------------------
+    | Use ReCaptcha
+    |--------------------------------------------------------------------------
+    |
+    | Define if we want to use ReCaptcha, false by default
+    |
+    */
+    'use_recaptcha' => true,
+```
+
+### ReCaptcha Laravel 4 Setup
+
+1. Add `Greggilbert\Recaptcha\RecaptchaServiceProvider` to the service provider list in `app/config/app.php`.
+2. Run `php artisan config:publish greggilbert/recaptcha`.
+3. In `app/config/packages/greggilbert/recaptcha/config.php`, enter your reCAPTCHA public and private keys.
+4. Add the following line into `app/lang/[lang]/validation.php`:
+
+```php
+    "recaptcha" => 'The :attribute field is not correct.',
+```
 
 ### User model
 
