@@ -99,6 +99,56 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals( $confide_user, $this->repo->getUserByMail( 'lol@sample.com' ) );
     }
 
+    public function testShouldGetByIdentity()
+    {
+        // Make sure that our user will be returned when querying
+        $confide_user = m::mock(new _mockedUser);
+
+        $confide_user->email = 'lol@sample.com';
+        $confide_user->username = 'LoL';
+
+        $confide_user->shouldReceive('where') // Should query for the model
+            ->with('email', 'lol@sample.com')
+            ->andReturn( $confide_user )
+            ->atLeast(1)
+
+            ->getMock()->shouldReceive('where')
+            ->with('username', 'LoL')
+            ->andReturn( $confide_user )
+            ->once()
+            
+            ->getMock()->shouldReceive('get')
+            ->andReturn( $confide_user )
+            ->atLeast(1)
+            
+            ->getMock()->shouldReceive('first')
+            ->andReturn( $confide_user )
+            ->atLeast(1);
+
+        // This will make sure that the mocked user will be returned
+        // when calling `model()` (that will occur inside `repo->confirm()`)
+        $this->repo->model = $confide_user;
+
+        // Parameters to search for
+        $values = array(
+            'email' => 'lol@sample.com',
+            'username' => 'LoL',
+        );
+
+        // Identity
+        $identity = array( 'email','username' );
+
+        // Using array
+        $this->assertEquals(
+            $confide_user, $this->repo->getUserByIdentity( $values, $identity )
+        );
+
+        // Using string
+        $this->assertEquals(
+            $confide_user, $this->repo->getUserByIdentity( $values, 'email' )
+        );
+    }
+
     public function testShouldGetPasswordRemindersCountByToken()
     {
         // Make sure that our user will recieve confirm

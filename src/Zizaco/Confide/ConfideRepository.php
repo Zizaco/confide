@@ -75,13 +75,39 @@ class ConfideRepository
      * Find a user by the given email
      * 
      * @param  string $email The email to be used in the query
-     * @return object        User object
+     * @return ConfideUser   User object
      */
     public function getUserByMail( $email )
     {
         $user = $this->model()->where('email', '=', $email)->get()->first();
 
         return $user;
+    }
+
+    /**
+     * Find a user by it's credentials. Perform a 'where' within
+     * the fields contained in the $identityColumns.
+     * 
+     * @param  array $credentials      An array containing the attributes to search for
+     * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
+     * @return ConfideUser             User object
+     */
+    public function getUserByIdentity( $credentials, $identityColumns = array('email', 'username') )
+    {
+        $identityColumns = (array)$identityColumns;
+
+        $user = $this->model();
+
+        foreach ($identityColumns as $attribute) {
+            
+            if(! isset($credentials[$attribute]))
+                return null; // Return null if an identity column is missing
+
+            echo "\$user->where($attribute, $credentials[$attribute]);";
+            $user = $user->where($attribute, $credentials[$attribute]);
+        }
+
+        return $user->get()->first();
     }
 
     /**
