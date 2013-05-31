@@ -81,7 +81,7 @@ class Confide
      * @param  array $credentials
      * @param  bool $confirmed_only
      * @param  mixed $identity_columns
-     * @return void
+     * @return boolean Success
      */
     public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('username', 'email') )
     {
