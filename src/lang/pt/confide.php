@@ -39,6 +39,7 @@ return array(
         'wrong_password_forgot' => 'Usuário não encontrado.',
         'password_reset' => 'Sua senha foi alterada com sucesso.',
         'wrong_password_reset' => 'Senha inválida. Tente novamente.',
+        'duplicated_credentials' => 'As credenciais fornecidos já foram usadas. Tente com credenciais diferentes.',
     ),
 
     'email' => array(

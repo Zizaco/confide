@@ -226,7 +226,26 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
-        return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+        $duplicated = false;
+
+        if(! $this->id)
+        {
+            $duplicated = static::$app['confide.repository']->userExists( $this );
+        }
+
+        if(! $duplicated)
+        {
+            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );    
+        }
+        else
+        {
+            $this->validationErrors->add(
+                'duplicated',
+                static::$app['translator']->get('confide::confide.alerts.duplicated_credentials')
+            );
+
+            return false;
+        }
     }
 
     /**

@@ -84,7 +84,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             'password_confirmation'=>'987987'
         );
 
-        // Should send an email once
+        // Should call changePassword of the repository
         ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
         ConfideUser::$app['confide.repository']->shouldReceive('changePassword')
             ->with( $this->confide_user, 'aRandomHash' )
@@ -98,8 +98,31 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( $this->confide_user->resetPassword( $credentials ) );
     }
 
+    public function testShouldNotSaveDuplicated()
+    {
+        // Make sure that userExists return 1 to simulates a duplicated user
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('userExists')
+            ->with( $this->confide_user )
+            ->andReturn( 1 )
+            ->once();
+
+        $this->populateUser();
+        $this->confide_user->confirmation_code = '';
+        $this->confide_user->confirmed = false;
+
+        $this->assertFalse( $this->confide_user->save() );
+    }
+
     public function testShouldGenerateConfirmationCodeOnSave()
     {
+        // Make sure that userExists return 0
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('userExists')
+            ->with( $this->confide_user )
+            ->andReturn( 0 )
+            ->once();
+
         // Should send an email once
         ConfideUser::$app['mailer'] = m::mock( 'Mail' );
         ConfideUser::$app['mailer']->shouldReceive('send')
@@ -124,7 +147,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     {
         $this->populateUser();
 
-        // Considering the model was already saved
+        // Considering the model was already saved (this will make sute to do
+        // not trigger the ConfideRepository::userExists method)
         $this->confide_user->id = 1;
 
         $old_cc = $this->confide_user->confirmation_code;
@@ -168,6 +192,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['hash'] = m::mock( 'Hash' );
         $app['hash']->shouldReceive('make')
             ->andReturn( 'aRandomHash' );
+
+        $app['translator'] = m::mock( 'Translator' );
+        $app['translator']->shouldReceive('get')
+            ->andReturn( 'aTranslatedString' );
 
         $app['db'] = m::mock( 'DatabaseManager' );
         $app['db']->shouldReceive('connection')

@@ -39,6 +39,7 @@ return array(
         'wrong_password_forgot' => 'No s\'ha trobat l\'usuari.',
         'password_reset' => 'La teva contrasenya s\'ha cambiat satisfactoriament.',
         'wrong_password_reset' => 'Contrasenya incorrecta. Prova un altre cop.',
+        'duplicated_credentials' => 'Les credencials proporcionades ja han estat utilitzats. Proveu amb diferents credencials.',
     ),
 
     'email' => array(
