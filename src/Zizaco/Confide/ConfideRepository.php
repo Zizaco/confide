@@ -149,4 +149,31 @@ class ConfideRepository
         
         return true;
     }
+
+    /**
+     * Checks if an non saved user has duplicated credentials
+     * (email and/or username)
+     * 
+     * @param  ConfideUser  $user The non-saved user to be checked
+     * @return int          The number of duplicated entry founds. Probably 0 or 1.
+     */
+    public function userExists( $user )
+    {
+        $usersTable = $user->getTable();
+        $id = $user->getKey();
+        $idColumn = $user->getKeyName();
+
+        $query = $this->app['db']->connection()->table($usersTable)
+            ->where('email',$user->email);
+
+        if($user->username)
+        {
+            $query = $query->orWhere('username',$user->username);
+        }
+
+        $count = $query->count();
+        // I.E: DB::table('users')->where('email', 'bob@sample.com')->orWhere('username', 'bob')->count();
+        
+        return $count;
+    }
 }

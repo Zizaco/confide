@@ -235,6 +235,61 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testUserExists()
+    {
+        // Make sure that the mock will return the table name
+        $confide_user = m::mock(new _mockedUser);
+
+        $confide_user->username = 'Bob';
+        $confide_user->email =    'bob@sample.com';
+
+        $confide_user->shouldReceive('getTable')
+            ->andReturn( 'users' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKey')
+            ->andReturn( '3' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKeyName')
+            ->andReturn( 'id' )
+            ->once();
+
+        // Mocks DB in order to check for the following query:
+        //     DB::table('users')->where('email', 'bob@sample.com')->orWhere('username', 'bob')->count();
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with( 'users' )
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('where')
+            ->with('email', 'bob@sample.com')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('orWhere')
+            ->with('username', 'Bob')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('count')
+            ->andReturn( 1 )
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        // Actually checks if the user exists
+        $this->assertEquals(
+            1,
+            $this->repo->userExists($confide_user)
+        );
+    }
+
     /**
      * Returns a mocked ConfideUser object for testing purposes
      * only
