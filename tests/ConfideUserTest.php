@@ -63,6 +63,13 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
 
     public function testShouldSendForgotPassword()
     {
+        // Should call forgotPassword of the repository
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('forgotPassword')
+            ->with( $this->confide_user )
+            ->andReturn( true )
+            ->once();
+
         // Should send an email once
         ConfideUser::$app['mailer'] = m::mock( 'Mail' );
         ConfideUser::$app['mailer']->shouldReceive('send')

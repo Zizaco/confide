@@ -151,6 +151,36 @@ class ConfideRepository
     }
 
     /**
+     * Generate a token for password change and saves it in
+     * the 'password_reminders' table with the email of the
+     * user.
+     * 
+     * @param  ConfideUser $user     An existent user
+     * @return boolean Success
+     */
+    public function forgotPassword( $user )
+    {
+        $usersTable = $user->getTable();
+
+        $values = array(
+            'email'=> $user->email,
+            'token'=> $token,
+            'created_at'=> new \DateTime
+        );
+
+        $this->app['db']->connection()->table($usersTable)
+            ->insert( $values );
+        // I.E:
+        //     DB::table('password_reminders')->insert(array(
+        //    'email'=> $this->email,
+        //    'token'=> $token,
+        //    'created_at'=> new \DateTime
+        //));
+        
+        return true;
+    }
+
+    /**
      * Checks if an non saved user has duplicated credentials
      * (email and/or username)
      * 
@@ -160,8 +190,6 @@ class ConfideRepository
     public function userExists( $user )
     {
         $usersTable = $user->getTable();
-        $id = $user->getKey();
-        $idColumn = $user->getKeyName();
 
         $query = $this->app['db']->connection()->table($usersTable)
             ->where('email',$user->email);

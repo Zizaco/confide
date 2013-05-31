@@ -235,6 +235,58 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
         );
     }
 
+    public function testShouldForgotPassword()
+    {
+        // Make sure that the mock will return the table name
+        $confide_user = m::mock(new _mockedUser);
+
+        $confide_user->email = 'bob@sample.com';
+
+        $confide_user->shouldReceive('getTable')
+            ->andReturn( 'users' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKey')
+            ->andReturn( '3' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKeyName')
+            ->andReturn( 'id' )
+            ->once();
+
+        // Mocks DB in order to check for the following query:
+        //     DB::table('password_reminders')->insert(array(
+        //    'email'=> $this->email,
+        //    'token'=> $token,
+        //    'created_at'=> new \DateTime
+        //));
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with( 'password_reminders' )
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('insert')
+            ->with(array(
+                'email'=> $confide_user->email,
+                'token'=> 'aToken(:',
+                'created_at'=> m::any()
+            ))
+            ->andReturn( true )
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        // Actually checks if the user exists
+        $this->assertTrue(
+            $this->repo->forgotPassword($confide_user)
+        );
+    }
+
     public function testUserExists()
     {
         // Make sure that the mock will return the table name

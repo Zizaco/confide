@@ -2,7 +2,7 @@
 
 use Illuminate\Auth\UserInterface;
 use LaravelBook\Ardent\Ardent;
-use J20\Uuid;
+use J20\Uuid\Uuid;
 
 class ConfideUser extends Ardent implements UserInterface {
 
@@ -177,13 +177,16 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function forgotPassword()
     {
-        $token = $this->generateUuid('password_reminders', 'token');
-
-        static::$app['db']->connection()->table('password_reminders')->insert(array(
-            'email'=> $this->email,
-            'token'=> $token,
-            'created_at'=> new \DateTime
-        ));
+        //$token = $this->generateUuid('password_reminders', 'token');
+//
+        //static::$app['db']->connection()->table('password_reminders')->insert(array(
+        //    'email'=> $this->email,
+        //    'token'=> $token,
+        //    'created_at'=> new \DateTime
+        //));
+        // ConfideRepository will generate token (and save it into database)
+        $token = static::$app['confide.repository']
+            ->forgotPassword( $this );
 
         $view = static::$app['config']->get('confide::email_reset_password');
 
