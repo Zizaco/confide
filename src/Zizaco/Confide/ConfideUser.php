@@ -293,32 +293,6 @@ class ConfideUser extends Ardent implements UserInterface {
     }
 
     /**
-     * Parses the two given users and compares the unique fields.
-     * @param $oldUser
-     * @param $updatedUser
-     * @param array $rules
-     */
-    public function prepareRules($oldUser, $updatedUser, $rules=array())
-    {
-        if(empty($rules)) {
-            $rules = $this->getRules();
-        }
-
-        foreach($rules as $rule => $validation) {
-            // get the rules with unique.
-            if (strpos($validation, 'unique')) {
-                // Compare old vs new
-                if($oldUser->$rule != $updatedUser->$rule) {
-                    // Set update rule to creation rule
-                    $updateRules = $this->getUpdateRules();
-                    $updateRules[$rule] = $validation;
-                    $this->setUpdateRules($updateRules);
-                }
-            }
-        }
-    }
-
-    /**
      * Add the namespace 'confide::' to view hints.
      * this makes possible to send emails using package views from
      * the command line.
@@ -383,6 +357,34 @@ class ConfideUser extends Ardent implements UserInterface {
     public function getUpdateRules()
     {
         return $this->updateRules;
+    }
+
+    /**
+     * [Deprecated] Parses the two given users and compares the unique fields.
+     * 
+     * @deprecated
+     * @param $oldUser
+     * @param $updatedUser
+     * @param array $rules
+     */
+    public function prepareRules($oldUser, $updatedUser, $rules=array())
+    {
+        if(empty($rules)) {
+            $rules = $this->getRules();
+        }
+
+        foreach($rules as $rule => $validation) {
+            // get the rules with unique.
+            if (strpos($validation, 'unique')) {
+                // Compare old vs new
+                if($oldUser->$rule != $updatedUser->$rule) {
+                    // Set update rule to creation rule
+                    $updateRules = $this->getUpdateRules();
+                    $updateRules[$rule] = $validation;
+                    $this->setUpdateRules($updateRules);
+                }
+            }
+        }
     }
 
     /**
