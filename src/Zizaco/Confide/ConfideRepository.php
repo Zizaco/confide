@@ -160,7 +160,7 @@ class ConfideRepository
      */
     public function forgotPassword( $user )
     {
-        $usersTable = $user->getTable();
+        $token = md5( uniqid(mt_rand(), true) );
 
         $values = array(
             'email'=> $user->email,
@@ -168,7 +168,7 @@ class ConfideRepository
             'created_at'=> new \DateTime
         );
 
-        $this->app['db']->connection()->table($usersTable)
+        $this->app['db']->connection()->table('password_reminders')
             ->insert( $values );
         // I.E:
         //     DB::table('password_reminders')->insert(array(

@@ -177,13 +177,6 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function forgotPassword()
     {
-        //$token = $this->generateUuid('password_reminders', 'token');
-//
-        //static::$app['db']->connection()->table('password_reminders')->insert(array(
-        //    'email'=> $this->email,
-        //    'token'=> $token,
-        //    'created_at'=> new \DateTime
-        //));
         // ConfideRepository will generate token (and save it into database)
         $token = static::$app['confide.repository']
             ->forgotPassword( $this );
@@ -425,16 +418,7 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     protected function generateUuid($table, $field)
     {
-        // Generate Uuid
-        $uuid = Uuid\Uuid::v4(false);
-        // Check that it is unique
-        $currentConfirmationCode = static::$app['db']->table($table)->where($field, $uuid)->first();
-        // If it isn't unique, try again. Make sure we're not Mocking.
-        if($currentConfirmationCode != NULL && !is_a($currentConfirmationCode, 'Mockery\Mock')) {
-           $uuid =  $this->generateUuid($table, $field);
-        }
-
-        return $uuid;
+        return md5( uniqid(mt_rand(), true) );
     }
 
     public function getUpdateRules()

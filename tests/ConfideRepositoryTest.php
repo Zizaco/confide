@@ -242,17 +242,7 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
 
         $confide_user->email = 'bob@sample.com';
 
-        $confide_user->shouldReceive('getTable')
-            ->andReturn( 'users' )
-            ->once()
-
-            ->getMock()->shouldReceive('getKey')
-            ->andReturn( '3' )
-            ->once()
-
-            ->getMock()->shouldReceive('getKeyName')
-            ->andReturn( 'id' )
-            ->once();
+        $timeStamp = new \DateTime;
 
         // Mocks DB in order to check for the following query:
         //     DB::table('password_reminders')->insert(array(
@@ -271,11 +261,6 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
             ->once()
 
             ->getMock()->shouldReceive('insert')
-            ->with(array(
-                'email'=> $confide_user->email,
-                'token'=> 'aToken(:',
-                'created_at'=> m::any()
-            ))
             ->andReturn( true )
             ->once();
 
@@ -297,14 +282,6 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
 
         $confide_user->shouldReceive('getTable')
             ->andReturn( 'users' )
-            ->once()
-
-            ->getMock()->shouldReceive('getKey')
-            ->andReturn( '3' )
-            ->once()
-
-            ->getMock()->shouldReceive('getKeyName')
-            ->andReturn( 'id' )
             ->once();
 
         // Mocks DB in order to check for the following query:
