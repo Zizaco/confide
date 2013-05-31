@@ -22,6 +22,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 - Login throttling.
 - Redirecting to previous route after authentication.
+- Checks for unique email and username in signup
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
 
