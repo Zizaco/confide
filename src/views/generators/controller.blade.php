@@ -247,7 +247,7 @@ class {{ $name }} extends BaseController {
             @if (! $restful)
             return Redirect::action('{{ $name }}@reset_password', array('token'=>$input['token']))
             @else
-            return Redirect::to('user/reset')
+            return Redirect::to('user/reset/'.$input['token'])
             @endif
                 ->withInput()
                 ->with( 'error', $error_msg );
