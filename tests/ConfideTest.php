@@ -77,6 +77,14 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
     {
         $confide_user = $this->mockConfideUser();
 
+        $this->confide->repo->model = $confide_user;
+
+        $credentials = array(
+            'email'=>'mail',
+            'username'=>'uname',
+            'password'=>'123123'
+        );
+
         // Considering a valid hash check from hash component
         $hash = m::mock('Illuminate\Hashing\HasherInterface');
         $hash->shouldReceive('check')
@@ -85,23 +93,26 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
         // Mocks the repository
         // Repository should receive model and return an existent user
+        $this->confide->repo->shouldReceive('getUserByIdentity')
+            ->andReturn($confide_user);
+
         $this->confide->repo->shouldReceive('model')
             ->andReturn($confide_user);
 
         $this->assertTrue( 
-            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ) )
+            $this->confide->logAttempt( $credentials )
         );
 
         // Should not login with unconfirmed user.
         $this->assertFalse( 
-            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ), true )
+            $this->confide->logAttempt( $credentials, true )
         );
 
         $confide_user->confirmed = 1;
 
         // Should login because now the user is confirmed
         $this->assertTrue( 
-            $this->confide->logAttempt( array( 'email'=>'mail', 'username'=>'uname', 'password'=>'123123' ), true )
+            $this->confide->logAttempt( $credentials, true )
         );
     }
 
@@ -114,8 +125,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->andReturn( null );
 
         // Mocks the repository
-        // Repository should receive model and return an existent user
-        $this->confide->repo->shouldReceive('model')
+        // Repository should receive getUserByIdentity and return an existent user
+        $this->confide->repo->shouldReceive('getUserByIdentity')
             ->andReturn($confide_user);
 
         $this->confide->app['hash']->shouldReceive('check')

@@ -36,7 +36,7 @@ class ConfideRepository
     public function model()
     {
         if (! $this->model)
-        {
+        {               
             $this->model = $this->app['config']->get('auth.model');
         }
 
@@ -103,7 +103,6 @@ class ConfideRepository
             if(! isset($credentials[$attribute]))
                 return null; // Return null if an identity column is missing
 
-            echo "\$user->where($attribute, $credentials[$attribute]);";
             $user = $user->where($attribute, $credentials[$attribute]);
         }
 

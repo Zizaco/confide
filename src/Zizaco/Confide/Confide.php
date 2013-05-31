@@ -87,12 +87,11 @@ class Confide
     {
         if(! $this->reachedThrottleLimit( $credentials ) )
         {
-            $user = $this->model()
-                ->getUserFromCredsIdentity($credentials, $identity_columns);
+            $user = $this->repo->getUserByIdentity($credentials, $identity_columns);
 
             if(
-                ! is_null($user) and
-                ($user->confirmed or ! $confirmed_only ) and
+                $user &&
+                ($user->confirmed || ! $confirmed_only ) &&
                 $this->app['hash']->check(
                     $credentials['password'],
                     $user->password

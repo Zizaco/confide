@@ -99,61 +99,6 @@ class ConfideUser extends Ardent implements UserInterface {
         return $this->password;
     }
 
-    public function getUserFromCredsIdentity($credentials, $identity_columns = array('username', 'email'))
-    {
-        $user = null;
-        $user_model = new $this;
-
-        if (is_array($identity_columns)) {
-            // Check that the passed in array contained the correct columns #45
-            foreach($identity_columns as $key => $identity_column) {
-                if(! array_key_exists($identity_column, $credentials)) {
-                    unset($identity_columns[$key]);
-                }
-            }
-            $identity_columns = array_values($identity_columns);
-            foreach ($identity_columns as $key => $column) {
-
-                if($key == 0)
-                {
-                    $user_model = $user_model->where($column,'=',$credentials[$column]);
-                }
-                else
-                {
-                    $user_model = $user_model->orWhere($column,'=',$credentials[$column]);
-                }
-
-            }
-            $user = $user_model->first();
-        } elseif (is_string($identity_columns)) {
-            $user = $user_model->where($identity_columns,'=',$credentials[$identity_columns])->first();
-        }
-
-        return $user;
-    }
-
-    public function checkUserExists($credentials, $identity_columns = array('username', 'email'))
-    {
-        $user = $this->getUserFromCredsIdentity($credentials, $identity_columns);
-
-        if (! empty($user)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function isConfirmed($credentials, $identity_columns = array('username', 'email'))
-    {
-        $user = $this->getUserFromCredsIdentity($credentials, $identity_columns);
-
-        if (! is_null($user) and $user->confirmed) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Confirm the user (usually means that the user)
      * email is valid.
@@ -409,9 +354,17 @@ class ConfideUser extends Ardent implements UserInterface {
         });
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Deprecated methods
+    |--------------------------------------------------------------------------
+    |
+    */
+
     /**
-     * Generates UUID and checks it for uniqueness against a table/column.
+     * [Deprecated] Generates UUID and checks it for uniqueness against a table/column.
      *
+     * @deprecated
      * @param  $table
      * @param  $field
      * @return string
@@ -421,18 +374,87 @@ class ConfideUser extends Ardent implements UserInterface {
         return md5( uniqid(mt_rand(), true) );
     }
 
+    /**
+     * [Deprecated]
+     * 
+     * @deprecated
+     */
     public function getUpdateRules()
     {
         return $this->updateRules;
     }
 
+    /**
+     * [Deprecated]
+     * 
+     * @deprecated
+     */
     public function getRules()
     {
         return self::$rules;
     }
 
+    /**
+     * [Deprecated]
+     * 
+     * @deprecated
+     */
     public function setUpdateRules($set)
     {
         $this->updateRules = $set;
+    }
+
+    /**
+     * [Deprecated] Find an user by it's credentials. Perform a 'where' within
+     * the fields contained in the $identityColumns.
+     *
+     * @deprecated Use ConfideRepository getUserByIdentity instead.
+     * @param  array $credentials      An array containing the attributes to search for
+     * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
+     * @return ConfideUser             User object
+     */
+    public function getUserFromCredsIdentity($credentials, $identity_columns = array('username', 'email'))
+    {
+        return static::$app['confide.repository']->getUserByIdentity($credentials, $identity_columns);
+    }
+
+    /**
+     * [Deprecated] Checks if an user exists by it's credentials. Perform a 'where' within
+     * the fields contained in the $identityColumns.
+     * 
+     * @deprecated Use ConfideRepository getUserByIdentity instead.
+     * @param  array $credentials      An array containing the attributes to search for
+     * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
+     * @return boolean                 Exists?
+     */
+    public function checkUserExists($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = static::$app['confide.repository']->getUserByIdentity($credentials, $identity_columns);
+
+        if ($user) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * [Deprecated] Checks if an user is confirmed by it's credentials. Perform a 'where' within
+     * the fields contained in the $identityColumns.
+     * 
+     * @deprecated Use ConfideRepository getUserByIdentity instead.
+     * @param  array $credentials      An array containing the attributes to search for
+     * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
+     * @return boolean                 Is confirmed?
+     */
+    public function isConfirmed($credentials, $identity_columns = array('username', 'email'))
+    {
+        $user = static::$app['confide.repository']->getUserByIdentity($credentials, $identity_columns);
+
+        if (! is_null($user) and $user->confirmed) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
