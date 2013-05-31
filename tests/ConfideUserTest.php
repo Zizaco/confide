@@ -56,7 +56,14 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     {
         $this->populateUser();
 
-        $this->assertNotEquals( 0, $this->confide_user->confirm() );
+        // Should call confirmUser of the repository
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('confirmUser')
+            ->with( $this->confide_user )
+            ->andReturn( true )
+            ->once();
+
+        $this->assertTrue( $this->confide_user->confirm() );
 
         $this->assertEquals( 1, $this->confide_user->confirmed );
     }
