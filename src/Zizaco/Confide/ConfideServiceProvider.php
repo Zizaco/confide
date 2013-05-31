@@ -6,75 +6,80 @@ define('CONFIDE_VERSION', '0.5.1beta');
 
 class ConfideServiceProvider extends ServiceProvider {
 
-	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
+    /**
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
+    protected $defer = false;
 
-	/**
-	 * Bootstrap the service provider.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		$this->package('zizaco/confide');
-	}
+    /**
+     * Bootstrap the service provider.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->package('zizaco/confide');
+    }
 
-	/**
-	 * Register the service provider.
-	 *
-	 * @return void
-	 */
-	public function register()
-	{
-		$this->registerConfide();
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->registerConfide();
 
-	    $this->registerCommands();   
-	}
+        $this->registerCommands();   
+    }
 
-	/**
-	 * Register the application bindings.
-	 *
-	 * @return void
-	 */
-	private function registerConfide()
-	{
-		$this->app->bind('confide', function($app)
-		{
-		    return new Confide($app->make('Zizaco\Confide\ConfideRepository'));
-		});
-	}
+    /**
+     * Register the application bindings.
+     *
+     * @return void
+     */
+    private function registerConfide()
+    {
+        $this->app->bind('confide.repository', function($app)
+        {
+            return new ConfideRepository;
+        });
 
-	/**
-	 * Register the artisan commands.
-	 *
-	 * @return void
-	 */
-	private function registerCommands()
-	{
-		$this->app['command.confide.controller'] = $this->app->share(function($app)
-		{
-			return new ControllerCommand($app);
-		});
+        $this->app->bind('confide', function($app)
+        {
+            return new Confide($app->make('confide.repository'));
+        });
+    }
 
-		$this->app['command.confide.routes'] = $this->app->share(function($app)
-		{
-			return new RoutesCommand($app);
-		});
+    /**
+     * Register the artisan commands.
+     *
+     * @return void
+     */
+    private function registerCommands()
+    {
+        $this->app['command.confide.controller'] = $this->app->share(function($app)
+        {
+            return new ControllerCommand($app);
+        });
 
-		$this->app['command.confide.migration'] = $this->app->share(function($app)
-		{
-			return new MigrationCommand($app);
-		});
+        $this->app['command.confide.routes'] = $this->app->share(function($app)
+        {
+            return new RoutesCommand($app);
+        });
 
-		$this->commands(
-			'command.confide.controller',
-			'command.confide.routes',
-			'command.confide.migration'
-		);
-	}
+        $this->app['command.confide.migration'] = $this->app->share(function($app)
+        {
+            return new MigrationCommand($app);
+        });
+
+        $this->commands(
+            'command.confide.controller',
+            'command.confide.routes',
+            'command.confide.migration'
+        );
+    }
 
 }

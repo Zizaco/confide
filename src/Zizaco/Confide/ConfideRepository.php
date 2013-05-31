@@ -128,4 +128,25 @@ class ConfideRepository
             ->select('email')->where('token','=',$token)
             ->delete();
     }
+
+    /**
+     * Change the password of the given user. Make sure to hash
+     * the $password before calling this method.
+     * 
+     * @param  ConfideUser $user     An existent user
+     * @param  string      $password The password hash to be used
+     * @return boolean Success
+     */
+    public function changePassword( $user, $password )
+    {
+        $usersTable = $user->getTable();
+        $id = $user->getKey();
+        $idColumn = $user->getKeyName();
+
+        $this->app['db']->connection()->table($usersTable)
+            ->where($idColumn,$id)->update(array('password'=>$password));
+        // I.E: DB::table('users')->where('id',3)->update(array('password'=>$password));
+        
+        return true;
+    }
 }

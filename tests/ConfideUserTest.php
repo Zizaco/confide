@@ -78,18 +78,24 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
 
     public function testShouldChangePassword()
     {
-        $credentials = array( 'email'=>'mail@sample.com', 'password'=>'987987' );
+        $credentials = array(
+            'email'=>'mail@sample.com',
+            'password'=>'987987',
+            'password_confirmation'=>'987987'
+        );
+
+        // Should send an email once
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('changePassword')
+            ->with( $this->confide_user, 'aRandomHash' )
+            ->andReturn( true )
+            ->once();
 
         $this->populateUser();
 
         $old_password = $this->confide_user->password;
 
         $this->assertTrue( $this->confide_user->resetPassword( $credentials ) );
-
-        $new_password = $this->confide_user->password;
-
-        // Should have generated a new password code
-        $this->assertNotEquals( $old_password, $new_password );
     }
 
     public function testShouldGenerateConfirmationCodeOnSave()

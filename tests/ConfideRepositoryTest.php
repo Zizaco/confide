@@ -189,6 +189,52 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
         $this->assertNull( $this->repo->deleteEmailByReminderToken( '456456' ) );
     }
 
+    public function testShouldResetPassword()
+    {
+        // Make sure that the mock will return the table name
+        $confide_user = m::mock(new _mockedUser);
+        $confide_user->shouldReceive('getTable')
+            ->andReturn( 'users' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKey')
+            ->andReturn( '3' )
+            ->once()
+
+            ->getMock()->shouldReceive('getKeyName')
+            ->andReturn( 'id' )
+            ->once();
+
+        // Mocks DB in order to check for the following query:
+        //     DB::table('users')->where('id',3)->update(array('password'=>'lol'));
+        $database = m::mock('DatabaseManager');
+        $database->shouldReceive('connection')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('table')
+            ->with( 'users' )
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('where')
+            ->with('id','3')
+            ->andReturn( $database )
+            ->once()
+
+            ->getMock()->shouldReceive('update')
+            ->with(array('password'=>'secret'))
+            ->andReturn( 0 )
+            ->once();
+
+        $this->repo->app['db'] = $database;
+
+        // Actually change the user password
+        $this->assertTrue(
+            $this->repo->changePassword($confide_user, 'secret')
+        );
+    }
+
     /**
      * Returns a mocked ConfideUser object for testing purposes
      * only
