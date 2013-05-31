@@ -154,7 +154,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
     {
         $this->populateUser();
 
-        // Considering the model was already saved (this will make sute to do
+        // Considering the model was already saved (this will make sure to
         // not trigger the ConfideRepository::userExists method)
         $this->confide_user->id = 1;
 
