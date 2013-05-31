@@ -1,5 +1,9 @@
 <?php namespace Zizaco\Confide;
 
+/**
+ * A layer that abstracts all database interactions that happens
+ * in Confide
+ */
 class ConfideRepository
 {
     /**
