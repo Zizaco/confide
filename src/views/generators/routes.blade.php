@@ -15,7 +15,7 @@ Route::get( '{{ lcfirst(substr($name,0,-10)) }}/logout',                 '{{ $na
 @else
 
 // Confide RESTful route
-Route::get('user/confirm/{code}', '{{ $name }}@getReset');
+Route::get('user/confirm/{code}', '{{ $name }}@getConfirm');
 Route::get('user/reset/{token}', '{{ $name }}@getReset');
 Route::controller( 'user', '{{ $name }}');
 @endif
