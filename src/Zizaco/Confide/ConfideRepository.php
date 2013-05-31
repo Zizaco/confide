@@ -229,4 +229,23 @@ class ConfideRepository
         
         return $count;
     }
+
+    /**
+     * Set the 'confirmed' column of the given user to 1
+     * 
+     * @param  ConfideUser $user     An existent user
+     * @return boolean Success
+     */
+    public function confirmUser( $user )
+    {
+        $usersTable = $user->getTable();
+        $id = $user->getKey();
+        $idColumn = $user->getKeyName();
+
+        $this->app['db']->connection()->table($usersTable)
+            ->where($idColumn,$id)->update(array('confirmed'=>1));
+        // I.E: DB::table('users')->where('id',3)->update(array('confirmed'=>1));
+        
+        return true;
+    }
 }
