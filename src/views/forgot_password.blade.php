@@ -1,5 +1,5 @@
 <form method="POST" action="{{ (Confide::checkAction('UserController@do_forgot_password')) ?: URL::to('/user/forgot') }}" accept-charset="UTF-8">
-    <input type="hidden" name="csrf_token" value="{{{ Session::getToken() }}}">
+    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 
     <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>
     <div class="input-append">
