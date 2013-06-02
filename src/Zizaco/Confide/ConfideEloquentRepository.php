@@ -189,7 +189,7 @@ class ConfideEloquentRepository implements ConfideRepository
      * user.
      * 
      * @param  ConfideUser $user     An existent user
-     * @return boolean Success
+     * @return string Password reset token
      */
     public function forgotPassword( $user )
     {
@@ -210,7 +210,7 @@ class ConfideEloquentRepository implements ConfideRepository
         //    'created_at'=> new \DateTime
         //));
         
-        return true;
+        return $token;
     }
 
     /**

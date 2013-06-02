@@ -79,7 +79,7 @@ interface ConfideRepository
      * user.
      * 
      * @param  ConfideUser $user     An existent user
-     * @return boolean Success
+     * @return string Password reset token
      */
     public function forgotPassword( $user );
 
