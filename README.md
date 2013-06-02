@@ -9,6 +9,8 @@ Confide is a authentication solution for **Laravel4** made to eliminate repetiti
 
 Confide aims to be simple to use, quick to configure and flexible.
 
+> Note: If you are using MongoDB check [Confide Mongo](https://github.com/Zizaco/confide-mongo).
+
 ## Features
 
 **Current:**
@@ -25,6 +27,8 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Checks for unique email and username in signup
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
+
+For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
 **Planned:**
 - Captcha in user signup and password reset.
