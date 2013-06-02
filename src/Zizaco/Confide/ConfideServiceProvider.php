@@ -40,7 +40,7 @@ class ConfideServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    private function registerRepository()
+    protected function registerRepository()
     {
         $this->app->bind('confide.repository', function($app)
         {
@@ -53,7 +53,7 @@ class ConfideServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    private function registerConfide()
+    protected function registerConfide()
     {
         $this->app->bind('confide', function($app)
         {
@@ -66,7 +66,7 @@ class ConfideServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    private function registerCommands()
+    protected function registerCommands()
     {
         $this->app['command.confide.controller'] = $this->app->share(function($app)
         {
