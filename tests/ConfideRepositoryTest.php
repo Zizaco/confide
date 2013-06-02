@@ -147,6 +147,11 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(
             $confide_user, $this->repo->getUserByIdentity( $values, 'email' )
         );
+
+        // Using string for username
+        $this->assertEquals(
+            $confide_user, $this->repo->getUserByIdentity( $values, 'username' )
+        );
     }
 
     public function testShouldGetPasswordRemindersCountByToken()
