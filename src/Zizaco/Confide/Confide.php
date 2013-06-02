@@ -83,7 +83,7 @@ class Confide
      * @param  mixed $identity_columns
      * @return boolean Success
      */
-    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('username', 'email') )
+    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('email') )
     {
         if(! $this->reachedThrottleLimit( $credentials ) )
         {

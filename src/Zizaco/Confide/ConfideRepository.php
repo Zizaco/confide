@@ -96,7 +96,7 @@ class ConfideRepository
      * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
      * @return ConfideUser             User object
      */
-    public function getUserByIdentity( $credentials, $identityColumns = array('email', 'username') )
+    public function getUserByIdentity( $credentials, $identityColumns = array('email') )
     {
         $identityColumns = (array)$identityColumns;
 
