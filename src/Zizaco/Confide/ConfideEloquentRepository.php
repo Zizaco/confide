@@ -144,7 +144,13 @@ class ConfideEloquentRepository implements ConfideRepository
             ->first();
 
         if ($email && is_object($email))
+        {
             $email = $email->email;
+        }
+        elseif ($email && is_array($email))
+        {
+            $email = $email['email'];
+        }
 
         return $email;
     }
