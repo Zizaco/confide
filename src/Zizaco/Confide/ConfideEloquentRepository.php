@@ -102,16 +102,27 @@ class ConfideEloquentRepository implements ConfideRepository
 
         $user = $this->model();
 
+        $first = true;
         foreach ($identityColumns as $attribute) {
             
-            if(! isset($credentials[$attribute]))
-                return null; // Return null if an identity column is missing
+            if(isset($credentials[$attribute]))
+            {
+                if($first)
+                {
+                    $user = $user->where($attribute, $credentials[$attribute]);        
+                    $first = false;
+                }
+                else
+                {
+                    $user = $user->orWhere($attribute, $credentials[$attribute]);        
+                }
+            }            
+        }
 
-            $user = $user->where($attribute, $credentials[$attribute]);
+        $user = $user->get();
 
-            if(! empty($user)) {
-                return $user->get()->first();
-            }
+        if(! empty($user)) {
+            return $user->first();
         }
 
         return null;

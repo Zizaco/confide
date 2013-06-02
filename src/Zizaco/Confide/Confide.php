@@ -83,8 +83,19 @@ class Confide
      * @param  mixed $identity_columns
      * @return boolean Success
      */
-    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array('email') )
+    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array() )
     {
+        // If identity columns is not provided, use all colluns of credentials
+        // except password and remember.
+        if(empty($identity_columns))
+        {
+            $identity_columns = array_diff(
+                array_keys($credentials),
+                array('password','remember')
+            );
+        }
+
+        // Check for throttle limit then log-in
         if(! $this->reachedThrottleLimit( $credentials ) )
         {
             $user = $this->repo->getUserByIdentity($credentials, $identity_columns);
