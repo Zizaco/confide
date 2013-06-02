@@ -1,7 +1,7 @@
 <?php
 
 use Zizaco\Confide\Confide;
-use Zizaco\Confide\ConfideRepository;
+use Zizaco\Confide\ConfideEloquentRepository;
 use Mockery as m;
 
 class ConfideTest extends PHPUnit_Framework_TestCase {
@@ -22,7 +22,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
     {
         // Mocks the application and the repository
         $app = $this->mockApp();
-        $repo = m::mock(new ConfideRepository);
+        $repo = m::mock(new ConfideEloquentRepository);
 
         $this->confide = new Confide($repo);
 

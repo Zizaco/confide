@@ -1,10 +1,10 @@
 <?php
 
 use Zizaco\Confide\Confide;
-use Zizaco\Confide\ConfideRepository;
+use Zizaco\Confide\ConfideEloquentRepository;
 use Mockery as m;
 
-class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
+class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 
     /**
      * ConfideRepository instance
@@ -16,7 +16,7 @@ class ConfideRepositoryTest extends PHPUnit_Framework_TestCase {
     public function setUp()
     {
         $app = $this->mockApp();
-        $this->repo = new ConfideRepository();
+        $this->repo = new ConfideEloquentRepository();
 
         // Set the app attribute with mock
         $this->repo->app = $app;
