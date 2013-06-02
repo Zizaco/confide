@@ -30,9 +30,24 @@ class ConfideServiceProvider extends ServiceProvider {
      */
     public function register()
     {
+        $this->registerRepository();
+
         $this->registerConfide();
 
         $this->registerCommands();   
+    }
+
+    /**
+     * Register the repository that will handle all the database interaction.
+     *
+     * @return void
+     */
+    private function registerRepository()
+    {
+        $this->app->bind('confide.repository', function($app)
+        {
+            return new ConfideRepository;
+        });
     }
 
     /**
@@ -42,11 +57,6 @@ class ConfideServiceProvider extends ServiceProvider {
      */
     private function registerConfide()
     {
-        $this->app->bind('confide.repository', function($app)
-        {
-            return new ConfideRepository;
-        });
-
         $this->app->bind('confide', function($app)
         {
             return new Confide($app->make('confide.repository'));
