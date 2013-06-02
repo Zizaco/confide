@@ -44,7 +44,7 @@ class ConfideServiceProvider extends ServiceProvider {
     {
         $this->app->bind('confide.repository', function($app)
         {
-            return new ConfideRepository;
+            return new ConfideEloquentRepository;
         });
     }
 

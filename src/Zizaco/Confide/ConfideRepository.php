@@ -4,57 +4,14 @@
  * A layer that abstracts all database interactions that happens
  * in Confide
  */
-class ConfideRepository
+interface ConfideRepository
 {
-    /**
-     * Laravel application
-     * 
-     * @var Illuminate\Foundation\Application
-     */
-    public $app;
-
-    /**
-     * Name of the model that should be used to retrieve your users.
-     * You may specify an specific object. Then that object will be
-     * returned when calling `model()` method.
-     * 
-     * @var string
-     */
-    public $model;
-
-    /**
-     * Create a new ConfideRepository
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->app = app();
-    }
-
     /**
      * Returns the model set in auth config
      *
      * @return mixed Instantiated object of the 'auth.model' class
      */
-    public function model()
-    {
-        if (! $this->model)
-        {               
-            $this->model = $this->app['config']->get('auth.model');
-        }
-
-        if(is_object($this->model))
-        {
-            return $this->model;
-        }
-        elseif(is_string($this->model))
-        {
-            return new $this->model;
-        }
-
-        throw new \Exception("Model not specified in config/auth.php", 639);
-    }
+    public function model();
 
     /**
      * Set the user confirmation to true.
@@ -62,18 +19,7 @@ class ConfideRepository
      * @param string $code
      * @return bool
      */
-    public function confirm( $code )
-    {
-        $user = $this->model()->where('confirmation_code', '=', $code)->get()->first();
-        if( $user )
-        {
-            return $user->confirm();
-        }
-        else
-        {
-            return false;
-        }
-    }
+    public function confirm( $code );
 
     /**
      * Find a user by the given email
@@ -81,12 +27,7 @@ class ConfideRepository
      * @param  string $email The email to be used in the query
      * @return ConfideUser   User object
      */
-    public function getUserByMail( $email )
-    {
-        $user = $this->model()->where('email', '=', $email)->get()->first();
-
-        return $user;
-    }
+    public function getUserByMail( $email );
 
     /**
      * Find a user by it's credentials. Perform a 'where' within
@@ -96,26 +37,7 @@ class ConfideRepository
      * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
      * @return ConfideUser             User object
      */
-    public function getUserByIdentity( $credentials, $identityColumns = array('email') )
-    {
-        $identityColumns = (array)$identityColumns;
-
-        $user = $this->model();
-
-        foreach ($identityColumns as $attribute) {
-            
-            if(! isset($credentials[$attribute]))
-                return null; // Return null if an identity column is missing
-
-            $user = $user->where($attribute, $credentials[$attribute]);
-
-            if(! empty($user)) {
-                return $user->get()->first();
-            }
-        }
-
-        return null;
-    }
+    public function getUserByIdentity( $credentials, $identityColumns = array('email') );
 
     /**
      * Get password reminders count by the given token
@@ -123,13 +45,7 @@ class ConfideRepository
      * @param  string $token
      * @return int    Password reminders count
      */
-    public function getPasswordRemindersCount( $token )
-    {
-        $count = $this->app['db']->connection()->table('password_reminders')
-            ->where('token','=',$token)->count();
-
-        return $count;
-    }
+    public function getPasswordRemindersCount( $token );
 
     /**
      * Get email of password reminder by the given token
@@ -137,17 +53,7 @@ class ConfideRepository
      * @param  string $token
      * @return string Email
      */
-    public function getEmailByReminderToken( $token )
-    {
-        $email = $this->app['db']->connection()->table('password_reminders')
-            ->select('email')->where('token','=',$token)
-            ->first();
-
-        if ($email && is_object($email))
-            $email = $email->email;
-
-        return $email;
-    }
+    public function getEmailByReminderToken( $token );
 
     /**
      * Remove password reminder from database by the given token
@@ -155,12 +61,7 @@ class ConfideRepository
      * @param  string $token
      * @return void
      */
-    public function deleteEmailByReminderToken( $token )
-    {
-        $email = $this->app['db']->connection()->table('password_reminders')
-            ->select('email')->where('token','=',$token)
-            ->delete();
-    }
+    public function deleteEmailByReminderToken( $token );
 
     /**
      * Change the password of the given user. Make sure to hash
@@ -170,18 +71,7 @@ class ConfideRepository
      * @param  string      $password The password hash to be used
      * @return boolean Success
      */
-    public function changePassword( $user, $password )
-    {
-        $usersTable = $user->getTable();
-        $id = $user->getKey();
-        $idColumn = $user->getKeyName();
-
-        $this->app['db']->connection()->table($usersTable)
-            ->where($idColumn,$id)->update(array('password'=>$password));
-        // I.E: DB::table('users')->where('id',3)->update(array('password'=>$password));
-        
-        return true;
-    }
+    public function changePassword( $user, $password );
 
     /**
      * Generate a token for password change and saves it in
@@ -191,27 +81,7 @@ class ConfideRepository
      * @param  ConfideUser $user     An existent user
      * @return boolean Success
      */
-    public function forgotPassword( $user )
-    {
-        $token = md5( uniqid(mt_rand(), true) );
-
-        $values = array(
-            'email'=> $user->email,
-            'token'=> $token,
-            'created_at'=> new \DateTime
-        );
-
-        $this->app['db']->connection()->table('password_reminders')
-            ->insert( $values );
-        // I.E:
-        //     DB::table('password_reminders')->insert(array(
-        //    'email'=> $this->email,
-        //    'token'=> $token,
-        //    'created_at'=> new \DateTime
-        //));
-        
-        return true;
-    }
+    public function forgotPassword( $user );
 
     /**
      * Checks if an non saved user has duplicated credentials
@@ -220,23 +90,7 @@ class ConfideRepository
      * @param  ConfideUser  $user The non-saved user to be checked
      * @return int          The number of duplicated entry founds. Probably 0 or 1.
      */
-    public function userExists( $user )
-    {
-        $usersTable = $user->getTable();
-
-        $query = $this->app['db']->connection()->table($usersTable)
-            ->where('email',$user->email);
-
-        if($user->username)
-        {
-            $query = $query->orWhere('username',$user->username);
-        }
-
-        $count = $query->count();
-        // I.E: DB::table('users')->where('email', 'bob@sample.com')->orWhere('username', 'bob')->count();
-        
-        return $count;
-    }
+    public function userExists( $user );
 
     /**
      * Set the 'confirmed' column of the given user to 1
@@ -244,16 +98,5 @@ class ConfideRepository
      * @param  ConfideUser $user     An existent user
      * @return boolean Success
      */
-    public function confirmUser( $user )
-    {
-        $usersTable = $user->getTable();
-        $id = $user->getKey();
-        $idColumn = $user->getKeyName();
-
-        $this->app['db']->connection()->table($usersTable)
-            ->where($idColumn,$id)->update(array('confirmed'=>1));
-        // I.E: DB::table('users')->where('id',3)->update(array('confirmed'=>1));
-        
-        return true;
-    }
+    public function confirmUser( $user );
 }
