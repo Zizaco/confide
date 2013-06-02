@@ -2,8 +2,6 @@
 
 use Illuminate\Support\ServiceProvider;
 
-define('CONFIDE_VERSION', '0.5.1beta');
-
 class ConfideServiceProvider extends ServiceProvider {
 
     /**
