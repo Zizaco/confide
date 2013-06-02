@@ -107,6 +107,8 @@ class ConfideRepository
             if(! isset($credentials[$attribute]))
                 return null; // Return null if an identity column is missing
 
+            $user = $user->where($attribute, $credentials[$attribute]);
+
             if(! empty($user)) {
                 return $user->get()->first();
             }
