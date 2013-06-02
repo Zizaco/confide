@@ -202,7 +202,7 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( empty($this->id) )
         {
-            $this->confirmation_code = $this->generateUuid($this->table, 'confirmation_code');
+            $this->confirmation_code = md5( uniqid(mt_rand(), true) );
         }
 
         /*
