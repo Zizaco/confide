@@ -85,7 +85,7 @@ class Confide
      */
     public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array() )
     {
-        // If identity columns is not provided, use all colluns of credentials
+        // If identity columns is not provided, use all columns of credentials
         // except password and remember.
         if(empty($identity_columns))
         {
