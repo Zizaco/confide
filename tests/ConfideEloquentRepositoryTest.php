@@ -116,6 +116,11 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('username', 'LoL')
             ->andReturn( $confide_user )
             ->once()
+
+            ->getMock()->shouldReceive('orWhere')
+            ->with('username', 'LoL')
+            ->andReturn( $confide_user )
+            ->once()
             
             ->getMock()->shouldReceive('get')
             ->andReturn( $confide_user )
@@ -321,8 +326,8 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 
         $this->repo->app['db'] = $database;
 
-        // Actually checks if the user exists
-        $this->assertTrue(
+        // Actually checks if the token is returned
+        $this->assertNotNull(
             $this->repo->forgotPassword($confide_user)
         );
     }
