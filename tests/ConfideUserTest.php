@@ -207,6 +207,12 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['hash']->shouldReceive('make')
             ->andReturn( 'aRandomHash' );
 
+        $app['cache'] = m::mock( 'Cache' );
+        $app['cache']->shouldReceive('get')
+            ->andReturn( false );
+        $app['cache']->shouldReceive('put')
+            ->andReturn( true );
+
         $app['translator'] = m::mock( 'Translator' );
         $app['translator']->shouldReceive('get')
             ->andReturn( 'aTranslatedString' );
