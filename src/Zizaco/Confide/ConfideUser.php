@@ -177,7 +177,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
         if(! $duplicated)
         {
-            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );    
+            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
         }
         else
         {
@@ -234,8 +234,12 @@ class ConfideUser extends Ardent implements UserInterface {
 
             $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
 
-            // Save in cache that the email has been sent. Will last for two hours
-            static::$app['cache']->put('confirmation_email_'.$this->_id, true, 120);
+            // Save in cache that the email has been sent.
+            $signup_cache = (int)static::$app['config']->get('confide::signup_cache');
+            if ($signup_cache !== 0)
+            {
+                static::$app['cache']->put('confirmation_email_'.$this->_id, true, $signup_cache);
+            }
         }
 
         return true;
@@ -354,7 +358,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * [Deprecated]
-     * 
+     *
      * @deprecated
      */
     public function getUpdateRules()
@@ -364,7 +368,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * [Deprecated] Parses the two given users and compares the unique fields.
-     * 
+     *
      * @deprecated
      * @param $oldUser
      * @param $updatedUser
@@ -392,7 +396,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * [Deprecated]
-     * 
+     *
      * @deprecated
      */
     public function getRules()
@@ -402,7 +406,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
     /**
      * [Deprecated]
-     * 
+     *
      * @deprecated
      */
     public function setUpdateRules($set)
@@ -427,7 +431,7 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * [Deprecated] Checks if an user exists by it's credentials. Perform a 'where' within
      * the fields contained in the $identityColumns.
-     * 
+     *
      * @deprecated Use ConfideRepository getUserByIdentity instead.
      * @param  array $credentials      An array containing the attributes to search for
      * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
@@ -447,7 +451,7 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * [Deprecated] Checks if an user is confirmed by it's credentials. Perform a 'where' within
      * the fields contained in the $identityColumns.
-     * 
+     *
      * @deprecated Use ConfideRepository getUserByIdentity instead.
      * @param  array $credentials      An array containing the attributes to search for
      * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
