@@ -55,7 +55,7 @@ return array(
             'subject'   => 'Reestablecer Contraseña',
             'greetings' => 'Hola :name',
             'body'      => 'Acceda al siguiente enlace para cambiar su contraseña',
-            'farewell'  => 'Regards',
+            'farewell'  => 'Saludos',
         ),
     ),
 
