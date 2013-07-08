@@ -272,10 +272,10 @@ class ConfideUser extends Ardent implements UserInterface {
              * This will make sure that a non modified password
              * will not trigger validation error.
              */
-            if( empty($rules) && $this->password == $this->getOriginal('password') )
+            if( isset($rules['password']) && $this->password == $this->getOriginal('password') )
             {
-                $rules = static::$rules;
-                $rules['password'] = 'required';
+                unset($rules['password']);
+                unset($rules['password_confirmation']);
             }
 
             return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );
