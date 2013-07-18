@@ -214,7 +214,7 @@ class ConfideUser extends Ardent implements UserInterface {
         {
             unset( $user->password_confirmation );
         }
-        print_r($user);
+
         return true;
     }
 
