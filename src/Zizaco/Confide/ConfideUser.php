@@ -164,9 +164,10 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $options
      * @param \Closure $beforeSave
      * @param \Closure $afterSave
+     * @param bool  $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
+    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
     {
         $duplicated = false;
 
@@ -177,7 +178,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
         if(! $duplicated)
         {
-            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
         }
         else
         {
@@ -195,25 +196,25 @@ class ConfideUser extends Ardent implements UserInterface {
      * Before save the user. Generate a confirmation
      * code if is a new user.
      *
-     * @param bool $forced Indicates whether the user is being saved forcefully
+     * @param User $user
      * @return bool
      */
-    public function beforeSave( $forced = false )
+    public static function beforeSave( $user )
     {
-        if ( empty($this->id) )
+        if ( empty($user->id) )
         {
-            $this->confirmation_code = md5( uniqid(mt_rand(), true) );
+            $user->confirmation_code = md5( uniqid(mt_rand(), true) );
         }
 
         /*
          * Remove password_confirmation field before save to
          * database.
          */
-        if ( isset($this->password_confirmation) )
+        if ( isset($user->password_confirmation) )
         {
-            unset( $this->password_confirmation );
+            unset( $user->password_confirmation );
         }
-
+        print_r($user);
         return true;
     }
 
@@ -222,23 +223,23 @@ class ConfideUser extends Ardent implements UserInterface {
      * After save, delivers the confirmation link email.
      * code if is a new user.
      *
-     * @param bool $success
-     * @param bool $forced Indicates whether the user is being saved forcefully
+     * @param  User   $user
+     * @param  string event status
      * @return bool
      */
-    public function afterSave( $success,  $forced = false )
+    public static function afterSave( $user,  $status = '' )
     {
-        if ( $success  && ! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->_id) )
+        if (! $user->confirmed && ! static::$app['cache']->get('confirmation_email_'.$user->id) )
         {
             $view = static::$app['config']->get('confide::email_account_confirmation');
 
-            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
+            $user->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $user) );
 
             // Save in cache that the email has been sent.
             $signup_cache = (int)static::$app['config']->get('confide::signup_cache');
             if ($signup_cache !== 0)
             {
-                static::$app['cache']->put('confirmation_email_'.$this->_id, true, $signup_cache);
+                static::$app['cache']->put('confirmation_email_'.$user->id, true, $signup_cache);
             }
         }
 
@@ -256,14 +257,15 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $options
      * @param \Closure $beforeSave
      * @param \Closure $afterSave
+     * @param bool  $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
+    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
     {
         if ( defined('CONFIDE_TEST') )
         {
-            $this->beforeSave();
-            $this->afterSave( true );
+            self::beforeSave( $this );
+            self::afterSave( $this );
             return true;
         }
         else{
@@ -278,25 +280,26 @@ class ConfideUser extends Ardent implements UserInterface {
                 $rules['password'] = 'required';
             }
 
-            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
         }
     }
 
     /**
      * Alias of save but uses updateRules instead of rules.
-     * @param array $rules
-     * @param array $customMessages
-     * @param array $options
-     * @param callable $beforeSave
-     * @param callable $afterSave
+     * @param array   $rules
+     * @param array   $customMessages
+     * @param array   $options
+     * @param Closure $beforeSave
+     * @param Closure $afterSave
+     * @param bool    $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    public function amend( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
+    public function amend( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
     {
-        if(empty($rules)) {
+        if (empty($rules)) {
             $rules = $this->getUpdateRules();
         }
-        return $this->save( $rules, $customMessages, $options, $beforeSave, $afterSave );
+        return $this->save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
     }
 
     /**
