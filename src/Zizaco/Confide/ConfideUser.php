@@ -166,7 +166,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param \Closure $afterSave
      * @return bool
      */
-    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
+    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
     {
         $duplicated = false;
 
