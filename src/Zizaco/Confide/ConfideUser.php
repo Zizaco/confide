@@ -137,7 +137,7 @@ class ConfideUser extends Ardent implements UserInterface {
     /**
      * Change user password
      *
-     * @param $params
+     * @param  $params
      * @return string
      */
     public function resetPassword( $params )
