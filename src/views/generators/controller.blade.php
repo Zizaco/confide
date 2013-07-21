@@ -36,7 +36,7 @@ class {{ $name }} extends BaseController {
         // The password confirmation will be removed from model
         // before saving. This field will be used in Ardent's
         // auto validation.
-        ${{ lcfirst(Config::get('auth.model')) }}->password_confirmation = Input::get( 'password_confirmation' );
+        ${{ lcfirst(Config::get('auth.model')) }}->confirmation_code = Input::get( 'confirmation_code' );
 
         // Save if valid. Password field will be hashed before save
         ${{ lcfirst(Config::get('auth.model')) }}->save();
@@ -227,7 +227,7 @@ class {{ $name }} extends BaseController {
         $input = array(
             'token'=>Input::get( 'token' ),
             'password'=>Input::get( 'password' ),
-            'password_confirmation'=>Input::get( 'password_confirmation' ),
+            'confirmation_code'=>Input::get( 'confirmation_code' ),
         );
 
         // By passing an array with the token, password and confirmation

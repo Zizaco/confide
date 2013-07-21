@@ -95,7 +95,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $credentials = array(
             'email'=>'mail@sample.com',
             'password'=>'987987',
-            'password_confirmation'=>'987987'
+            'confirmation_code'=>'987987'
         );
 
         // Should call changePassword of the repository
