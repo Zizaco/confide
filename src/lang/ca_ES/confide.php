@@ -4,7 +4,7 @@ return array(
 
     'username' => 'Nom d\'usuari',
     'password' => 'Contrasenya',
-    'password_confirmation' => 'Confirmació de la contrasenya',
+    'confirmation_code' => 'Confirmació de la contrasenya',
     'e_mail' => 'Email',
     'username_e_mail' => 'Nom d\'usuari o email',
 

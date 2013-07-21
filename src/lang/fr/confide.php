@@ -4,7 +4,7 @@ return array(
 
     'username' => 'Utilisateur',
     'password' => 'Mot de passe',
-    'password_confirmation' => 'Confirmez le mot de passe',
+    'confirmation_code' => 'Confirmez le mot de passe',
     'e_mail' => 'Email',
     'username_e_mail' => "Nom d'utilisateur ou Email",
 

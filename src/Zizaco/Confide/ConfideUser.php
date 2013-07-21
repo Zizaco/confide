@@ -51,7 +51,7 @@ class ConfideUser extends Ardent implements UserInterface {
         'username' => 'required|alpha_dash|unique:users',
         'email' => 'required|email|unique:users',
         'password' => 'required|between:4,11|confirmed',
-        'password_confirmation' => 'between:4,11',
+        'confirmation_code' => 'between:4,11',
     );
 
     /**
@@ -63,7 +63,7 @@ class ConfideUser extends Ardent implements UserInterface {
         'username' => 'required|alpha_dash',
         'email' => 'required|email',
         'password' => 'between:4,11|confirmed',
-        'password_confirmation' => 'between:4,11',
+        'confirmation_code' => 'between:4,11',
     );
 
     /**
@@ -143,7 +143,7 @@ class ConfideUser extends Ardent implements UserInterface {
     public function resetPassword( $params )
     {
         $password = array_get($params, 'password', '');
-        $passwordConfirmation = array_get($params, 'password_confirmation', '');
+        $passwordConfirmation = array_get($params, 'confirmation_code', '');
 
         if ( $password == $passwordConfirmation )
         {
@@ -207,12 +207,12 @@ class ConfideUser extends Ardent implements UserInterface {
         }
 
         /*
-         * Remove password_confirmation field before save to
+         * Remove confirmation_code field before save to
          * database.
          */
-        if ( isset($user->password_confirmation) )
+        if ( isset($user->confirmation_code) )
         {
-            unset( $user->password_confirmation );
+            unset( $user->confirmation_code );
         }
 
         return true;
