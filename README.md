@@ -34,6 +34,10 @@ For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 - Captcha in user signup and password reset.
 - General improvements.
 
+**Warning:**
+
+Standard the confirm email is not being send. So if you want only confirmed users to login, in your UserController, instead of simply calling logAttempt( $input ), call logAttempt( $input, true ). The second parameter stands for "confirmed_only".
+
 ## Quick start
 
 ### Required setup
