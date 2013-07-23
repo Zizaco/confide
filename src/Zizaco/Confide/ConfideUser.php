@@ -164,10 +164,9 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $options
      * @param \Closure $beforeSave
      * @param \Closure $afterSave
-     * @param bool  $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
+    public function save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
         $duplicated = false;
 
@@ -178,7 +177,7 @@ class ConfideUser extends Ardent implements UserInterface {
 
         if(! $duplicated)
         {
-            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
+            return $this->real_save( $rules, $customMessages, $options, $beforeSave, $afterSave );
         }
         else
         {
@@ -196,23 +195,22 @@ class ConfideUser extends Ardent implements UserInterface {
      * Before save the user. Generate a confirmation
      * code if is a new user.
      *
-     * @param User $user
      * @return bool
      */
-    public static function beforeSave( $user )
+    public function beforeSave()
     {
-        if ( empty($user->id) )
+        if ( empty($this->id) )
         {
-            $user->confirmation_code = md5( uniqid(mt_rand(), true) );
+            $this->confirmation_code = md5( uniqid(mt_rand(), true) );
         }
 
         /*
          * Remove password_confirmation field before save to
          * database.
          */
-        if ( isset($user->password_confirmation) )
+        if ( isset($this->password_confirmation) )
         {
-            unset( $user->password_confirmation );
+            unset( $this->password_confirmation );
         }
 
         return true;
@@ -223,23 +221,21 @@ class ConfideUser extends Ardent implements UserInterface {
      * After save, delivers the confirmation link email.
      * code if is a new user.
      *
-     * @param  User   $user
-     * @param  string event status
      * @return bool
      */
-    public static function afterSave( $user,  $status = '' )
+    public function afterSave()
     {
-        if (! $user->confirmed && ! static::$app['cache']->get('confirmation_email_'.$user->id) )
+        if (! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->id) )
         {
             $view = static::$app['config']->get('confide::email_account_confirmation');
 
-            $user->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $user) );
+            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
 
             // Save in cache that the email has been sent.
             $signup_cache = (int)static::$app['config']->get('confide::signup_cache');
             if ($signup_cache !== 0)
             {
-                static::$app['cache']->put('confirmation_email_'.$user->id, true, $signup_cache);
+                static::$app['cache']->put('confirmation_email_'.$this->id, true, $signup_cache);
             }
         }
 
@@ -257,15 +253,14 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array $options
      * @param \Closure $beforeSave
      * @param \Closure $afterSave
-     * @param bool  $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
+    protected function real_save( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
         if ( defined('CONFIDE_TEST') )
         {
-            self::beforeSave( $this );
-            self::afterSave( $this );
+            $this->beforeSave();
+            $this->afterSave();
             return true;
         }
         else{
@@ -280,7 +275,7 @@ class ConfideUser extends Ardent implements UserInterface {
                 $rules['password'] = 'required';
             }
 
-            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
+            return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );
         }
     }
 
@@ -291,15 +286,14 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param array   $options
      * @param Closure $beforeSave
      * @param Closure $afterSave
-     * @param bool    $force Forces saving invalid data. Defaults to false; when true has the same effect as calling
      * @return bool
      */
-    public function amend( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null, $force = false )
+    public function amend( array $rules = array(), array $customMessages = array(), array $options = array(), \Closure $beforeSave = null, \Closure $afterSave = null )
     {
         if (empty($rules)) {
             $rules = $this->getUpdateRules();
         }
-        return $this->save( $rules, $customMessages, $options, $beforeSave, $afterSave, $force );
+        return $this->save( $rules, $customMessages, $options, $beforeSave, $afterSave );
     }
 
     /**
@@ -335,7 +329,7 @@ class ConfideUser extends Ardent implements UserInterface {
         static::$app['mailer']->send($view_name, $params, function($m) use ($subject_translation, $user)
         {
             $m->to( $user->email )
-            ->subject( ConfideUser::$app['translator']->get($subject_translation) );
+                ->subject( ConfideUser::$app['translator']->get($subject_translation) );
         });
     }
 
