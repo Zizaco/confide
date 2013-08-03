@@ -44,7 +44,7 @@ Standard the confirm email is not being send. So if you want only confirmed user
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "dev-master"
+    "zizaco/confide": "1.0.x"
 
 Run the Composer update comand
 
