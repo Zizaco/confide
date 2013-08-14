@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_reset_password'))    ?: URL::to('/' . $app['config']->get('auth.table') . '/reset') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_reset_password'))    ?: URL::to('/' . Config::get('auth.table') . '/reset') }}}" accept-charset="UTF-8">
     <input type="hidden" name="token" value="{{{ $token }}}">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 

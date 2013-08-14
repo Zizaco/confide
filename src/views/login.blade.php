@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_login') ?: URL::to('/' . $app['config']->get('auth.table') . '/login') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_login') ?: URL::to('/' . Config::get('auth.table') . '/login') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
