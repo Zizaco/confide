@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (Confide::checkAction( lcfirst(Config::get('auth.model')) . '@store')) ?: URL::to(Config::get('auth.table'))  }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (Confide::checkAction( Config::get('auth.model') . 'Controller@store')) ?: URL::to(Config::get('auth.table'))  }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <label for="username">{{{ Lang::get('confide::confide.username') }}}</label>
