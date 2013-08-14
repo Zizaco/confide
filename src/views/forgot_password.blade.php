@@ -1,4 +1,4 @@
-<form method="POST" action="{{ (Confide::checkAction('UserController@do_forgot_password')) ?: URL::to('/user/forgot') }}" accept-charset="UTF-8">
+<form method="POST" action="{{ (Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_forgot_password')) ?: URL::to('/' . $app['config']->get('auth.table') . '/forgot') }}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 
     <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>

@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ Confide::checkAction('UserController@do_login') ?: URL::to('/user/login') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ Confide::checkAction( lcfirst(Config::get('auth.model')) . '@do_login') ?: URL::to('/' . $app['config']->get('auth.table') . '/login') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
@@ -7,7 +7,7 @@
         <label for="password">
             {{{ Lang::get('confide::confide.password') }}}
             <small>
-                <a href="{{{ (Confide::checkAction('UserController@forgot_password')) ?: 'forgot' }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
+                <a href="{{{ (Confide::checkAction( lcfirst(Config::get('auth.model')) . '@forgot_password')) ?: 'forgot' }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
             </small>
         </label>
         <input tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
