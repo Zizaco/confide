@@ -53,7 +53,7 @@ return array(
         ),
 
         'password_reset' => array(
-            'subject' => 'Passworr zurücksetzen',
+            'subject' => 'Passwort zurücksetzen',
             'greetings' => 'Hallo :name',
             'body' => 'Bitte folgen Sie dem unten stehenden Link um Ihr Passwort zu ändern  .',
             'farewell' => 'Vielen Dank',
