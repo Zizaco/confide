@@ -16,7 +16,7 @@ return array(
     ),
 
     'login' => array(
-        'title' => 'Connection',
+        'title' => 'Connexion',
         'desc' => 'Remplir vos identifiants',
         'forgot_password' => '(mot de passe oublié)',
         'remember' => 'Se souvenir de moi',
