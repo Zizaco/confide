@@ -87,6 +87,17 @@ return array(
     | the confirmation using another technique, for example by using the IPN
     | from a payment-processor. Very usefull for websites offering products.
     |
+    | signup_email:
+    | is for the transport of the email, true or false
+    | If you want to use an IPN to trigger the email, then set it to false
+    |
+    | signup_confirm:
+    | is to decide of a member needs to be confirmed before he is able to login
+    | so when you set this to true, then a member has to be confirmed before
+    | he is able to login, so if you want to use an IPN for confirmation, be 
+    | sure that the ipn process also changes the confirmed flag in the member
+    | table, otherwise they will not be able to login after the payment.
+    |
     */
     'signup_email'      => true,
     'signup_confirm'    => true,
