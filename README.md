@@ -36,7 +36,11 @@ For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
 **Warning:**
 
-Standard the confirm email is not being send. So if you want only confirmed users to login, in your UserController, instead of simply calling logAttempt( $input ), call logAttempt( $input, true ). The second parameter stands for "confirmed_only".
+Standard the confirm email is being send. And we require them to be confirmed.
+It is easy to change this in the confide config-file.
+Both values signup_email and signup_confirm are set to true in the config-file.
+Change it to false if you do not want to send them an email and they do not need
+to be confirmed to be able to login to the website.
 
 ## Quick start
 
