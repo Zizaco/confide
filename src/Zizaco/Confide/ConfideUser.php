@@ -230,10 +230,12 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         if ( $success  && ! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->_id) )
         {
-            $view = static::$app['config']->get('confide::email_account_confirmation');
-
-            $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
-
+            // on behalf or the config file we should send and email or not
+            if (static::$app['config']->get('confide::signup_email') == true)
+            {
+                $view = static::$app['config']->get('confide::email_account_confirmation');
+                $this->sendEmail( 'confide::confide.email.account_confirmation.subject', $view, array('user' => $this) );
+            }
             // Save in cache that the email has been sent.
             $signup_cache = (int)static::$app['config']->get('confide::signup_cache');
             if ($signup_cache !== 0)
