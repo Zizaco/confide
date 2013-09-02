@@ -100,7 +100,8 @@ class {{ $name }} extends BaseController {
         // If you wish to only allow login from confirmed users, call logAttempt
         // with the second parameter as true.
         // logAttempt will check if the 'email' perhaps is the username.
-        if ( Confide::logAttempt( $input ) ) 
+        // Get the value from the config file instead of changing the controller
+        if ( Confide::logAttempt( $input, Config::get('confide::signup_confirm') ) ) 
         {
             // If the session 'loginRedirect' is set, then redirect
             // to that route. Otherwise redirect to '/'
