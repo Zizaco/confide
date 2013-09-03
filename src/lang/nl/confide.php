@@ -17,7 +17,7 @@ return array(
 
     'login' => array(
         'title' => 'Inloggen',
-        'desc' => 'Vul je gebruikersnaam en wachtwoord in',
+        'desc' => 'Vul uw gebruikersnaam en wachtwoord in',
         'forgot_password' => '(wachtwoord vergeten)',
         'remember' => 'Onthouden',
         'submit' => 'Inloggen',
@@ -37,7 +37,7 @@ return array(
         'wrong_confirmation' => 'Onjuiste activatie.',
         'password_forgot' => 'De informatie is naar uw e-mail verzonden.',
         'wrong_password_forgot' => 'Gebruiker kon niet gevonden worden.',
-        'password_reset' => 'Your password has been changed successfully.',
+        'password_reset' => 'Uw wachtwoord is met succes veranderd.',
         'wrong_password_reset' => 'Onjuist wachtwoord, probeer het nog eens.',
         'wrong_token' => 'De reset token is onjuist.',
         'duplicated_credentials' => 'De ingevulde gegevens zijn al in gebruik.',
