@@ -102,16 +102,9 @@ class {{ $name }} extends BaseController {
         // logAttempt will check if the 'email' perhaps is the username.
         if ( Confide::logAttempt( $input ) ) 
         {
-            // If the session 'loginRedirect' is set, then redirect
-            // to that route. Otherwise redirect to '/'
-            $r = Session::get('loginRedirect');
-            if (!empty($r))
-            {
-                Session::forget('loginRedirect');
-                return Redirect::to($r);
-            }
-            
-            return Redirect::to('/'); // change it to '/admin', '/dashboard' or something
+            // Redirect the user to the URL they were trying to access before
+            // being caught by the authentication filter. Otherwise fallback to '/'
+            return Redirect::intended('/'); // change it to '/admin', '/dashboard' or something
         }
         else
         {
