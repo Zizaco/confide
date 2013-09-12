@@ -217,6 +217,9 @@ To change the validation rules of the User model you can take a look at [Ardent]
 
 Feel free to add more fields to your table and to the validation array. Then you should build your own sign-up form with the additional fields.
 
+NOTE: If you add fields to your validation rules into your model like above, do not forget you have to add those fields to the UserController store function also. If you forget this, the form will always return with an error.
+Example: $user->terms = Input::get('terms');
+
 #### Passing additional information to the make methods
 
 If you want to pass additional parameters to the forms, you can use an alternate syntax to achieve this. 
