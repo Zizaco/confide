@@ -172,6 +172,7 @@ To update an user already in the database you'll Need to make sure your ruleset 
     
     public static $rules = array(
         'username' => 'unique:users,username',
+        'email' => 'email'
     );
     
     ?>
@@ -186,8 +187,9 @@ To update an user already in the database you'll Need to make sure your ruleset 
             // 1 is set just as an example.
             $user = User::find(1);
         
-            // From the username field from a form.
-            $user->username = Input::get('username'); 
+            // Update a user attribute from a form.
+            // Using email as an example.
+            $user->email = Input::get('email'); 
         
             // Save
             $user->save();
@@ -196,11 +198,8 @@ To update an user already in the database you'll Need to make sure your ruleset 
     }
     
     ?>
-
-This will compare the two users and where they differ set the update rule to the original unique rule.
-
-`prepareRules` also takes a third param which can be a rule set to use to update the updateRules array. By default it
-uses the rules array within the user class.
+    
+This will allow you to update the current user.
 
 #### Validate model fields
 
