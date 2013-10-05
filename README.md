@@ -162,29 +162,40 @@ Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
 #### Update an User
 
-To update an user already in the database you'll want to either pass in an different rule set or use the amend function.
+To update an user already in the database you'll Need to make sure your ruleset is using the unique validator within the User model.
 
-    $user = new User;
-    $user->username = 'newuser';
+    <?php
 
-    // Save
-    $user->save($this->getUpdateRules());
-    // Or amend
-    $this->amend();
+    use Zizaco\Confide\ConfideUser;
 
-Further if you'd like to make sure the updated user uses unique from the original rule, you'll want
-to pass in the old user and the new user to the `prepareRules` function. You can use it like this:
+    class User extends ConfideUser {
+    
+    public static $rules = array(
+        'username' => 'unique:users,username',
+    );
+    
+    ?>
 
-    $oldUser = $user->find(1)->first();
-    $user = clone $oldUser;
-    $user->username = 'newuser';
-
-    $user->prepareRules($oldUser, $user);
-
-    // Save
-    $user->save($this->getUpdateRules());
-    // Or amend
-    $this->amend();
+    <?php 
+    
+    class UserController extends Controller {
+    
+        public function postCreate() {
+    
+            // In real usage you'll need to find the user that is being modified.
+            // 1 is set just as an example.
+            $user = User::find(1);
+        
+            // From the username field from a form.
+            $user->username = Input::get('username'); 
+        
+            // Save
+            $user->save();
+        
+        }
+    }
+    
+    ?>
 
 This will compare the two users and where they differ set the update rule to the original unique rule.
 
