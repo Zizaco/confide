@@ -192,7 +192,7 @@ To update an user already in the database you'll Need to make sure your ruleset 
             $user->email = Input::get('email'); 
         
             // Save
-            $user->save();
+            $user->update();
         
         }
     }
