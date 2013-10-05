@@ -192,7 +192,10 @@ To update an user already in the database you'll Need to make sure your ruleset 
             $user->email = Input::get('email'); 
         
             // Save
-            $user->update();
+            // This was previously update, but Ardent changed :( 
+            // Pull request to change it back. https://github.com/laravelbook/ardent/pull/110
+            $user->updateUniques(); 
+            
         
         }
     }
