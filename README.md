@@ -193,7 +193,7 @@ To update an user already in the database you'll Need to make sure your ruleset 
         
             // Save
             // This was previously update, but Ardent changed :( 
-            // Pull request to change it back. https://github.com/laravelbook/ardent/pull/110
+            // Issue: https://github.com/laravelbook/ardent/issues/84
             $user->updateUniques(); 
             
         
