@@ -197,7 +197,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return bool
      */
-    public function beforeSave()
+    public function beforeSave($forced = false)
     {
         if ( empty($this->id) )
         {
@@ -223,7 +223,7 @@ class ConfideUser extends Ardent implements UserInterface {
      *
      * @return bool
      */
-    public function afterSave()
+    public function afterSave($success, $forced = false)
     {
         if (! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->id) )
         {
