@@ -25,7 +25,7 @@
         "illuminate/auth": "4.0.x"
     },
     "suggest": {
-        "zizaco/entrust":"add Role-based Permissions to Laravel 4"
+        "zizaco/entrust":"Add Role-based Permissions to Laravel 4"
     },
     "autoload": {
         "classmap": [
