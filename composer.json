@@ -17,7 +17,7 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "*",
-        "laravelbook/ardent": "dev-master",
+        "laravelbook/ardent": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "0.7.2",
