@@ -17,7 +17,7 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "*",
-        "laravelbook/ardent": "1.1.x"
+        "laravelbook/ardent": "dev-master",
     },
     "require-dev": {
         "mockery/mockery": "0.7.2",
@@ -36,5 +36,9 @@
             "Zizaco\\Confide": "src/"
         }
     },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/nightowl77/ardent"
+    }],
     "minimum-stability": "dev"
 }
