@@ -260,7 +260,7 @@ class ConfideUser extends Ardent implements UserInterface {
         if ( defined('CONFIDE_TEST') )
         {
             $this->beforeSave();
-            $this->afterSave();
+            $this->afterSave(true);
             return true;
         }
         else{
