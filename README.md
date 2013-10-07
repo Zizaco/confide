@@ -36,7 +36,11 @@ For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
 **Warning:**
 
-Standard the confirm email is not being send. So if you want only confirmed users to login, in your UserController, instead of simply calling logAttempt( $input ), call logAttempt( $input, true ). The second parameter stands for "confirmed_only".
+Standard the confirm email is being send. And we require them to be confirmed.
+It is easy to change this in the confide config-file.
+Both values signup_email and signup_confirm are set to true in the config-file.
+Change it to false if you do not want to send them an email and they do not need
+to be confirmed to be able to login to the website.
 
 ## Quick start
 
@@ -225,6 +229,9 @@ To change the validation rules of the User model you can take a look at [Ardent]
     }
 
 Feel free to add more fields to your table and to the validation array. Then you should build your own sign-up form with the additional fields.
+
+NOTE: If you add fields to your validation rules into your model like above, do not forget you have to add those fields to the UserController store function also. If you forget this, the form will always return with an error.
+Example: $user->terms = Input::get('terms');
 
 #### Passing additional information to the make methods
 
