@@ -120,6 +120,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
     {
         $tries = 15;
 
+        $this->confide->app['request'] = m::mock( 'Request' );
+        $this->confide->app['request']->shouldReceive('server')
+            ->andReturn( '12.34.56.78' );
+
         $confide_user = $this->mockConfideUser();
         $confide_user->shouldReceive('get','first')
             ->andReturn( null );
@@ -132,7 +136,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->confide->app['hash']->shouldReceive('check')
             ->andReturn( false );
 
-        for ($i=0; $i < $tries; $i++) { 
+        for ($i=0; $i < $tries; $i++) {
 
             // Simulates cache values
             $this->useCacheForThrottling($i);
@@ -341,7 +345,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
     {
         $cache = m::mock('Illuminate\Cache\Store');
         $cache->shouldReceive('put')
-            ->with( "confide_flogin_attempt_wrong", $value+1, 2 )
+            ->with( "confide_flogin_attempt_12.34.56.78wrong", $value+1, 2 )
             ->once();
         $cache->shouldReceive('get')
             ->andReturn( $value );

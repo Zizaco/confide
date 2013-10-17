@@ -99,4 +99,6 @@ interface ConfideRepository
      * @return boolean Success
      */
     public function confirmUser( $user );
+
+    public function validate(array $rules, array $customMessages);
 }

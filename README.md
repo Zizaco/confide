@@ -268,7 +268,7 @@ See [Entrust](https://github.com/Zizaco/entrust)
 
 #### Redirecting to previous route after login
 
-When defining your filter you should set the `'loginRedirect'` session variable. For example:
+When defining your filter you should use the Redirect::guest('user/login') within your auth filter. For example:
 
     // filters.php
 
@@ -276,11 +276,7 @@ When defining your filter you should set the `'loginRedirect'` session variable.
     {
         if ( Auth::guest() ) // If the user is not logged in
         {
-            // Set the loginRedirect session variable
-            Session::put( 'loginRedirect', Request::url() );
-
-            // Redirect back to user login
-            return Redirect::to( 'user/login' );
+            return Redirect::guest('user/login');
         }
     });
 
@@ -293,9 +289,11 @@ or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
     // filters.php
 
     Entrust::routeNeedsRole( 'admin*', 'Admin', function(){
-        Session::put( 'loginRedirect', Request::url() );
-        return Redirect::to( 'user/login' );
+            return Redirect::guest('user/login');
     } );
+
+Finally, it'll auto redirect if your controller's user/login function uses Redirect:intended('a/default/url/here') after a successful login.
+The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
     
 #### Validating a route
 
