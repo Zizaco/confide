@@ -319,6 +319,6 @@ class Confide
         $attempt_key = $this->attemptCacheKey( $credentials );
         $attempts = $this->app['cache']->get($attempt_key, 0);
 
-        $this->app['cache']->put($attempt_key, $attempts+1, 2); // used throttling login attempts
+        $this->app['cache']->put($attempt_key, $attempts+1, $this->app['config']->get('confide::throttle_time_period')); // used throttling login attempts
     }
 }

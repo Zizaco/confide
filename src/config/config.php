@@ -8,11 +8,12 @@ return array(
     |--------------------------------------------------------------------------
     |
     | Defines how many login failed tries may be done within
-    | two minutes.
+    | the 'throttle_time_period', which is in minutes.
     |
     */
 
     'throttle_limit' => 9,
+    'throttle_time_period' => 2,
 
     /*
     |--------------------------------------------------------------------------
@@ -49,9 +50,7 @@ return array(
     'login_form' =>             'confide::login',
     'signup_form' =>            'confide::signup',
     'forgot_password_form' =>   'confide::forgot_password',
-    'reset_password_form' =>    'confide::reset_password', //*
-
-    // * reset_password_form must use $token variable in hidden input field
+    'reset_password_form' =>    'confide::reset_password', 
 
     /*
     |--------------------------------------------------------------------------
