@@ -333,6 +333,10 @@ Removed deprecated variable and functions.
 * checkUserExists
 * isConfirmed
 
+Adds two config values
+* login_cache_field (#161)
+* throttle_time_period (#162)
+
 ### Version 2.0.0 Beta 3
 Readme Update
 
