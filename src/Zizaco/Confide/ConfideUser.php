@@ -181,6 +181,7 @@ class ConfideUser extends Ardent implements UserInterface {
         }
         else
         {
+            static::$app['confide.repository']->validate();
             $this->validationErrors->add(
                 'duplicated',
                 static::$app['translator']->get('confide::confide.alerts.duplicated_credentials')
@@ -270,11 +271,12 @@ class ConfideUser extends Ardent implements UserInterface {
             /*
              * This will make sure that a non modified password
              * will not trigger validation error.
+             * @fixed Pull #110
              */
-            if( empty($rules) && $this->password == $this->getOriginal('password') )
+            if( isset($rules['password']) && $this->password == $this->getOriginal('password') )
             {
-                $rules = static::$rules;
-                $rules['password'] = 'required';
+                unset($rules['password']);
+                unset($rules['password_confirmation']);
             }
 
             return parent::save( $rules, $customMessages, $options, $beforeSave, $afterSave );

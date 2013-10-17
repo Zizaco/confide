@@ -121,6 +121,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( 1 )
             ->once();
 
+        ConfideUser::$app['confide.repository']->shouldReceive('validate')
+            ->andReturn( true )
+            ->once();
+
         $this->populateUser();
         $this->confide_user->confirmation_code = '';
         $this->confide_user->confirmed = false;
