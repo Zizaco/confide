@@ -181,7 +181,6 @@ class ConfideUser extends Ardent implements UserInterface {
         }
         else
         {
-            $this->validate();
             $this->validationErrors->add(
                 'duplicated',
                 static::$app['translator']->get('confide::confide.alerts.duplicated_credentials')
