@@ -290,7 +290,7 @@ class Confide
     {
         return 'confide_flogin_attempt_'
             .$this->app['request']->server('REMOTE_ADDR')
-            .$credentials['email'];
+            .$credentials[$this->app['config']->get('confide::login_cache_field')];
     }
 
     /**

@@ -16,6 +16,19 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Login Throttle Field
+    |--------------------------------------------------------------------------
+    |
+    | Login throttle is done using the remote ip address
+    | and a provided credential. Email and username are likely values.
+    |
+    | Default: email
+    |
+    */
+    'login_cache_field' => 'email',
+
+    /*
+    |--------------------------------------------------------------------------
     | Form Views
     |--------------------------------------------------------------------------
     |
@@ -101,4 +114,5 @@ return array(
     */
     'signup_email'      => true,
     'signup_confirm'    => true,
+
 );
