@@ -52,9 +52,9 @@ return array(
         ),
 
         'password_reset' => array(
-            'subject' => 'Password Reset',
+            'subject' => 'Zmiana hasła',
             'greetings' => 'Witaj :name,',
-            'body' => 'Access the following link to change your password',
+            'body' => 'Aby go aktywować nowe hasło, kliknij w poniższy link:',
             'farewell' => 'Z pozdrowieniami,',
         ),
     ),
