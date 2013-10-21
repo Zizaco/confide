@@ -215,7 +215,7 @@ class ConfideUser extends Ardent implements UserInterface {
      * @param bool $forced
      * @return bool
      */
-    public function afterSave($success, $forced = false)
+    public function afterSave($success=true, $forced = false)
     {
         if (! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->id) )
         {
