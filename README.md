@@ -32,14 +32,12 @@ For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
 **Planned:**
 - Captcha in user signup and password reset.
-- General improvements.
 
 **Warning:**
 
-Standard the confirm email is being send. And we require them to be confirmed.
-It is easy to change this in the confide config-file.
-Both values signup_email and signup_confirm are set to true in the config-file.
-Change it to false if you do not want to send them an email and they do not need
+By default a confirmation email is sent and users are required to confirm the email address.
+It is easy to change this in the confide config file.
+Change signup_email and signup_confirm to false if you do not want to send them an email and they do not need
 to be confirmed to be able to login to the website.
 
 ## Quick start
@@ -48,7 +46,7 @@ to be confirmed to be able to login to the website.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "1.0.x"
+    "zizaco/confide": "2.0.x"
 
 Run the Composer update comand
 
@@ -320,6 +318,39 @@ __Users are able to login without confirming account__
 
 If you want only confirmed users to login, in your `UserController`, instead of simply calling `logAttempt( $input )`, call `logAttempt( $input, true )`. The second parameter stands for _"confirmed_only"_.
 
+## Release Notes
+
+### Version 2.0.0 Beta 4
+Removed deprecated variable and functions.
+* $updateRules
+* amend()
+* generateUuid
+* getUpdateRules
+* prepareRules
+* getRules
+* setUpdateRules
+* getUserFromCredsIdentity
+* checkUserExists
+* isConfirmed
+
+Adds two config values
+* login_cache_field (#161)
+* throttle_time_period (#162)
+
+### Version 2.0.0 Beta 3
+Readme Update
+
+### Version 2.0.0 Beta 2
+Pulls in a few pull requests and also locks to Ardent 2.1.x
+* Properly handles validation messaging (#124)
+* Properly validates in real_save (#110)
+* Auth redirect is handled using Redirect::guest instead of a custom session variable (#145)
+* Bruteforce vulnerability is addressed. (#151)
+
+### Version 2.0.0 Beta 2
+Locked to Ardent 1.1.x
+
+### Version 1.1.0
 
 ## License
 

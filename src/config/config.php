@@ -8,11 +8,25 @@ return array(
     |--------------------------------------------------------------------------
     |
     | Defines how many login failed tries may be done within
-    | two minutes.
+    | the 'throttle_time_period', which is in minutes.
     |
     */
 
     'throttle_limit' => 9,
+    'throttle_time_period' => 2,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Login Throttle Field
+    |--------------------------------------------------------------------------
+    |
+    | Login throttle is done using the remote ip address
+    | and a provided credential. Email and username are likely values.
+    |
+    | Default: email
+    |
+    */
+    'login_cache_field' => 'email',
 
     /*
     |--------------------------------------------------------------------------
@@ -36,9 +50,7 @@ return array(
     'login_form' =>             'confide::login',
     'signup_form' =>            'confide::signup',
     'forgot_password_form' =>   'confide::forgot_password',
-    'reset_password_form' =>    'confide::reset_password', //*
-
-    // * reset_password_form must use $token variable in hidden input field
+    'reset_password_form' =>    'confide::reset_password',
 
     /*
     |--------------------------------------------------------------------------
@@ -101,4 +113,5 @@ return array(
     */
     'signup_email'      => true,
     'signup_confirm'    => true,
+
 );

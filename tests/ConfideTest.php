@@ -295,6 +295,14 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
             ->andReturn( 9 );
 
         $app['config']->shouldReceive( 'get' )
+            ->with( 'confide::login_cache_field' )
+            ->andReturn( 'email' );
+
+        $app['config']->shouldReceive( 'get' )
+            ->with( 'confide::throttle_time_period' )
+            ->andReturn( 2 );
+
+        $app['config']->shouldReceive( 'get' )
             ->with( 'confide::password_field', 'password' )
             ->andReturn( 'password' );
 
