@@ -31,15 +31,15 @@ return array(
     'alerts' => array(
         'account_created' => 'Ihr Konto wurde erfolgreich angelegt. Bitte prüfen Sie Ihre Emails um Ihr Konto zu bestätigen.',
         'too_many_attempts' => 'Zu viele Versuche. Probieren Sie es in ein paar Minuten erneut.',
-        'wrong_credentials' => 'Flascher Nutzername, Email oder Passwort.',
+        'wrong_credentials' => 'Falscher Nutzername, Email oder Passwort.',
         'not_confirmed' => 'Ihr Konto wurde möglicherweise nicht bestätigt. Prüfen Sie Ihre Emails um Ihr Konto zu bestätigen.',
         'confirmation' => 'Ihr Konto wurde bestätigt. Sie können sich nun anmelden.',
-        'wrong_confirmation' => 'Flascher Bestätigungscode.',
+        'wrong_confirmation' => 'Falscher Bestätigungscode.',
         'password_forgot' => 'Die Informationen zum Zurücksetzen des Passworts wurden Ihnen per Email gesendet.',
         'wrong_password_forgot' => 'Nutzer nicht gefunden.',
         'password_reset' => 'Ihr Passwort wurde erfolgreich geändert.',
-        'wrong_password_reset' => 'Falsches Passwort. Erneut versuchen.',
-        'wrong_token' => 'Der Token zum Zurücksetzen des Passworts ist nicht valide.',
+        'wrong_password_reset' => 'Falsches Passwort. Bitte erneut versuchen.',
+        'wrong_token' => 'Der Token zum Zurücksetzen des Passworts ist nicht gültig.',
         'duplicated_credentials' => 'Ihre gewählten Kontoinformationen werden schon verwendet. Bitte versuchen Sie es mit anderen.',
     ),
 
@@ -47,7 +47,6 @@ return array(
         'account_confirmation' => array(
             'subject' => 'Kontobestätigung',
             'greetings' => 'Hallo :name',
-            'body' => 'Please access the link below to confirm your account.',
             'body' => 'Bitte folgen Sie dem unten stehenden Link um Ihr Konto zu bestätigen.',
             'farewell' => 'Vielen Dank',
         ),
@@ -55,7 +54,7 @@ return array(
         'password_reset' => array(
             'subject' => 'Passwort zurücksetzen',
             'greetings' => 'Hallo :name',
-            'body' => 'Bitte folgen Sie dem unten stehenden Link um Ihr Passwort zu ändern  .',
+            'body' => 'Bitte folgen Sie dem unten stehenden Link um Ihr Passwort zu ändern.',
             'farewell' => 'Vielen Dank',
         ),
     ),
