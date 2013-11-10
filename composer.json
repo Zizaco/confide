@@ -16,13 +16,13 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "*",
-        "laravelbook/ardent": "2.1.x"
+        "illuminate/support": "4.*",
+        "laravelbook/ardent": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "0.7.2",
-        "illuminate/database": "4.0.x",
-        "illuminate/auth": "4.0.x"
+        "illuminate/database": "4.*",
+        "illuminate/auth": "4.*"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
