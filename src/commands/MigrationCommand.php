@@ -43,7 +43,7 @@ class MigrationCommand extends Command {
 
         $this->line('');
         $this->info( "Table name: $table" );
-        $message = "An migration that creates the $table table will".
+        $message = "A migration that creates the $table table will".
         " be created in app/database/migrations directory";
 
         $this->comment( $message );
