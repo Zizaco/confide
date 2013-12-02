@@ -5,7 +5,7 @@
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
 
-Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
+Confide is an authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
 
@@ -19,12 +19,12 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Easily render forms for login, signup and password reset.
 - Generate customizable routes for login, signup, password reset, confirmation, etc.
 - Generate a customizable controller that handles the basic user account actions.
-- Contains a set of methods to help basic user features.
+- Contains a set of methods to help with basic user features.
 - Integrated with the Laravel Auth component/configs.
 - Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
 - Login throttling.
-- Redirecting to previous route after authentication.
-- Checks for unique email and username in signup
+- Redirecting to the previous route after authentication.
+- Checks for unique email and username at signup.
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
 
@@ -37,8 +37,7 @@ For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
 By default a confirmation email is sent and users are required to confirm the email address.
 It is easy to change this in the confide config file.
-Change signup_email and signup_confirm to false if you do not want to send them an email and they do not need
-to be confirmed to be able to login to the website.
+Change signup_email and signup_confirm to false if you do not want to send them an email and they do not need to be confirmed to be able to login to the website.
 
 ## Quick start
 
@@ -76,9 +75,9 @@ At the end of `config/app.php` add `'Confide'    => 'Zizaco\Confide\ConfideFacad
 
 ### Configuration
 
-Set the properly values to the `config/auth.php`. This values will be used by confide to generate the database migration and to generate controllers and routes.
+Set the property values in `config/auth.php`. These values will be used by confide to generate the database migration, controllers and routes.
 
-Set the `address` and `name` from the `from` array in `config/mail.php`. Those will be used to send account confirmation and password reset emails to the users.
+Set the `address` and `name` in the `from` array in `config/mail.php`. These will be used to send account confirmation and password reset emails to the users.
 
 ### User model
 
@@ -104,9 +103,9 @@ Change your User model in `app/models/User.php` to:
 
 `ConfideUser` class will take care of some behaviors of the user model.
 
-### Dump the default acessors
+### Dump the default assessors
 
-Least, you can dump a default controller and the default routes for Confide.
+In the least, you can dump a default controller and the default routes for Confide.
 
     $ php artisan confide:controller
     $ php artisan confide:routes
@@ -122,20 +121,20 @@ Access `http://yourapp/user/create` to create your first user. Check the `app/ro
 
 **Basic setup:**
 
-1. Database connection in `config/database.php` running properly.
+1. Database connection in `config/database.php` setup properly.
 2. Correct model and table names in `config/auth.php`. They will be used by Confide all the time.
-3. `from` configuration in `config/mail.php`.
+3. Update `from` configuration in `config/mail.php`.
 
 **Configuration:**
 
 1. `ConfideServiceProvider` and `ConfideFacade` entry in `config/app.php` `'providers'` and `'aliases'` respectively.
-2. User model (with the same name as in `config/auth.php`) should extend `ConfideUser` class. This will cause to methods like `resetPassword()`, `confirm()` and a overloaded `save()` to be available.
+2. User model (with the same name as in `config/auth.php`) should extend `ConfideUser` class. This will cause methods like `resetPassword()`, `confirm()` and a overloaded `save()` to be available.
 
 **Optional steps:**
 
 1. Use `Confide` facade to dump login and signup forms easly with `makeLoginForm()` and `makeSignupForm()`. You can render the forms within your views by doing `{{ Confide::makeLoginForm()->render() }}`.
 2. Generate a controller with the template contained in Confide throught the artisan command `$ php artisan confide:controller`. If a controller with the same name exists it will **NOT** be overwritten.
-3. Generate routes matching the controller template throught the artisan command `$ php artisan confide:routes`. Your `routes.php` will **NOT** be overwritten.
+3. Generate routes matching the controller template through the artisan command `$ php artisan confide:routes`. Your `routes.php` will **NOT** be overwritten.
 
 ### Advanced
 
@@ -164,7 +163,7 @@ Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
 #### Update an User
 
-To update an user already in the database you'll Need to make sure your ruleset is using the unique validator within the User model.
+To update a user already in the database you will need to make sure your ruleset is using the unique validator within the User model.
 
     <?php
 
@@ -227,6 +226,7 @@ To change the validation rules of the User model you can take a look at [Ardent]
 Feel free to add more fields to your table and to the validation array. Then you should build your own sign-up form with the additional fields.
 
 NOTE: If you add fields to your validation rules into your model like above, do not forget you have to add those fields to the UserController store function also. If you forget this, the form will always return with an error.
+
 Example: $user->terms = Input::get('terms');
 
 #### Passing additional information to the make methods
@@ -258,13 +258,13 @@ Then, when dumping the routes, you should use the --restful option to match the 
     
 #### User roles and permissions
 
-In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
+In order not to bloat Confide with unrelated features, the roles and permissions were developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
 
 See [Entrust](https://github.com/Zizaco/entrust)
 
 #### Redirecting to previous route after login
 
-When defining your filter you should use the Redirect::guest('user/login') within your auth filter. For example:
+When defining your filter, you should use the Redirect::guest('user/login') within your auth filter. For example:
 
     // filters.php
 
@@ -280,7 +280,7 @@ When defining your filter you should use the Redirect::guest('user/login') withi
     // 'admin'. Ex: 'admin/posts', 'admin/categories'.
     Route::when('admin*', 'auth'); 
 
-or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
+Or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
     // filters.php
 
@@ -288,7 +288,7 @@ or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
             return Redirect::guest('user/login');
     } );
 
-Finally, it'll auto redirect if your controller's user/login function uses Redirect:intended('a/default/url/here') after a successful login.
+Finally, it will auto redirect if your controller's user/login function uses Redirect:intended('a/default/url/here') after a successful login.
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
     
 #### Validating a route
@@ -310,7 +310,7 @@ If you overwrite the `beforeSave()` method in your model, make sure to call `par
         // Your stuff
     }
 
-__Confirmation link is not sent when user signup__
+__Confirmation link is not sent after user signup__
 
 Same as above. If you overwrite the `afterSave()` method in your model, make sure to call `parent::afterSave()`:
 
@@ -356,8 +356,8 @@ Locked to Ardent 1.1.x
 
 Confide is free software distributed under the terms of the MIT license
 
-## Aditional information
+## Additional information
 
-Any questions, feel free to contact me or ask [here](http://forums.laravel.io/viewtopic.php?id=4658)
+Any questions, feel free to contact me or ask [here](http://forums.laravel.io/viewtopic.php?id=9312)
 
 Any issues, please [report here](https://github.com/Zizaco/confide/issues)
