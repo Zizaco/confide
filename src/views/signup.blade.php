@@ -1,3 +1,10 @@
+@extends(Config::get('confide::views.layout'))
+
+@section('title')
+<h1>Confide - Create User</h1>
+@stop
+
+@section('content')
 {{ Form::open(array(
     'url' =>  Confide::checkAction('UserController@store') ?: URL::to('user'),
     'method' => 'POST',
@@ -62,3 +69,4 @@
         </div>
     </fieldset>
 {{ Form::close() }}
+@stop

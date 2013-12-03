@@ -1,3 +1,10 @@
+@extends(Config::get('confide::views.layout'))
+
+@section('title')
+<h1>Confide - Login</h1>
+@stop
+
+@section('content')
 {{ Form::open(array(
     'url' =>  Confide::checkAction('UserController@do_login') ?: URL::to('/user/login'),
     'method' => 'POST',
@@ -41,9 +48,10 @@
         @endif
         <div class="form-group">
             {{ Form::submit(Lang::get('confide::confide.login.submit'), array(
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-primary',
                 'tabindex' => '4'
             )) }}
         </div>
     </fieldset>
 {{ Form::close() }}
+@stop

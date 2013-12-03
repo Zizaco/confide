@@ -1,3 +1,10 @@
+@extends(Config::get('confide::views.layout'))
+
+@section('title')
+<h1>Confide - Reset Password</h1>
+@stop
+
+@section('content')
 {{ Form::open(array(
     'url' =>  Confide::checkAction('UserController@do_reset_password') ?: URL::to('/user/reset_password'),
     'method' => 'POST',
@@ -40,3 +47,4 @@
         )) }}
     </div>
 {{ Form::close() }}
+@stop

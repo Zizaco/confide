@@ -1,3 +1,10 @@
+@extends(Config::get('confide::views.layout'))
+
+@section('title')
+<h1>Confide - Forgot Password</h1>
+@stop
+
+@section('content')
 {{ Form::open(array(
     'url' =>  Confide::checkAction('UserController@do_forgot_password') ?: URL::to('/user/forgot_password'),
     'method' => 'POST',
@@ -13,14 +20,13 @@
             'placeholder' => Lang::get('confide::confide.e_mail'),
             'tabindex' => '1'
         )) }}
-        <div class="input-append input-group">
-            <span class="input-group-btn">
-                {{ Form::submit(Lang::get('confide::confide.forgot.submit'), array(
-                    'class' => 'btn btn-default',
-                    'tabindex' => '2'
-                )) }}
-            </span>
-        </div>
+        <br>
+    </div>
+    <div class="form-group">
+        {{ Form::submit(Lang::get('confide::confide.forgot.submit'), array(
+            'class' => 'btn btn-primary',
+            'tabindex' => '2'
+        )) }}
     </div>
 
     @if ( Session::get('error') )
@@ -31,3 +37,4 @@
         <div class="alert">{{{ Session::get('notice') }}}</div>
     @endif
 {{ Form::close() }}
+@stop
