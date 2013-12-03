@@ -1,14 +1,28 @@
-<form method="POST" action="{{{ (Confide::checkAction('UserController@do_reset_password'))    ?: URL::to('/user/reset') }}}" accept-charset="UTF-8">
-    <input type="hidden" name="token" value="{{{ $token }}}">
-    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+{{ Form::open(array(
+    'url' =>  Confide::checkAction('UserController@do_reset_password') ?: URL::to('/user/reset_password'),
+    'method' => 'POST',
+    'accept-charset' => 'UTF-8'
+)) }}
+    {{ Form::hidden('token', $token) }}
+    {{ Form::hidden('_token', Session::getToken()) }}
 
     <div class="form-group">
-        <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
-        <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+        {{ Form::label('password', Lang::get('confide::confide.password')) }}
+        {{ Form::password('password', array(
+            'class' => 'form-control',
+            'id' => 'password',
+            'placeholder' => Lang::get('confide::confide.password'),
+            'tabindex' => '1'
+        )) }}
     </div>
     <div class="form-group">
-        <label for="password_confirmation">{{{ Lang::get('confide::confide.password_confirmation') }}}</label>
-        <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password_confirmation') }}}" type="password" name="password_confirmation" id="password_confirmation">
+        {{ Form::label('password_confirmation', Lang::get('confide::confide.password_confirmation')) }}
+        {{ Form::password('password_confirmation', array(
+            'class' => 'form-control',
+            'id' => 'password_confirmation',
+            'placeholder' => Lang::get('confide::confide.password_confirmation'),
+            'tabindex' => '2'
+        )) }}
     </div>
 
     @if ( Session::get('error') )
@@ -20,6 +34,9 @@
     @endif
 
     <div class="form-actions form-group">
-        <button type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.forgot.submit') }}}</button>
+        {{ Form::submit(Lang::get('confide::confide.forgot.submit'), array(
+            'class' => 'btn btn-primary',
+            'tabindex' => '3'
+        )) }}
     </div>
-</form>
+{{ Form::close() }}

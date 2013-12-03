@@ -1,24 +1,36 @@
-<form method="POST" action="{{{ Confide::checkAction('UserController@do_login') ?: URL::to('/user/login') }}}" accept-charset="UTF-8">
-    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+{{ Form::open(array(
+    'url' =>  Confide::checkAction('UserController@do_login') ?: URL::to('/user/login'),
+    'method' => 'POST',
+    'accept-charset' => 'UTF-8'
+)) }}
     <fieldset>
         <div class="form-group">
-            <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
-            <input class="form-control" tabindex="1" placeholder="{{{ Lang::get('confide::confide.username_e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
+            {{ Form::label('email', Lang::get('confide::confide.username_e_mail')) }}
+            {{ Form::text('email', Input::old('email'), array(
+                'class' => 'form-control',
+                'id' => 'email',
+                'placeholder' => Lang::get('confide::confide.username_e_mail'),
+                'tabindex' => '1'
+            )) }}
         </div>
         <div class="form-group">
-        <label for="password">
-            {{{ Lang::get('confide::confide.password') }}}
-            <small>
-                <a href="{{{ (Confide::checkAction('UserController@forgot_password')) ?: 'forgot' }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
-            </small>
-        </label>
-        <input tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+            {{ Form::forgotPasswordLabel('password', array(
+                'class' => 'form-control',
+                'id' => 'password'
+            )) }}
+            {{ Form::password('password', array(
+                'class' => 'form-control',
+                'id' => 'password',
+                'placeholder' => Lang::get('confide::confide.password'),
+                'tabindex' => '2'
+            )) }}
         </div>
         <div class="form-group">
-            <label for="remember" class="checkbox">{{{ Lang::get('confide::confide.login.remember') }}}
-                <input type="hidden" name="remember" value="0">
-                <input tabindex="4" type="checkbox" name="remember" id="remember" value="1">
-            </label>
+            {{ Form::hidden('remember', '0') }}
+            {{ Form::label('remember', Lang::get('confide::confide.login.remember')) }}
+            {{ Form::checkbox('remember', '1', false, array(
+                'tabindex' => '3'
+            )) }}
         </div>
         @if ( Session::get('error') )
             <div class="alert alert-error">{{{ Session::get('error') }}}</div>
@@ -28,7 +40,10 @@
             <div class="alert">{{{ Session::get('notice') }}}</div>
         @endif
         <div class="form-group">
-            <button tabindex="3" type="submit" class="btn btn-default">{{{ Lang::get('confide::confide.login.submit') }}}</button>
+            {{ Form::submit(Lang::get('confide::confide.login.submit'), array(
+                'class' => 'btn btn-default',
+                'tabindex' => '4'
+            )) }}
         </div>
     </fieldset>
-</form>
+{{ Form::close() }}
