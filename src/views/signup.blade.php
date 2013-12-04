@@ -22,7 +22,10 @@
             )) }}
         </div>
         <div class="form-group">
-            {{ Form::signupEmailLabel('email', Lang::get('confide::confide.e_mail')) }}
+            {{ HTML::decode(Form::label(
+                'email',
+                Lang::get('confide::confide.e_mail').' <small>('.Lang::get('confide::confide.signup.confirmation_required').')</small>'
+            )) }}
             {{ Form::email('email', Input::old('email'), array(
                 'class' => 'form-control',
                 'id' => 'email',

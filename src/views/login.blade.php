@@ -21,10 +21,19 @@
             )) }}
         </div>
         <div class="form-group">
-            {{ Form::forgotPasswordLabel('password', array(
-                'class' => 'form-control',
-                'id' => 'password'
+            {{ HTML::decode(Form::label(
+                'password',
+                Lang::get('confide::confide.password')." <small><a href=\"{{{ (Confide::checkAction('UserController@forgot_password')) ?: 'forgot' }}}\">".Lang::get('confide::confide.login.forgot_password')."</a></small>"
             )) }}
+            {{ Form::password('password', array(
+                'class' => 'form-control',
+                'id' => 'password',
+                'placeholder' => Lang::get('confide::confide.password'),
+                'tabindex' => '2'
+            )) }}
+        </div>
+        <div class="form-group">
+            {{ Form::forgotPasswordLabel('password') }}
             {{ Form::password('password', array(
                 'class' => 'form-control',
                 'id' => 'password',
