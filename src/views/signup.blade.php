@@ -1,21 +1,55 @@
-<form method="POST" action="{{{ (Confide::checkAction('UserController@store')) ?: URL::to('user')  }}}" accept-charset="UTF-8">
-    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+@extends(Config::get('confide::views.layout'))
+
+@section('title')
+<h1>Confide - Create User</h1>
+@stop
+
+@section('content')
+{{ Form::open(array(
+    'url' =>  Confide::checkAction('UserController@store') ?: URL::to('user'),
+    'method' => 'POST',
+    'accept-charset' => 'UTF-8'
+)) }}
+    {{ Form::hidden('_token', Session::getToken()) }}
     <fieldset>
         <div class="form-group">
-            <label for="username">{{{ Lang::get('confide::confide.username') }}}</label>
-            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.username') }}}" type="text" name="username" id="username" value="{{{ Input::old('username') }}}">
+            {{ Form::label('username', Lang::get('confide::confide.username')) }}
+            {{ Form::text('username', Input::old('username'), array(
+                'class' => 'form-control',
+                'id' => 'username',
+                'placeholder' => Lang::get('confide::confide.username'),
+                'tabindex' => '1'
+            )) }}
         </div>
         <div class="form-group">
-            <label for="email">{{{ Lang::get('confide::confide.e_mail') }}} <small>{{ Lang::get('confide::confide.signup.confirmation_required') }}</small></label>
-            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
+            {{ HTML::decode(Form::label(
+                'email',
+                Lang::get('confide::confide.e_mail').' <small>('.Lang::get('confide::confide.signup.confirmation_required').')</small>'
+            )) }}
+            {{ Form::email('email', Input::old('email'), array(
+                'class' => 'form-control',
+                'id' => 'email',
+                'placeholder' => Lang::get('confide::confide.e_mail'),
+                'tabindex' => '2'
+            )) }}
         </div>
         <div class="form-group">
-            <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
-            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+            {{ Form::label('password', Lang::get('confide::confide.password')) }}
+            {{ Form::password('password', array(
+                'class' => 'form-control',
+                'id' => 'password',
+                'placeholder' => Lang::get('confide::confide.password'),
+                'tabindex' => '3'
+            )) }}
         </div>
         <div class="form-group">
-            <label for="password_confirmation">{{{ Lang::get('confide::confide.password_confirmation') }}}</label>
-            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password_confirmation') }}}" type="password" name="password_confirmation" id="password_confirmation">
+            {{ Form::label('password_confirmation', Lang::get('confide::confide.password_confirmation')) }}
+            {{ Form::password('password_confirmation', array(
+                'class' => 'form-control',
+                'id' => 'password_confirmation',
+                'placeholder' => Lang::get('confide::confide.password_confirmation'),
+                'tabindex' => '4'
+            )) }}
         </div>
 
         @if ( Session::get('error') )
@@ -31,8 +65,11 @@
         @endif
 
         <div class="form-actions form-group">
-          <button type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.signup.submit') }}}</button>
+            {{ Form::submit(Lang::get('confide::confide.signup.submit'), array(
+                'class' => 'btn btn-primary',
+                'tabindex' => '5'
+            )) }}
         </div>
-
     </fieldset>
-</form>
+{{ Form::close() }}
+@stop
