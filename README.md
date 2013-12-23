@@ -46,7 +46,7 @@ to be confirmed to be able to login to the website.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "2.0.x"
+    "zizaco/confide": "3.0.x"
 
 Run the Composer update comand
 
@@ -319,6 +319,9 @@ __Users are able to login without confirming account__
 If you want only confirmed users to login, in your `UserController`, instead of simply calling `logAttempt( $input )`, call `logAttempt( $input, true )`. The second parameter stands for _"confirmed_only"_.
 
 ## Release Notes
+
+### Version 3.0.0
+Updated to support Laravel 4.1
 
 ### Version 2.0.0 Beta 4
 Removed deprecated variable and functions.
