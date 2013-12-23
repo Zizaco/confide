@@ -104,7 +104,7 @@ Change your User model in `app/models/User.php` to:
 
 `ConfideUser` class will take care of some behaviors of the user model.
 
-### Dump the default acessors
+### Dump the default accessors
 
 Least, you can dump a default controller and the default routes for Confide.
 
