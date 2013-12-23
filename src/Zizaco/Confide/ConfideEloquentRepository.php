@@ -98,6 +98,11 @@ class ConfideEloquentRepository implements ConfideRepository
      */
     public function getUserByIdentity( $credentials, $identityColumns = array('email') )
     {
+        if(empty($credentials))
+        {
+            return null;
+        }
+
         $identityColumns = (array)$identityColumns;
 
         $user = $this->model();

@@ -157,6 +157,11 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(
             $confide_user, $this->repo->getUserByIdentity( $values, 'username' )
         );
+
+        // When passing empty credentials should return null
+        $this->assertEquals(
+            null, $this->repo->getUserByIdentity( array() )
+        );
     }
 
     public function testShouldGetPasswordRemindersCountByToken()
