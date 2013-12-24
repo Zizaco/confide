@@ -106,7 +106,7 @@ Change your User model in `app/models/User.php` to:
 
 ### Dump the default accessors
 
-Least, you can dump a default controller and the default routes for Confide.
+Lastly, you can dump a default controller and the default routes for Confide.
 
     $ php artisan confide:controller
     $ php artisan confide:routes
