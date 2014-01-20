@@ -3,6 +3,7 @@
 use Illuminate\Auth\UserInterface;
 use LaravelBook\Ardent\Ardent;
 use J20\Uuid\Uuid;
+use Validator;
 
 class ConfideUser extends Ardent implements UserInterface {
 
@@ -130,10 +131,22 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function resetPassword( $params )
     {
-        $password = array_get($params, 'password', '');
-        $passwordConfirmation = array_get($params, 'password_confirmation', '');
-
-        if ( $password == $passwordConfirmation )
+        $password = array_get($params, 'password', null);
+        $passwordConfirmation = array_get($params, 'password_confirmation', null);
+ 
+        $rules = array(
+            'password' => static::$rules['password'],
+            'password_confirmation' => static::$rules['password_confirmation']
+        );
+ 
+        $input = array(
+            'password' => array_get($params, 'password', null),
+            'password_confirmation' => array_get($params, 'password_confirmation', null)
+        );
+ 
+        $validator = Validator::make($input, $rules);
+ 
+        if ( $password == $passwordConfirmation && $validator->passes())
         {
             return static::$app['confide.repository']
                 ->changePassword( $this, static::$app['hash']->make($password) );
@@ -474,3 +487,4 @@ class ConfideUser extends Ardent implements UserInterface {
         }
     }
 }
+
