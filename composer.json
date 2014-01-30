@@ -6,7 +6,6 @@
     "authors": [
         {
             "name": "Zizaco Zizuini",
-            "email": "zizaco@gmail.com",
             "homepage": "http://www.zizaco.net"
         },
         {
@@ -17,7 +16,6 @@
     "require": {
         "php": ">=5.3.0",
         "illuminate/support": "4.1.x",
-        "laravelbook/ardent": "2.4.x"
     },
     "require-dev": {
         "mockery/mockery": "0.7.2",
