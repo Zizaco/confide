@@ -22,20 +22,23 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
         m::close();
     }
 
-    public function testGetModel()
+    public function testShouldGetModel()
     {
-        /**
-         * Set
-         */
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
         $modelClassName = '_mockedUser';
         $user = m::mock($modelClassName);
         $repo = new EloquentRepository([]);
         $repo->app['config'] = m::mock('Illuminate\Config\Repository');
 
-        /**
-         * Expectation
-         */
-
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
         // Make sure to return the wanted value from config
         $repo->app['config']->shouldReceive('get')
             ->with('auth.model')
@@ -46,10 +49,159 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
         // the correct object.
         $repo->app[$modelClassName] = $user;
 
-        /**
-         * Assertion
-         */
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
         $this->assertEquals($user, $repo->model());
     }
 
+    public function testShouldGetUserByIdentity()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'something' => 'somevalue'
+        ];
+        $model = m::mock('_mockedUser');
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]',[]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Repo model method should return the model instance
+        $repo->shouldReceive('model')
+            ->andReturn($model);
+
+        // Should query for the user using each credential
+        $firstWhere = true;
+        foreach ($identity as $attribute => $value) {
+            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+                ->with($attribute, '=', $value)
+                ->once()
+                ->andReturn($model);
+
+            $firstWhere = false;
+        }
+
+        $model->shouldReceive('get')
+            ->once()
+            ->andReturn($model);
+
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByIdentity($identity));
+    }
+
+    public function testShouldGetUserByEmail()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $email = 'someone@somewhere.com';
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]',[]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Repo model method should return the model instance
+        $repo->shouldReceive('getUserByIdentity')
+            ->with(['email'=>$email])
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByEmail($email));
+    }
+
+    public function testShouldGetUserByEmailOrUsername()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $username = 'Someone';
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]',[]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Repo model method should return the model instance
+        $repo->shouldReceive('getUserByIdentity')
+            ->with(['email'=>$username, 'username'=>$username])
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByEmailOrUsername($username));
+    }
+
+    public function testShouldConfirmByCode()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $confirmCode = 123123;
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]',[]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Should query for the user
+        $repo->shouldReceive('getUserByIdentity')
+            ->with(['confirmation_code' => $confirmCode])
+            ->andReturn($user);
+
+        // Should call the confirmUser method with the user
+        // instance
+        $repo->shouldReceive('confirmUser')
+            ->with($user)
+            ->once()
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+       $this->assertTrue($repo->confirmByCode($confirmCode));
+    }
 }

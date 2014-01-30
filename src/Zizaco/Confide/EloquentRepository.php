@@ -40,8 +40,7 @@ class EloquentRepository
      */
     public function model()
     {
-        if (! $this->model)
-        {
+        if (! $this->model) {
             $this->model = $this->app['config']->get('auth.model');
         }
 
@@ -50,5 +49,80 @@ class EloquentRepository
         }
 
         throw new \Exception("Wrong model specified in config/auth.php", 639);
+    }
+
+    /**
+     * Find a user by one of the fields given as $identity.
+     * If one of the fields in the $identity array matches the user
+     * will be retrieved.
+     * @param  array $identity  An array of attributes and values to search for
+     * @return COnfideUser      User object
+     */
+    public function getUserByIdentity($identity)
+    {
+        $user = $this->model();
+
+        $firstWhere = true;
+        foreach ($identity as $attribute => $value) {
+
+            if ($firstWhere) {
+                $user = $user->where($attribute, '=', $value);
+            } else {
+                $user = $user->orWhere($attribute, '=', $value);
+            }
+
+            $firstWhere = false;
+        }
+
+        $user = $user->get()->first();
+
+        return $user;
+    }
+
+    /**
+     * Find a user by the given email
+     *
+     * @param  string $email The email to be used in the query
+     * @return ConfideUser   User object
+     */
+    public function getUserByEmail($email)
+    {
+        return $this->getUserByIdentity(['email'=>$email]);
+    }
+
+    /**
+     * Find a user by the given email or username
+     *
+     * @param  string $emailOrUsername Username of email to be used in the query
+     * @return ConfideUser   User object
+     */
+    public function getUserByEmailOrUsername($emailOrUsername)
+    {
+        $identity = [
+            'email' => $emailOrUsername,
+            'username' => $emailOrUsername
+        ];
+
+        return $this->getUserByIdentity($identity);
+    }
+
+    /**
+     * Update the confirmation status of a user to true if a user
+     * is found with the given confirmation code.
+     *
+     * @param string $code
+     * @return bool Success
+     */
+    public function confirmByCode($code)
+    {
+        $identity = ['confirmation_code' => $code];
+
+        $user = $this->getUserByIdentity($identity);
+
+        if ($user) {
+            return $this->confirmUser($user);
+        } else {
+            return false;
+        }
     }
 }
