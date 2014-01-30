@@ -1,7 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 /**
- * A layer that abstracts all database interactions that happens
+ * A service that abstracts all database interactions that happens
  * in Confide using Eloquent
  */
 class EloquentRepository
@@ -56,7 +56,7 @@ class EloquentRepository
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
      * @param  array $identity  An array of attributes and values to search for
-     * @return COnfideUser      User object
+     * @return ConfideUser      User object
      */
     public function getUserByIdentity($identity)
     {

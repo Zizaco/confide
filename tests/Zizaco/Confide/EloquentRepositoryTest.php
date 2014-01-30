@@ -6,13 +6,6 @@ use PHPUnit_Framework_TestCase;
 class EloquentRepositoryTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * ConfideRepository instance
-     *
-     * @var Zizaco\Confide\ConfideRepository
-     */
-    protected $repo;
-
-    /**
      * Calls Mockery::close
      *
      * @return void
