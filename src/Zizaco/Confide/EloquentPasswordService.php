@@ -47,8 +47,38 @@ class EloquentPasswordService
         $this->app['db']
             ->connection()
             ->table('password_reminders')
-            ->insert( $values );
+            ->insert($values);
 
         return $token;
+    }
+
+    public function getEmailByToken($token)
+    {
+        $email = $this->app['db']
+            ->connection()
+            ->table('password_reminders')
+            ->select('email')->where('token','=',$token)
+            ->first();
+
+        if ($email && is_object($email))
+        {
+            $email = $email->email;
+        }
+        elseif ($email && is_array($email))
+        {
+            $email = $email['email'];
+        }
+
+        return $email;
+    }
+
+    /**
+     * Generates a random password change token
+     *
+     * @return  string
+     */
+    protected function generateToken()
+    {
+        return md5(uniqid(mt_rand(), true));
     }
 }
