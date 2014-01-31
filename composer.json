@@ -18,7 +18,7 @@
         "illuminate/support": "4.1.x"
     },
     "require-dev": {
-        "mockery/mockery": "0.7.2",
+        "mockery/mockery": "0.9.*@dev",
         "illuminate/database": "4.1.x",
         "illuminate/auth": "4.1.x"
     },
