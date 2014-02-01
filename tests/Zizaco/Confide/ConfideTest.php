@@ -509,6 +509,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $confide = new Confide($repo, $passService, $app);
+
         $user = m::mock('_mockedUser');
         $user->email = 'someone@somewhere.com';
         $generatedToken = '12345';
@@ -540,5 +541,135 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertFalse($confide->forgotPassword('wrong@somewhere.com'));
+    }
+
+    public function testShouldGetUserByPasswordResetToken()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $confide = new Confide($repo, $passService, $app);
+
+        $user = m::mock('_mockedUser');
+        $user->email = 'someone@somewhere.com';
+        $token = '12345';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('getEmailByToken')
+            ->once()->with($token)
+            ->andReturn($user->email);
+
+        $passService->shouldReceive('getEmailByToken')
+            ->andReturn(false);
+
+        $repo->shouldReceive('getUserByEmail')
+            ->once()->with($user->email)
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            $user,
+            $confide->userByResetPasswordToken($token)
+        );
+
+        $this->assertFalse(
+            $confide->userByResetPasswordToken('wrong')
+        );
+    }
+
+    public function testShouldDoLogout()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $app['auth'] = m::mock('Auth');
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $confide = new Confide($repo, $passService, $app);
+        $user = m::mock('_mockedUser');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app['auth']->shouldReceive('logout')
+            ->once()->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($confide->logout());
+    }
+
+    public function testShouldMakeViews()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $app['config'] = m::mock('Config');
+        $app['view'] = m::mock('ViewEnv');
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $confide = new Confide($repo, $passService, $app);
+        $token = '12345';
+        $view = m::mock('View');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app['view']->shouldReceive('make')
+            ->once()->with('view.confide::login_form')
+            ->andReturn($view);
+        $app['view']->shouldReceive('make')
+            ->once()->with('view.confide::signup_form')
+            ->andReturn($view);
+        $app['view']->shouldReceive('make')
+            ->once()->with('view.confide::forgot_password_form')
+            ->andReturn($view);
+        $app['view']->shouldReceive('make')
+            ->once()->with(
+                'view.confide::reset_password_form',
+                ['token'=>$token]
+            )
+            ->andReturn($view);
+
+        $app['config']->shouldReceive('get')
+            ->times(4)->andReturnUsing(function($name){
+                return 'view.'.$name;
+            });
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals($view, $confide->makeLoginForm());
+        $this->assertEquals($view, $confide->makeSignupForm());
+        $this->assertEquals($view, $confide->makeForgotPasswordForm());
+        $this->assertEquals($view, $confide->makeResetPasswordForm($token));
     }
 }

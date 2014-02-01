@@ -139,7 +139,7 @@ class Confide
      * user.
      *
      * @param string  $email
-     * @return bool
+     * @return string $token
      */
     public function forgotPassword($email)
     {
@@ -149,5 +149,86 @@ class Confide
             return $this->passService->requestChangePassword($user);
 
         return false;
+    }
+
+    /**
+     * Returns a user that corresponds to the given reset
+     * password token or false if there is no user with the
+     * given token.
+     * @param  string $token
+     * @return ConfideUser
+     */
+    public function userByResetPasswordToken($token)
+    {
+        $email = $this->passService->getEmailByToken($token);
+
+        if ($email) {
+            return $this->repo->getUserByEmail($email);
+        }
+
+        return false;
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        return $this->app['auth']->logout();
+    }
+
+    /**
+     * Display the default login view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function makeLoginForm()
+    {
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::login_form')
+            );
+    }
+
+    /**
+     * Display the default signup view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function makeSignupForm()
+    {
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::signup_form')
+            );
+    }
+
+    /**
+     * Display the forget password view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function makeForgotPasswordForm()
+    {
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::forgot_password_form')
+            );
+    }
+
+    /**
+     * Display the forget password view
+     *
+     * @return \Illuminate\View\View
+     */
+    public function makeResetPasswordForm( $token )
+    {
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::reset_password_form'),
+                array('token'=>$token)
+            );
     }
 }
