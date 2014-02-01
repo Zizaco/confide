@@ -4,6 +4,7 @@
  * A service that abstracts all database interactions that happens
  * in Confide using Eloquent
  *
+ * @license MIT
  * @package  Zizaco\Confide
  */
 class EloquentRepository implements RepositoryInterface

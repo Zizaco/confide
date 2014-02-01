@@ -145,4 +145,35 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         */
         $this->assertEquals('1234', $user->getAuthPassword());
     }
+
+    public function testErrors()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new ConfideUser;
+        $newMessageBag = m::mock('Illuminate\Support\MessageBag');
+        $existentMessageBag = m::mock('Illuminate\Support\MessageBag');
+        $user->errors = $existentMessageBag;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        App::shouldReceive('make')
+            ->once()->with('Illuminate\Support\MessageBag')
+            ->andReturn($newMessageBag);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals($existentMessageBag, $user->errors());
+        $user->errors = null;
+        $this->assertEquals($newMessageBag, $user->errors());
+    }
 }

@@ -5,6 +5,7 @@
  * too many failed attempts. This is a secure measure in
  * order to avoid brute force attacks.
  *
+ * @license MIT
  * @package  Zizaco\Confide
  */
 class CacheLoginThrottleService implements LoginThrottleServiceInterface

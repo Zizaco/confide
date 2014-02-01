@@ -5,6 +5,7 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 /**
  * A service that abstracts all user password management related methods
  *
+ * @license MIT
  * @package  Zizaco\Confide
  */
 interface PasswordServiceInterface

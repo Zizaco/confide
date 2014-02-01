@@ -5,6 +5,7 @@
  * services. Usually this is the only service class that the
  * application will interact directly with.
  *
+ * @license MIT
  * @package  Zizaco\Confide
  */
 class Confide

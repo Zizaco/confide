@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 /**
  * Eloquent implementation of the ConfideUserInterface.
  *
+ * @license MIT
  * @package  Zizaco\Confide
  */
 class ConfideUser extends Eloquent implements ConfideUserInterface {
@@ -24,6 +25,14 @@ class ConfideUser extends Eloquent implements ConfideUserInterface {
      * @var array
      */
     protected $hidden = array('password');
+
+    /**
+     * A MessageBag object that store any error regarding
+     * the confide User.
+     *
+     * @var \Illuminate\Support\MessageBag
+     */
+    public $errors;
 
     /**
      * Confirm the user (usually means that the user)
@@ -80,6 +89,20 @@ class ConfideUser extends Eloquent implements ConfideUserInterface {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns a MessageBag object that store any error
+     * regarding the user validation
+     *
+     * @var \Illuminate\Support\MessageBag
+     */
+    public function errors()
+    {
+        if (!$this->errors)
+            $this->errors = App::make('Illuminate\Support\MessageBag');
+
+        return $this->errors;
     }
 
     /**
