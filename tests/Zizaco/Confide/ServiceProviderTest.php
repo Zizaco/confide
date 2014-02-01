@@ -50,7 +50,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp = m::mock(
             'Zizaco\Confide\ServiceProvider'.
-            '[registerRepository,registerConfide,registerCommands]',
+            '[registerRepository,registerPasswordService,registerConfide,registerCommands]',
             ['something']
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -62,7 +62,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp->shouldReceive(
                 'registerRepository','registerConfide',
-                'registerCommands'
+                'registerCommands','registerPasswordService'
             )
             ->once();
 
@@ -110,6 +110,44 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->registerRepository();
+    }
+
+    public function testShouldRegisterPasswordService()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $test = $this;
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app->shouldReceive('bind')
+            ->once()->andReturnUsing(
+                // Make sure that the name is 'confide.password'
+                // and that the closure passed returns the correct
+                // kind of object.
+                function($name, $closure) use ($test, $app) {
+                    $test->assertEquals('confide.password', $name);
+                    $test->assertInstanceOf(
+                        'Zizaco\Confide\EloquentPasswordService',
+                        $closure($app)
+                    );
+                }
+            );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $sp->registerPasswordService();
     }
 
     public function testShouldRegisterConfide()

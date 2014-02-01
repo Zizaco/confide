@@ -34,6 +34,8 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->registerRepository();
 
+        $this->registerPasswordService();
+
         $this->registerConfide();
 
         $this->registerCommands();
@@ -48,7 +50,20 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->app->bind('confide.repository', function($app)
         {
-            return new EloquentRepository;
+            return new EloquentRepository($app);
+        });
+    }
+
+    /**
+     * Register the repository that will handle all the database interaction.
+     *
+     * @return void
+     */
+    protected function registerPasswordService()
+    {
+        $this->app->bind('confide.password', function($app)
+        {
+            return new EloquentPasswordService($app);
         });
     }
 
