@@ -115,24 +115,39 @@ class Confide
     protected function extractRememberFromArray($input)
     {
         if (isset($input['remember'])) {
-            $remember = $input['remember'];
+            return $input['remember'];
         } else {
-            $remember = false;
+            return false;
         }
-
-        return $remember;
     }
 
     protected function extractIdentityFromArray($input)
     {
         if (isset($input['email'])) {
-            $emailOrUsername = $input['email'];
+            return $input['email'];
         } elseif (isset($input['username'])) {
-            $emailOrUsername = $input['username'];
+            return $input['username'];
         } else {
             return false;
         }
+    }
 
-        return $emailOrUsername;
+    /**
+     * If an user with the given email exists then generate
+     * a token for password change and saves it in the
+     * 'password_reminders' table with the email of the
+     * user.
+     *
+     * @param string  $email
+     * @return bool
+     */
+    public function forgotPassword($email)
+    {
+        $user = $this->repo->getUserByEmail($email);
+
+        if ($user)
+            return $this->passService->requestChangePassword($user);
+
+        return false;
     }
 }

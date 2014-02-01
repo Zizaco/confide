@@ -497,4 +497,48 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             $confide->extractIdentityFromArray($bothId)
         );
     }
+
+    public function testShouldForgotPassword()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $confide = new Confide($repo, $passService, $app);
+        $user = m::mock('_mockedUser');
+        $user->email = 'someone@somewhere.com';
+        $generatedToken = '12345';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $repo->shouldReceive('getUserByEmail')
+            ->once()->with($user->email)
+            ->andReturn($user);
+
+        $repo->shouldReceive('getUserByEmail')
+            ->andReturn(false);
+
+        $passService->shouldReceive('requestChangePassword')
+            ->once()->with($user)
+            ->andReturn($generatedToken);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            $generatedToken,
+            $confide->forgotPassword($user->email)
+        );
+
+        $this->assertFalse($confide->forgotPassword('wrong@somewhere.com'));
+    }
 }
