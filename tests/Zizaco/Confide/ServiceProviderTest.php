@@ -171,7 +171,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $app->shouldReceive('bind')
             ->once()->andReturnUsing(
-                // Make sure that the name is 'confide.password'
+                // Make sure that the name is 'confide.throttle'
                 // and that the closure passed returns the correct
                 // kind of object.
                 function($name, $closure) use ($test, $app) {
@@ -214,6 +214,10 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $app->shouldReceive('make')
             ->once()->with('confide.password')
             ->andReturn(new EloquentPasswordService);
+
+        $app->shouldReceive('make')
+            ->once()->with('confide.throttle')
+            ->andReturn(new CacheLoginThrottleService);
 
         $app->shouldReceive('bind')
             ->once()->andReturnUsing(

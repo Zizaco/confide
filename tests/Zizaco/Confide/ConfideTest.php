@@ -25,7 +25,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
         $modelInstance = m::mock('_mockedUser');
 
         /*
@@ -55,7 +56,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['auth'] = m::mock('Auth');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
         $user = m::mock('_mockedUser');
 
         /*
@@ -84,7 +86,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
         $modelInstance = m::mock('_mockedUser');
         $code = '12345';
 
@@ -117,11 +120,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['hash'] = m::mock('Hash');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray,extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -180,11 +184,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['hash'] = m::mock('Hash');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray,extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -235,11 +240,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['hash'] = m::mock('Hash');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray,extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -290,11 +296,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['hash'] = m::mock('Hash');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray,extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -349,11 +356,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['hash'] = m::mock('Hash');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray,extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -410,11 +418,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractRememberFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -454,11 +463,12 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
             '[extractIdentityFromArray]',
-            [$repo, $passService, $app]
+            [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
 
@@ -508,7 +518,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
 
         $user = m::mock('_mockedUser');
         $user->email = 'someone@somewhere.com';
@@ -553,7 +564,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app = [];
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
 
         $user = m::mock('_mockedUser');
         $user->email = 'someone@somewhere.com';
@@ -601,7 +613,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['auth'] = m::mock('Auth');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
         $user = m::mock('_mockedUser');
 
         /*
@@ -632,7 +645,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app['view'] = m::mock('ViewEnv');
         $repo = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $confide = new Confide($repo, $passService, $app);
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+        $confide = new Confide($repo, $passService, $loginThrottler, $app);
         $token = '12345';
         $view = m::mock('View');
 

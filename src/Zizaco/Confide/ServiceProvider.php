@@ -98,6 +98,7 @@ class ServiceProvider extends IlluminateServiceProvider
             return new Confide(
                 $app->make('confide.repository'),
                 $app->make('confide.password'),
+                $app->make('confide.throttle'),
                 $app
             );
         });

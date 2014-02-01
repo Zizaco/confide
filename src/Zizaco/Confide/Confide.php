@@ -31,22 +31,32 @@ class Confide
     public $passService;
 
     /**
+     * Confide login throttling service instance
+     *
+     * @var \Zizaco\Confide\LoginThrottleServiceInterface
+     */
+    public $loginThrottler;
+
+    /**
      * Create a new Confide class
      *
-     * @param  \Zizaco\Confide\RepositoryInterface      $repo
-     * @param  \Zizaco\Confide\PasswordServiceInterface $passService
+     * @param  \Zizaco\Confide\RepositoryInterface           $repo
+     * @param  \Zizaco\Confide\PasswordServiceInterface      $passService
+     * @param  \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
      * @param  \Illuminate\Foundation\Application     $app Laravel application object
      * @return void
      */
     public function __construct(
-        RepositoryInterface      $repo,
-        PasswordServiceInterface $passService,
+        RepositoryInterface       $repo,
+        PasswordServiceInterface  $passService,
+        LoginThrottleServiceInterface $loginThrottler,
         $app = null
     )
     {
-        $this->repo        = $repo;
-        $this->passService = $passService;
-        $this->app         = $app ?: app();
+        $this->repo           = $repo;
+        $this->passService    = $passService;
+        $this->loginThrottler = $loginThrottler;
+        $this->app            = $app ?: app();
     }
 
     /**
