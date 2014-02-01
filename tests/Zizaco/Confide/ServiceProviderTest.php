@@ -50,7 +50,9 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp = m::mock(
             'Zizaco\Confide\ServiceProvider'.
-            '[registerRepository,registerPasswordService,registerConfide,registerCommands]',
+            '[registerRepository,registerPasswordService,'.
+            'registerConfide,registerCommands,'.
+            'registerLoginThrottleService]',
             ['something']
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -62,7 +64,8 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp->shouldReceive(
                 'registerRepository','registerConfide',
-                'registerCommands','registerPasswordService'
+                'registerCommands','registerPasswordService',
+                'registerLoginThrottleService'
             )
             ->once();
 
@@ -150,6 +153,44 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->registerPasswordService();
     }
 
+    public function testShouldRegisterLoginThrottleService()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $test = $this;
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app->shouldReceive('bind')
+            ->once()->andReturnUsing(
+                // Make sure that the name is 'confide.password'
+                // and that the closure passed returns the correct
+                // kind of object.
+                function($name, $closure) use ($test, $app) {
+                    $test->assertEquals('confide.throttle', $name);
+                    $test->assertInstanceOf(
+                        'Zizaco\Confide\CacheLoginThrottleService',
+                        $closure($app)
+                    );
+                }
+            );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $sp->registerLoginThrottleService();
+    }
+
     public function testShouldRegisterConfide()
     {
         /*
@@ -176,7 +217,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
 
         $app->shouldReceive('bind')
             ->once()->andReturnUsing(
-                // Make sure that the name is 'confide.repository'
+                // Make sure that the name is 'confide'
                 // and that the closure passed returns the correct
                 // kind of object.
                 function($name, $closure) use ($test, $app) {

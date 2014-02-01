@@ -1,8 +1,8 @@
 <?php namespace Zizaco\Confide;
 
 /**
- * The LoginThrottle is a service that Throttles login attempts
- * after too many failed attempts. This is a secure measure in
+ * The LoginThrottle is a service that Throttles login after
+ * too many failed attempts. This is a secure measure in
  * order to avoid brute force attacks.
  *
  * @package  Zizaco\Confide

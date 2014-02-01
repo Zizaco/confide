@@ -36,13 +36,16 @@ class ServiceProvider extends IlluminateServiceProvider
 
         $this->registerPasswordService();
 
+        $this->registerLoginThrottleService();
+
         $this->registerConfide();
 
         $this->registerCommands();
     }
 
     /**
-     * Register the repository that will handle all the database interaction.
+     * Register the repository that will handle all the database
+     * interaction.
      *
      * @return void
      */
@@ -55,7 +58,8 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * Register the repository that will handle all the database interaction.
+     * Register the service that abstracts all user password management
+     * related methods
      *
      * @return void
      */
@@ -64,6 +68,21 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->bind('confide.password', function($app)
         {
             return new EloquentPasswordService($app);
+        });
+    }
+
+    /**
+     * Register the service that Throttles login after
+     * too many failed attempts. This is a secure measure in
+     * order to avoid brute force attacks.
+     *
+     * @return void
+     */
+    protected function registerLoginThrottleService()
+    {
+        $this->app->bind('confide.throttle', function($app)
+        {
+            return new CacheLoginThrottleService($app);
         });
     }
 
