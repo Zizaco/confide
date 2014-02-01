@@ -59,7 +59,14 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerConfide()
     {
-
+        $this->app->bind('confide', function($app)
+        {
+            return new Confide(
+                $app->make('confide.repository'),
+                $app->make('confide.password'),
+                $app
+            );
+        });
     }
 
     /**

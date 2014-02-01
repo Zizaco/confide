@@ -83,7 +83,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $test = $this;
         $app = m::mock('LaravelApp');
-        $sp = new ServiceProvider($app);
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
         |------------------------------------------------------------
@@ -109,6 +109,52 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Assertion
         |------------------------------------------------------------
         */
-        $sp->register();
+        $sp->registerRepository();
+    }
+
+    public function testShouldRegisterConfide()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $test = $this;
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app->shouldReceive('make')
+            ->once()->with('confide.repository')
+            ->andReturn(new EloquentRepository);
+
+        $app->shouldReceive('make')
+            ->once()->with('confide.password')
+            ->andReturn(new EloquentPasswordService);
+
+        $app->shouldReceive('bind')
+            ->once()->andReturnUsing(
+                // Make sure that the name is 'confide.repository'
+                // and that the closure passed returns the correct
+                // kind of object.
+                function($name, $closure) use ($test, $app) {
+                    $test->assertEquals('confide', $name);
+                    $test->assertInstanceOf(
+                        'Zizaco\Confide\Confide',
+                        $closure($app)
+                    );
+                }
+            );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $sp->registerConfide();
     }
 }
