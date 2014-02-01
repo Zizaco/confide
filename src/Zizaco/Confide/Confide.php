@@ -80,7 +80,7 @@ class Confide
     }
 
     /**
-     * Sets the confirmation code of the user with the
+     * Sets the 'confirmed' field of the user with the
      * matching code to true.
      *
      * @param string $code
