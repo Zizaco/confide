@@ -5,12 +5,12 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 /**
  * A service that abstracts all user password management related methods
  */
-class EloquentPasswordService
+class EloquentPasswordService implements PasswordServiceInterface
 {
     /**
      * Laravel application
      *
-     * @var Illuminate\Foundation\Application
+     * @var \Illuminate\Foundation\Application
      */
     public $app;
 

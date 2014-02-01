@@ -4,12 +4,12 @@
  * A service that abstracts all database interactions that happens
  * in Confide using Eloquent
  */
-class EloquentRepository
+class EloquentRepository implements RepositoryInterface
 {
     /**
      * Laravel application
      *
-     * @var Illuminate\Foundation\Application
+     * @var \Illuminate\Foundation\Application
      */
     public $app;
 

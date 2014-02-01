@@ -2,6 +2,10 @@
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
+/**
+ * This class is used by Laravel in order to register confide
+ * services into the IoC container.
+ */
 class ServiceProvider extends IlluminateServiceProvider
 {
     /**
