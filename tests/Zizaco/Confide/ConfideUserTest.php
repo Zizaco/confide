@@ -146,7 +146,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1234', $user->getAuthPassword());
     }
 
-    public function testErrors()
+    public function testShouldGetErrors()
     {
         /*
         |------------------------------------------------------------
