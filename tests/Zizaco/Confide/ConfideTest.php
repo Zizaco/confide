@@ -124,7 +124,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
-            '[extractRememberFromArray,extractIdentityFromArray]',
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
             [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
@@ -151,6 +151,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide->shouldReceive('extractIdentityFromArray')
             ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(true);
 
         $repo->shouldReceive('getUserByEmailOrUsername')
             ->once()->with('someone@somewhere.com')
@@ -172,7 +176,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($confide->logAttempt($input));
     }
 
-    public function testShouldFailLogAttemptIfUserNotFound()
+    public function testShouldFailLogAttemptIfThrottled()
     {
         /*
         |------------------------------------------------------------
@@ -188,7 +192,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
-            '[extractRememberFromArray,extractIdentityFromArray]',
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
             [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
@@ -215,6 +219,66 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide->shouldReceive('extractIdentityFromArray')
             ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(false);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertFalse($confide->logAttempt($input));
+    }
+
+    public function testShouldFailLogAttemptIfUserNotFound()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $app['auth'] = m::mock('Auth');
+        $app['hash'] = m::mock('Hash');
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+
+        $confide = m::mock(
+            'Zizaco\Confide\Confide'.
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
+            [$repo, $passService, $loginThrottler, $app]
+        );
+        $confide->shouldAllowMockingProtectedMethods();
+
+        $user = m::mock('_mockedUser');
+        $user->confirmed = true;
+        $user->email = 'someone@somewhere.com';
+        $user->password = 'secret';
+
+        $remember = true;
+        $input = [
+            'email'=>$user->email,
+            'password'=>$user->password,
+            'remember'=>$remember
+        ];
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $confide->shouldReceive('extractRememberFromArray')
+            ->with($input)->andReturn(true);
+
+        $confide->shouldReceive('extractIdentityFromArray')
+            ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(true);
 
         $repo->shouldReceive('getUserByEmailOrUsername')
             ->once()->with('someone@somewhere.com')
@@ -244,7 +308,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
-            '[extractRememberFromArray,extractIdentityFromArray]',
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
             [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
@@ -271,6 +335,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide->shouldReceive('extractIdentityFromArray')
             ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(true);
 
         $repo->shouldReceive('getUserByEmailOrUsername')
             ->once()->with('someone@somewhere.com')
@@ -300,7 +368,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
-            '[extractRememberFromArray,extractIdentityFromArray]',
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
             [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
@@ -327,6 +395,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide->shouldReceive('extractIdentityFromArray')
             ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(true);
 
         $repo->shouldReceive('getUserByEmailOrUsername')
             ->once()->with('someone@somewhere.com')
@@ -360,7 +432,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide = m::mock(
             'Zizaco\Confide\Confide'.
-            '[extractRememberFromArray,extractIdentityFromArray]',
+            '[extractRememberFromArray,extractIdentityFromArray,loginThrottling]',
             [$repo, $passService, $loginThrottler, $app]
         );
         $confide->shouldAllowMockingProtectedMethods();
@@ -387,6 +459,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 
         $confide->shouldReceive('extractIdentityFromArray')
             ->with($input)->andReturn($user->email);
+
+        $confide->shouldReceive('loginThrottling')
+            ->once()->with($user->email)
+            ->andReturn(true);
 
         $repo->shouldReceive('getUserByEmailOrUsername')
             ->once()->with('someone@somewhere.com')
@@ -506,6 +582,58 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             'someone@somewhere.com',
             $confide->extractIdentityFromArray($bothId)
         );
+    }
+
+    public function testShouldDoLoginThrottling()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $config = m::mock('Config');
+        $app = ['config'=>$config];
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+
+        $confide = m::mock(
+            'Zizaco\Confide\Confide'.
+            '[loginThrottling]',
+            [$repo, $passService, $loginThrottler, $app]
+        );
+        $confide->shouldAllowMockingProtectedMethods();
+
+        $userEmail = 'someone@somewhere.com';
+        $throttledUserEmail  = 'hack@me.com';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $confide->shouldReceive('loginThrottling')
+            ->passthru();
+
+        $config->shouldReceive('get')
+            ->twice()->with('confide::throttle_limit')
+            ->andReturn(19);
+
+        $loginThrottler->shouldReceive('throttleIdentity')
+            ->once()->with($userEmail)
+            ->andReturn(0);
+
+        $loginThrottler->shouldReceive('throttleIdentity')
+            ->once()->with($throttledUserEmail)
+            ->andReturn(20);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($confide->loginThrottling($userEmail));
+        $this->assertFalse($confide->loginThrottling($throttledUserEmail));
     }
 
     public function testShouldForgotPassword()

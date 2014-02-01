@@ -103,6 +103,10 @@ class Confide
     {
         $remember = $this->extractRememberFromArray($input);
         $emailOrUsername = $this->extractIdentityFromArray($input);
+
+        if (!$this->loginThrottling($emailOrUsername))
+            return false;
+
         $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
 
         if ($user) {
@@ -142,6 +146,22 @@ class Confide
         } else {
             return false;
         }
+    }
+
+    protected function loginThrottling($identity)
+    {
+        $count = $this->loginThrottler
+            ->throttleIdentity($identity);
+
+        if ($count >= $this->app['config']->get('confide::throttle_limit'))
+            return false;
+
+        // Throttling delay!
+        // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
+        if($count > 3)
+            sleep(($count-1));
+
+        return true;
     }
 
     /**
