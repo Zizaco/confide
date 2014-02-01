@@ -4,6 +4,7 @@ use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Zizaco\Confide\Facade as ConfideFacade;
 use Illuminate\Support\Facades\App as App;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class ConfideUserTest extends PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = new ConfideUser;
+        $user = new _ConfideUserStub;
         $user->confirmation_code = '12345';
 
         /*
@@ -51,7 +52,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = new ConfideUser;
+        $user = new _ConfideUserStub;
         $user->email = 'someone@somewhere.com';
 
         /*
@@ -78,7 +79,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = new ConfideUser;
+        $user = new _ConfideUserStub;
         $validator = m::mock('Zizaco\Confide\Validator');
 
         /*
@@ -109,7 +110,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = m::mock('Zizaco\Confide\ConfideUser[getKey]');
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[getKey]');
 
         /*
         |------------------------------------------------------------
@@ -135,7 +136,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = m::mock('Zizaco\Confide\ConfideUser[getKey]');
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[getKey]');
         $user->password = '1234';
 
         /*
@@ -153,7 +154,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = new ConfideUser;
+        $user = new _ConfideUserStub;
         $newMessageBag = m::mock('Illuminate\Support\MessageBag');
         $existentMessageBag = m::mock('Illuminate\Support\MessageBag');
         $user->errors = $existentMessageBag;
@@ -176,4 +177,12 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $user->errors = null;
         $this->assertEquals($newMessageBag, $user->errors());
     }
+}
+
+/**
+ * A stub class that implements ConfideUserInterface and uses
+ * the ConfideUser trait.
+ */
+class _ConfideUserStub extends Eloquent implements ConfideUserInterface{
+    use ConfideUser;
 }

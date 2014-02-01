@@ -2,7 +2,6 @@
 
 use Zizaco\Confide\Facade as ConfideFacade;
 use Illuminate\Support\Facades\App as App;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
  * Eloquent implementation of the ConfideUserInterface.
@@ -10,21 +9,7 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @license MIT
  * @package  Zizaco\Confide
  */
-class ConfideUser extends Eloquent implements ConfideUserInterface {
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = array('password');
+trait ConfideUser {
 
     /**
      * A MessageBag object that store any error regarding
