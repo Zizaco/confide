@@ -4,6 +4,8 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 
 /**
  * A service that abstracts all user password management related methods
+ *
+ * @package  Zizaco\Confide
  */
 class EloquentPasswordService implements PasswordServiceInterface
 {

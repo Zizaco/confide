@@ -4,6 +4,8 @@
  * This class is the main entry point to use the confide
  * services. Usually this is the only service class that the
  * application will interact directly with.
+ *
+ * @package  Zizaco\Confide
  */
 class Confide
 {
