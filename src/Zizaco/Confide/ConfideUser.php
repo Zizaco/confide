@@ -4,8 +4,10 @@ use Zizaco\Confide\Facade as ConfideFacade;
 use Illuminate\Support\Facades\App as App;
 
 /**
- * Eloquent implementation of the ConfideUserInterface.
+ * This is a trait containing a initial implementation of the
+ * methods declared in the ConfideUserInterface.
  *
+ * @see \Zizaco\Confide\ConfideUserInterface
  * @license MIT
  * @package  Zizaco\Confide
  */

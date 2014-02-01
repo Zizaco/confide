@@ -2,6 +2,17 @@
 
 use Illuminate\Auth\UserInterface;
 
+/**
+ * Interface that declares the methods that must be
+ * present in the User method that is going to be used
+ * with Confide.
+ * If you are looking for a implementation for this
+ * methods see ConfideUser trait.
+ *
+ * @see \Zizaco\Confide\ConfideUser
+ * @license MIT
+ * @package  Zizaco\Confide
+ */
 interface ConfideUserInterface extends UserInterface
 {
     /**
