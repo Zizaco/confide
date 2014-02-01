@@ -163,7 +163,7 @@ class Confide
     /**
      * Calls throttleIdentity of the loginThrottler and returns false
      * if the throttleCount is grater then the 'throttle_limit' config.
-     * Also sleeps a little in order to protect from dicionary attacks.
+     * Also sleeps a little in order to avoid dicionary attacks.
      * @param  mixed $identity
      * @return boolean False if the identity has reached the 'throttle_limit'
      */

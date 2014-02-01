@@ -54,6 +54,12 @@ class EloquentPasswordService implements PasswordServiceInterface
         return $token;
     }
 
+    /**
+     * Returns the email associated with the given reset
+     * password token
+     * @param  string $token
+     * @return string Email
+     */
     public function getEmailByToken($token)
     {
         $email = $this->app['db']

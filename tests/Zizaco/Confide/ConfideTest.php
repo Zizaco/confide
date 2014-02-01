@@ -649,7 +649,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
         $confide = new Confide($repo, $passService, $loginThrottler, $app);
 
-        $user = m::mock('_mockedUser');
+        $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
         $user->email = 'someone@somewhere.com';
         $generatedToken = '12345';
 
