@@ -182,6 +182,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
 /**
  * A stub class that implements ConfideUserInterface and uses
  * the ConfideUser trait.
+ *
+ * @see \Zizaco\Confide\ConfideUser
  */
 class _ConfideUserStub extends Eloquent implements ConfideUserInterface{
     use ConfideUser;
