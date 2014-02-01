@@ -128,6 +128,12 @@ class Confide
         return false;
     }
 
+    /**
+     * Extracts the value of the remember key of the given
+     * array
+     * @param  array $input An array containing the key 'remember'
+     * @return boolean
+     */
     protected function extractRememberFromArray($input)
     {
         if (isset($input['remember'])) {
@@ -137,6 +143,12 @@ class Confide
         }
     }
 
+    /**
+     * Extracts the email or the username key of the given
+     * array
+     * @param  array $input An array containing the key 'email' or 'username'
+     * @return mixed
+     */
     protected function extractIdentityFromArray($input)
     {
         if (isset($input['email'])) {
@@ -148,6 +160,13 @@ class Confide
         }
     }
 
+    /**
+     * Calls throttleIdentity of the loginThrottler and returns false
+     * if the throttleCount is grater then the 'throttle_limit' config.
+     * Also sleeps a little in order to protect from dicionary attacks.
+     * @param  mixed $identity
+     * @return boolean False if the identity has reached the 'throttle_limit'
+     */
     protected function loginThrottling($identity)
     {
         $count = $this->loginThrottler
@@ -158,8 +177,8 @@ class Confide
 
         // Throttling delay!
         // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
-        if($count > 3)
-            sleep(($count-1));
+        if($count > 2)
+            sleep(($count-1) * 400000);
 
         return true;
     }
