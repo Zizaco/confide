@@ -59,6 +59,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         $config = m::mock('Config');
         $app = ['config'=>$config];
         $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
+        $command->shouldAllowMockingProtectedMethods();
         $viewVars = [
             'class' => "UsersController",
             'namespace' => "",
@@ -72,7 +73,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
-        $command->shouldReceive('getClassName')
+        $command->shouldReceive('getControllerName')
             ->once()->with('Users')
             ->andReturn('UsersController');
 
@@ -124,5 +125,90 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $command->fire();
+    }
+
+    public function testSouldGetControlerName()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
+        $command->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $command->shouldReceive('getControllerName')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            'UsersController',
+            $command->getControllerName('Users')
+        );
+
+        $this->assertEquals(
+            'UsersController',
+            $command->getControllerName('UsersController')
+        );
+
+        $this->assertEquals(
+            'SomethingController',
+            $command->getControllerName('Some\Namespace\Something')
+        );
+
+        $this->assertEquals(
+            'CamelCaseController',
+            $command->getControllerName('Some\Thing\CamelCase')
+        );
+    }
+
+    public function testSouldGetNamespace()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
+        $command->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $command->shouldReceive('getNamespace')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            'Some\Namespace',
+            $command->getNamespace('Some\Namespace\Something')
+        );
+
+        $this->assertEquals(
+            'Some\Thing',
+            $command->getNamespace('Some\Thing\Resource')
+        );
+
+        $this->assertEquals(
+            '',
+            $command->getNamespace('Users')
+        );
     }
 }

@@ -71,7 +71,7 @@ class ControllerCommand extends GenerateCommand
     public function fire()
     {
         // Prepare variables
-        $class = $this->getClassName($this->option('name'));
+        $class = $this->getControllerName($this->option('name'));
         $namespace = $this->getNamespace($this->option('name'));
         $model = $this->app['config']->get('auth.model');
         $restful = $this->option('restful');
@@ -99,5 +99,51 @@ class ControllerCommand extends GenerateCommand
                 $this->generateFile($filename, 'generators.repository', $viewVars);
             }
         }
+    }
+
+    /**
+     * Returns the name of the controller class that will handle a
+     * resource with the given name.
+     * @param  string $name Resource name
+     * @return string       Controller class name
+     */
+    protected function getControllerName($name)
+    {
+        if (strstr($name, '\\'))
+        {
+            $name = array_pop(explode('\\', $name));
+        }
+
+        $name = ( $name != '') ? ucfirst($name) : 'Users';
+
+        if( substr(strtolower($name),-10) == 'controller' )
+        {
+            $name = substr($name, 0, -10).'Controller';
+        }
+        else
+        {
+            $name .= 'Controller';
+        }
+
+        return $name;
+    }
+
+    /**
+     * Returns the namespace of the given class name
+     * @param  string $name Class name
+     * @return string       Namespace
+     */
+    protected function getNamespace($name)
+    {
+        if (strstr($name, '\\'))
+        {
+            $name = explode('\\', $name);
+            array_pop($name);
+            $name = implode('\\', $name);
+        } else {
+            $name = '';
+        }
+
+        return $name;
     }
 }
