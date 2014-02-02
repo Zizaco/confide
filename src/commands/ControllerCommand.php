@@ -111,7 +111,8 @@ class ControllerCommand extends GenerateCommand
     {
         if (strstr($name, '\\'))
         {
-            $name = array_pop(explode('\\', $name));
+            $name = explode('\\', $name);
+            $name = array_pop($name);
         }
 
         $name = ( $name != '') ? ucfirst($name) : 'Users';
