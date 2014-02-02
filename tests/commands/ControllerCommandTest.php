@@ -36,19 +36,10 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         $app = ['config'=>$config];
         $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
         $options = [
-            ['name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'User'],
+            ['name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'Users'],
             ['--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'],
             ['--repository', '-R', InputOption::VALUE_NONE, 'Generate a User Repository class.'],
         ];
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-        $config->shouldReceive('get')
-            ->once()->with('auth.model')
-            ->andReturn('User');
 
         /*
         |------------------------------------------------------------
@@ -56,5 +47,82 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $this->assertEquals($options, $command->getOptions());
+    }
+
+    public function testSouldFire()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $config = m::mock('Config');
+        $app = ['config'=>$config];
+        $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
+        $viewVars = [
+            'class' => "UsersController",
+            'namespace' => "",
+            'model' => "User",
+            'restful' => true,
+            'repository' => true,
+        ];
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $command->shouldReceive('getClassName')
+            ->once()->with('Users')
+            ->andReturn('UsersController');
+
+        $command->shouldReceive('getNamespace')
+            ->once()->with('Users')
+            ->andReturn('');
+
+        $config->shouldReceive('get')
+            ->once()->with('auth.model')
+            ->andReturn('User');
+
+        $command->shouldReceive('option')
+            ->twice()->with('name')
+            ->andReturn('Users');
+
+        $command->shouldReceive('option')
+            ->once()->with('restful')
+            ->andReturn(true);
+
+        $command->shouldReceive('option')
+            ->once()->with('repository')
+            ->andReturn(true);
+
+        $command->shouldReceive('fire')
+            ->passthru();
+
+        $command->shouldReceive('line','info','comment','confirm')
+            ->andReturn(true);
+
+        $command->shouldReceive('generateFile')
+            ->once()->with(
+                'controllers/UsersController.php',
+                'generators.controller',
+                $viewVars
+            )
+            ->andReturn(true);
+
+        $command->shouldReceive('generateFile')
+            ->once()->with(
+                'models/UserRepository.php',
+                'generators.repository',
+                $viewVars
+            )
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $command->fire();
     }
 }

@@ -1,10 +1,18 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Console\Command;
+use Zizaco\Confide\Support\GenerateCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ControllerCommand extends Command
+/**
+ * This command renders the package view generator.contoller and also
+ * generator.repository into a file within the application directory
+ * in order to save some time.
+ *
+ * @license MIT
+ * @package  Zizaco\Confide
+ */
+class ControllerCommand extends GenerateCommand
 {
     /**
      * Laravel application
@@ -49,7 +57,7 @@ class ControllerCommand extends Command
     protected function getOptions()
     {
         return array(
-            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', $this->app['config']->get('auth.model')),
+            array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'Users'),
             array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
             array('--repository', '-R', InputOption::VALUE_NONE, 'Generate a User Repository class.'),
         );
@@ -62,6 +70,34 @@ class ControllerCommand extends Command
      */
     public function fire()
     {
+        // Prepare variables
+        $class = $this->getClassName($this->option('name'));
+        $namespace = $this->getNamespace($this->option('name'));
+        $model = $this->app['config']->get('auth.model');
+        $restful = $this->option('restful');
+        $repository = $this->option('repository');
 
+        $viewVars = compact(
+            'class','namespace','model','restful','repository'
+        );
+
+        // Prompt
+        $this->line('');
+        $this->info("Controller name: $class".(($restful) ? "\nRESTful: Yes" : '') );
+        $this->comment("An authentication ".(($restful) ? 'RESTful ' : '')."controller template with the name ".($namespace ? $namespace.'\\' : '')."$class.php".
+        " will be created in app/controllers directory");
+        $this->line('');
+
+        if ( $this->confirm("Proceed with the controller creation? [Yes|no]") )
+        {
+            // Generate
+            $filename = 'controllers/'.($namespace ? $namespace.'/' : '').$class.'.php';
+            $this->generateFile($filename, 'generators.controller', $viewVars);
+
+            if ($repository) {
+                $filename = 'models/'.$model.'Repository.php';
+                $this->generateFile($filename, 'generators.repository', $viewVars);
+            }
+        }
     }
 }
