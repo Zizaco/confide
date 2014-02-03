@@ -90,13 +90,16 @@ class ControllerCommand extends GenerateCommand
 
         if ( $this->confirm("Proceed with the controller creation? [Yes|no]") )
         {
+            $this->info( "Creating $class..." );
             // Generate
             $filename = 'controllers/'.($namespace ? $namespace.'/' : '').$class.'.php';
             $this->generateFile($filename, 'generators.controller', $viewVars);
+            $this->info( "$class.php Successfully created!" );
 
             if ($repository) {
                 $filename = 'models/'.$model.'Repository.php';
                 $this->generateFile($filename, 'generators.repository', $viewVars);
+                $this->info( "$model.'Repository.php Successfully created!" );
             }
         }
     }
