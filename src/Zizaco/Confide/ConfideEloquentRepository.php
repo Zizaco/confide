@@ -8,7 +8,7 @@ class ConfideEloquentRepository implements ConfideRepository
 {
     /**
      * Laravel application
-     * 
+     *
      * @var Illuminate\Foundation\Application
      */
     public $app;
@@ -17,7 +17,7 @@ class ConfideEloquentRepository implements ConfideRepository
      * Name of the model that should be used to retrieve your users.
      * You may specify an specific object. Then that object will be
      * returned when calling `model()` method.
-     * 
+     *
      * @var string
      */
     public $model;
@@ -40,7 +40,7 @@ class ConfideEloquentRepository implements ConfideRepository
     public function model()
     {
         if (! $this->model)
-        {               
+        {
             $this->model = $this->app['config']->get('auth.model');
         }
 
@@ -77,7 +77,7 @@ class ConfideEloquentRepository implements ConfideRepository
 
     /**
      * Find a user by the given email
-     * 
+     *
      * @param  string $email The email to be used in the query
      * @return ConfideUser   User object
      */
@@ -91,7 +91,7 @@ class ConfideEloquentRepository implements ConfideRepository
     /**
      * Find a user by it's credentials. Perform a 'where' within
      * the fields contained in the $identityColumns.
-     * 
+     *
      * @param  array $credentials      An array containing the attributes to search for
      * @param  mixed $identityColumns  Array of attribute names or string (for one atribute)
      * @return ConfideUser             User object
@@ -109,19 +109,19 @@ class ConfideEloquentRepository implements ConfideRepository
 
         $first = true;
         foreach ($identityColumns as $attribute) {
-            
+
             if(isset($credentials[$attribute]))
             {
                 if($first)
                 {
-                    $user = $user->where($attribute, $credentials[$attribute]);        
+                    $user = $user->where($attribute, $credentials[$attribute]);
                     $first = false;
                 }
                 else
                 {
-                    $user = $user->orWhere($attribute, $credentials[$attribute]);        
+                    $user = $user->orWhere($attribute, $credentials[$attribute]);
                 }
-            }            
+            }
         }
 
         $user = $user->get();
@@ -135,7 +135,7 @@ class ConfideEloquentRepository implements ConfideRepository
 
     /**
      * Get password reminders count by the given token
-     * 
+     *
      * @param  string $token
      * @return int    Password reminders count
      */
@@ -149,7 +149,7 @@ class ConfideEloquentRepository implements ConfideRepository
 
     /**
      * Get email of password reminder by the given token
-     * 
+     *
      * @param  string $token
      * @return string Email
      */
@@ -173,7 +173,7 @@ class ConfideEloquentRepository implements ConfideRepository
 
     /**
      * Remove password reminder from database by the given token
-     * 
+     *
      * @param  string $token
      * @return void
      */
@@ -187,7 +187,7 @@ class ConfideEloquentRepository implements ConfideRepository
     /**
      * Change the password of the given user. Make sure to hash
      * the $password before calling this method.
-     * 
+     *
      * @param  ConfideUser $user     An existent user
      * @param  string      $password The password hash to be used
      * @return boolean Success
@@ -201,7 +201,7 @@ class ConfideEloquentRepository implements ConfideRepository
         $this->app['db']->connection()->table($usersTable)
             ->where($idColumn,$id)->update(array('password'=>$password));
         // I.E: DB::table('users')->where('id',3)->update(array('password'=>$password));
-        
+
         return true;
     }
 
@@ -209,7 +209,7 @@ class ConfideEloquentRepository implements ConfideRepository
      * Generate a token for password change and saves it in
      * the 'password_reminders' table with the email of the
      * user.
-     * 
+     *
      * @param  ConfideUser $user     An existent user
      * @return string Password reset token
      */
@@ -223,7 +223,7 @@ class ConfideEloquentRepository implements ConfideRepository
             'created_at'=> new \DateTime
         );
 
-        $this->app['db']->connection()->table('password_reminders')
+        $this->app['db']->connection()->table($this->app['config']['auth']['reminder']['table'])
             ->insert( $values );
         // I.E:
         //     DB::table('password_reminders')->insert(array(
@@ -231,14 +231,14 @@ class ConfideEloquentRepository implements ConfideRepository
         //    'token'=> $token,
         //    'created_at'=> new \DateTime
         //));
-        
+
         return $token;
     }
 
     /**
      * Checks if an non saved user has duplicated credentials
      * (email and/or username)
-     * 
+     *
      * @param  ConfideUser  $user The non-saved user to be checked
      * @return int          The number of duplicated entry founds. Probably 0 or 1.
      */
@@ -256,13 +256,13 @@ class ConfideEloquentRepository implements ConfideRepository
 
         $count = $query->count();
         // I.E: DB::table('users')->where('email', 'bob@sample.com')->orWhere('username', 'bob')->count();
-        
+
         return $count;
     }
 
     /**
      * Set the 'confirmed' column of the given user to 1
-     * 
+     *
      * @param  ConfideUser $user     An existent user
      * @return boolean Success
      */
@@ -275,7 +275,7 @@ class ConfideEloquentRepository implements ConfideRepository
         $this->app['db']->connection()->table($usersTable)
             ->where($idColumn,$id)->update(array('confirmed'=>1));
         // I.E: DB::table('users')->where('id',3)->update(array('confirmed'=>1));
-        
+
         return true;
     }
 
