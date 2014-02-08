@@ -114,6 +114,13 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue( 
             $this->confide->logAttempt( $credentials, true )
         );
+
+        unset($credentials['username']);
+        unset($credentials['email']);
+        // Should not login because there is no username or email provided
+        $this->assertFalse(
+            $this->confide->logAttempt( $credentials, true )
+        );
     }
 
     public function testShouldThrottleLogAttempt()
