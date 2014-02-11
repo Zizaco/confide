@@ -122,6 +122,10 @@ class ConfideEloquentRepository implements ConfideRepository
                     $user = $user->orWhere($attribute, $credentials[$attribute]);        
                 }
             }            
+            else
+            {
+                return null;
+            }
         }
 
         $user = $user->get();
