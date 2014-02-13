@@ -65,7 +65,7 @@ class MigrationCommand extends GenerateCommand
             $this->info( "Creating migration..." );
             // Generate
             $filename = 'database/migrations/'.
-                date('Y_m_d_His')."_confide_setup_$table.php";
+                date('Y_m_d_His')."_confide_setup_users_table.php";
             $this->generateFile($filename, 'generators.migration', $viewVars);
 
             $this->info( "Migration successfully created!" );
