@@ -58,6 +58,7 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldAllowMockingProtectedMethods();
         $viewVars = [
             'controllerName' => 'UsersController',
+            'url' => 'users',
             'restful' => true
         ];
 
