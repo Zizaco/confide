@@ -62,7 +62,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldAllowMockingProtectedMethods();
         $viewVars = [
             'class' => "UsersController",
-            'namespace' => "",
+            'namespace' => "The\\Namespace",
             'model' => "User",
             'restful' => true,
             'repository' => true,
@@ -74,12 +74,12 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $command->shouldReceive('getControllerName')
-            ->once()->with('Users')
+            ->once()->with('The\\Namespace\\Users')
             ->andReturn('UsersController');
 
         $command->shouldReceive('getNamespace')
-            ->once()->with('Users')
-            ->andReturn('');
+            ->once()->with('The\\Namespace\\Users')
+            ->andReturn('The\\Namespace');
 
         $config->shouldReceive('get')
             ->once()->with('auth.model')
@@ -87,7 +87,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
 
         $command->shouldReceive('option')
             ->twice()->with('name')
-            ->andReturn('Users');
+            ->andReturn('The\\Namespace\\Users');
 
         $command->shouldReceive('option')
             ->once()->with('restful')
@@ -105,7 +105,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
 
         $command->shouldReceive('generateFile')
             ->once()->with(
-                'controllers/UsersController.php',
+                'controllers/The/Namespace/UsersController.php',
                 'generators.controller',
                 $viewVars
             )

@@ -71,7 +71,7 @@ class ControllerCommand extends GenerateCommand
         {
             $this->info( "Creating $class..." );
             // Generate
-            $filename = 'controllers/'.($namespace ? $namespace.'/' : '').$class.'.php';
+            $filename = 'controllers/'.($namespace ? str_replace('\\', '/', $namespace).'/' : '').$class.'.php';
             $this->generateFile($filename, 'generators.controller', $viewVars);
             $this->info( "$class.php Successfully created!" );
 
