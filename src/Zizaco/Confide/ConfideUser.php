@@ -72,7 +72,7 @@ trait ConfideUser {
     public function save(array $options = array())
     {
         if ($this->isValid()) {
-            parent::save();
+            return parent::save($options);
         } else {
             return false;
         }

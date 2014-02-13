@@ -103,6 +103,85 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $user->isValid();
     }
 
+    public function testShouldValidateAndSave()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newQueryWithDeleted]');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $user->shouldReceive('save')
+            ->once()
+            ->passthru();
+
+        $user->shouldReceive('isValid')
+            ->once()
+            ->andReturn(true);
+
+        // Throw an exception instead of actually saving the object
+        $user->shouldReceive('newQueryWithDeleted')
+            ->once()
+            ->andReturnUsing(function(){
+                throw new \Exception('Saved in database');
+            });
+
+        // Set the exception as expected ;)
+        $this->setExpectedException(
+            'Exception', 'Saved in database'
+        );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $user->save();
+    }
+
+    public function testShouldNotSaveInvalid()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newQueryWithDeleted]');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $user->shouldReceive('save')
+            ->once()
+            ->passthru();
+
+        $user->shouldReceive('isValid')
+            ->once()
+            ->andReturn(false); // If validation returns false
+
+        // Throw an exception instead of actually saving the object
+        $user->shouldReceive('newQueryWithDeleted')
+            ->never()
+            ->andReturnUsing(function(){
+                throw new \Exception('Saved in database');
+            });
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertFalse($user->save());
+    }
+
     public function testShouldGetAuthIdentifier()
     {
         /*
