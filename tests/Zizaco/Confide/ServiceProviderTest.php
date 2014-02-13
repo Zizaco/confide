@@ -240,4 +240,55 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp->registerConfide();
     }
+
+    public function testSHouldRegisterCommands()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $test = $this;
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app->shouldReceive('bind')
+            ->times(3)->andReturnUsing(
+                // Make sure that the commands are being registered
+                // with a closure that returns the correct
+                // object.
+                function($name, $closure) use ($test, $app) {
+
+                    $shouldBe = [
+                        'command.confide.controller' => 'Zizaco\Confide\ControllerCommand',
+                        'command.confide.routes'     => 'Zizaco\Confide\RoutesCommand',
+                        'command.confide.migration'  => 'Zizaco\Confide\MigrationCommand',
+                    ];
+
+                    $test->assertInstanceOf(
+                        $shouldBe[$name],
+                        $closure($app)
+                    );
+                }
+            );
+
+        $sp->shouldReceive('commands')
+            ->with(
+                'command.confide.controller',
+                'command.confide.routes',
+                'command.confide.migration'
+            );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $sp->registerCommands();
+    }
 }

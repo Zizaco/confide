@@ -111,6 +111,25 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerCommands()
     {
+        $this->app->bind('command.confide.controller', function($app)
+        {
+            return new ControllerCommand($app);
+        });
 
+        $this->app->bind('command.confide.routes', function($app)
+        {
+            return new RoutesCommand($app);
+        });
+
+        $this->app->bind('command.confide.migration', function($app)
+        {
+            return new MigrationCommand($app);
+        });
+
+        $this->commands(
+            'command.confide.controller',
+            'command.confide.routes',
+            'command.confide.migration'
+        );
     }
 }
