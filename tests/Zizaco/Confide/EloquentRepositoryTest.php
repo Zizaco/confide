@@ -50,6 +50,40 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($user, $repo->model());
     }
 
+    public function testShouldThrowExceptionIfCannotGetModel()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $repo = new EloquentRepository([]);
+        $repo->app['config'] = m::mock('Illuminate\Config\Repository');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Make sure to return the wanted value from config
+        $repo->app['config']->shouldReceive('get')
+            ->with('auth.model')
+            ->once()
+            ->andReturn(null);
+
+        // Set the exception as expected ;)
+        $this->setExpectedException(
+            'Exception', 'Wrong model specified in config/auth.php'
+        );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $repo->model();
+    }
+
     public function testShouldGetUserByIdentity()
     {
         /*
