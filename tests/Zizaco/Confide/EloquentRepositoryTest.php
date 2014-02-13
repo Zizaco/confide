@@ -204,6 +204,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $confirmCode = 123123;
+        $wrongConfirmCode = 'IdontExist';
         $user = m::mock('_mockedUser');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]',[]);
 
@@ -217,6 +218,11 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
             ->with(['confirmation_code' => $confirmCode])
             ->andReturn($user);
 
+        // Return null if no user can be found
+        $repo->shouldReceive('getUserByIdentity')
+            ->with(['confirmation_code' => $wrongConfirmCode])
+            ->andReturn(null);
+
         // Should call the confirmUser method with the user
         // instance
         $repo->shouldReceive('confirmUser')
@@ -229,6 +235,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         | Assertion
         |------------------------------------------------------------
         */
-       $this->assertTrue($repo->confirmByCode($confirmCode));
+        $this->assertTrue($repo->confirmByCode($confirmCode));
+        $this->assertFalse($repo->confirmByCode($wrongConfirmCode));
     }
 }
