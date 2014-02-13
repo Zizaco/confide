@@ -15,13 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
 class RoutesCommand extends GenerateCommand
 {
     /**
-     * Laravel application
-     *
-     * @var \Illuminate\Foundation\Application
-     */
-    public $app;
-
-    /**
      * The console command name.
      *
      * @var string
@@ -34,20 +27,6 @@ class RoutesCommand extends GenerateCommand
      * @var string
      */
     protected $description = 'Append the default Confide controller routes to the routes.php';
-
-    /**
-     * Create a new command instance.
-     *
-     * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
-     */
-    public function __construct($app = null)
-    {
-        if (! is_array($app))
-            parent::__construct();
-
-        $this->app = $app ?: app();
-    }
 
     /**
      * Get the console command options.

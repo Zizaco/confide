@@ -14,13 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
 class MigrationCommand extends GenerateCommand
 {
     /**
-     * Laravel application
-     *
-     * @var \Illuminate\Foundation\Application
-     */
-    public $app;
-
-    /**
      * The console command name.
      *
      * @var string
@@ -33,20 +26,6 @@ class MigrationCommand extends GenerateCommand
      * @var string
      */
     protected $description = 'Creates a migration following the Confide especifications.';
-
-    /**
-     * Create a new command instance.
-     *
-     * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
-     */
-    public function __construct($app = null)
-    {
-        if (! is_array($app))
-            parent::__construct();
-
-        $this->app = $app ?: app();
-    }
 
     /**
      * Get the console command options.
