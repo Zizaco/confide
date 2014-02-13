@@ -31,8 +31,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $config = m::mock('Config');
-        $app = ['config'=>$config];
+        $app = [];
         $command = m::mock('Zizaco\Confide\MigrationCommand', [$app]);
         $options = [
             ['table', null, InputOption::VALUE_OPTIONAL, 'Table name.', 'users'],
@@ -53,8 +52,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $config = m::mock('Config');
-        $app = ['config'=>$config];
+        $app = [];
         $command = m::mock('Zizaco\Confide\MigrationCommand', [$app]);
         $command->shouldAllowMockingProtectedMethods();
         $viewVars = [
