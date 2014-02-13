@@ -102,7 +102,8 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         */
         $userEmail = 'someone@somewhere.com';
         $token = '123456789';
-        $passService = new EloquentPasswordService;
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $passService->shouldAllowMockingProtectedMethods();
         $db = m::mock('connection');
 
         $passService->app['db'] = $db;
@@ -112,6 +113,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+        $passService->shouldReceive('getEmailByToken')
+            ->passthru();
+
+        $passService->shouldReceive('unwrapEmail')
+            ->once()->with(['email'=>$userEmail])
+            ->andReturn($userEmail);
+
         // Mocks DB in order to check for the following query:
         //     DB::table('password_reminders')
         //         ->select('email')
@@ -149,5 +157,64 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             $userEmail,
             $passService->getEmailByToken($token)
         );
+    }
+
+    public function testShouldGenerateToken()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $passService->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('generateToken')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue(is_string($passService->generateToken()));
+    }
+
+    public function testShouldUnwrapEmail()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $passService->shouldAllowMockingProtectedMethods();
+        $email = 'someone@somewhere.com';
+        $emailArray = ['email'=>$email];
+        $emailObject = m::mock('UserWithEmail');
+
+        $emailObject->email = $email;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('unwrapEmail')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals($email, $passService->unwrapEmail($email));
+        $this->assertEquals($email, $passService->unwrapEmail($emailArray));
+        $this->assertEquals($email, $passService->unwrapEmail($emailObject));
     }
 }

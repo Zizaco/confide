@@ -69,14 +69,7 @@ class EloquentPasswordService implements PasswordServiceInterface
             ->select('email')->where('token','=',$token)
             ->first();
 
-        if ($email && is_object($email))
-        {
-            $email = $email->email;
-        }
-        elseif ($email && is_array($email))
-        {
-            $email = $email['email'];
-        }
+        $email = $this->unwrapEmail($email);
 
         return $email;
     }
@@ -89,5 +82,24 @@ class EloquentPasswordService implements PasswordServiceInterface
     protected function generateToken()
     {
         return md5(uniqid(mt_rand(), true));
+    }
+
+    /**
+     * Extracts the email of the given object or array
+     * @param  mixed $email An object, array or email string
+     * @return string       The email address
+     */
+    protected function unwrapEmail($email)
+    {
+        if ($email && is_object($email))
+        {
+            $email = $email->email;
+        }
+        elseif ($email && is_array($email))
+        {
+            $email = $email['email'];
+        }
+
+        return $email;
     }
 }
