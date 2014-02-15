@@ -131,7 +131,6 @@ class ConfideUser extends Ardent implements UserInterface {
     public function resetPassword( $params )
     {
         $password = array_get($params, 'password', '');
-        $passwordConfirmation = array_get($params, 'password_confirmation', '');
 
         $passwordValidators = array(
             'password' => static::$rules['password'],

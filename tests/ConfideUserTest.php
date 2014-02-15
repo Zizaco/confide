@@ -105,6 +105,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( true )
             ->once();
 
+        // Should call validate method
         ConfideUser::$app['confide.repository']->shouldReceive('validate')
             ->andReturn( true )
             ->once();
@@ -125,11 +126,12 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             'password_confirmation'=>''
         );
 
-        // Should call changePassword of the repository
+        // Should not call changePassword of the repository
         ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
         ConfideUser::$app['confide.repository']->shouldReceive( 'changePassword' )
             ->never();
 
+        // Should call validate method
         ConfideUser::$app['confide.repository']->shouldReceive('validate')
             ->andReturn( false )
             ->times(4);
