@@ -131,9 +131,14 @@ class ConfideUser extends Ardent implements UserInterface {
     public function resetPassword( $params )
     {
         $password = array_get($params, 'password', '');
-        $passwordConfirmation = array_get($params, 'password_confirmation', '');
 
-        if ( $password == $passwordConfirmation )
+        $passwordValidators = array(
+            'password' => static::$rules['password'],
+            'password_confirmation' => static::$rules['password_confirmation'],
+        );
+        $validationResult = static::$app['confide.repository']->validate($passwordValidators);
+
+        if ( $validationResult )
         {
             return static::$app['confide.repository']
                 ->changePassword( $this, static::$app['hash']->make($password) );

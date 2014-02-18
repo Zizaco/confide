@@ -105,11 +105,65 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( true )
             ->once();
 
+        // Should call validate method
+        ConfideUser::$app['confide.repository']->shouldReceive('validate')
+            ->andReturn( true )
+            ->once();
+
         $this->populateUser();
 
         $old_password = $this->confide_user->password;
 
         $this->assertTrue( $this->confide_user->resetPassword( $credentials ) );
+    }
+
+    public function testShouldNotChangePassword()
+    {
+        // Password should not be changed because it is empty
+        $credentials = array(
+            'email'=>'mail@sample.com',
+            'password'=>'',
+            'password_confirmation'=>''
+        );
+
+        // Should not call changePassword of the repository
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive( 'changePassword' )
+            ->never();
+
+        // Should call validate method
+        ConfideUser::$app['confide.repository']->shouldReceive('validate')
+            ->andReturn( false )
+            ->times(4);
+
+        $this->populateUser();
+
+        $this->assertFalse( $this->confide_user->resetPassword( $credentials ) );
+
+        // Additional asserts
+        // Password should not be changed because it is too short
+        $credentials = array(
+            'email'=>'mail@sample.com',
+            'password'=>'39a',
+            'password_confirmation'=>'39a'
+        );
+        $this->assertFalse( $this->confide_user->resetPassword( $credentials ) );
+
+        // Password should not be changed because it is too long
+        $credentials = array(
+            'email'=>'mail@sample.com',
+            'password'=>'1a2f34g5uj887n',
+            'password_confirmation'=>'1a2f34g5uj887n'
+        );
+        $this->assertFalse( $this->confide_user->resetPassword( $credentials ) );
+
+        // Password should not be changed because it is not confirmed
+        $credentials = array(
+            'email'=>'mail@sample.com',
+            'password'=>'987987',
+            'password_confirmation'=>'562906'
+        );
+        $this->assertFalse( $this->confide_user->resetPassword( $credentials ) );
     }
 
     public function testShouldNotSaveDuplicated()
