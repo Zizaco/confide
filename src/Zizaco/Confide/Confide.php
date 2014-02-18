@@ -93,10 +93,6 @@ class Confide
                 array_keys($credentials),
                 array('password','remember')
             );
-            // Recheck if identity_columns are populated now
-            if (empty($identity_columns)) {
-                return false;
-           }
         }
 
         // Check for throttle limit then log-in
