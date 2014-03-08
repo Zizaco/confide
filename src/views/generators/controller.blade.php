@@ -43,13 +43,19 @@ class {{ $name }} extends BaseController {
 
         if ( ${{ lcfirst(Config::get('auth.model')) }}->id )
         {
+            @if ( Config::get('confide::signup_confirm') && Config::get('confide::signup_email'))
+            $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent'); 
+            @else
+            $notice = Lang::get('confide::confide.alerts.account_created'); 
+            @endif
+        
             // Redirect with success message, You may replace "Lang::get(..." for your custom message.
             @if (! $restful)
             return Redirect::action('{{ $name }}@login')
             @else
             return Redirect::to('user/login')
             @endif
-                ->with( 'notice', Lang::get('confide::confide.alerts.account_created') );
+                ->with( 'notice', $notice );
         }
         else
         {
