@@ -5,8 +5,8 @@ return array(
     'username' => 'Benutzername',
     'password' => 'Passwort',
     'password_confirmation' => 'Passwort bestätigen',
-    'e_mail' => 'Email',
-    'username_e_mail' => 'Benutzername oder Email',
+    'e_mail' => 'E-Mail',
+    'username_e_mail' => 'Benutzername oder E-Mail',
 
     'signup' => array(
         'title' => 'Registrierung',
@@ -29,13 +29,13 @@ return array(
     ),
 
     'alerts' => array(
-        'account_created' => 'Ihr Konto wurde erfolgreich angelegt. Bitte prüfen Sie Ihre Emails um Ihr Konto zu bestätigen.',
+        'account_created' => 'Ihr Konto wurde erfolgreich angelegt. Bitte prüfen Sie Ihre E-Mails um Ihr Konto zu bestätigen.',
         'too_many_attempts' => 'Zu viele Versuche. Probieren Sie es in ein paar Minuten erneut.',
-        'wrong_credentials' => 'Falscher Benutzername, Email oder Passwort.',
-        'not_confirmed' => 'Ihr Konto wurde möglicherweise nicht bestätigt. Prüfen Sie Ihre Emails um Ihr Konto zu bestätigen.',
+        'wrong_credentials' => 'Falscher Benutzername, E-Mail oder Passwort.',
+        'not_confirmed' => 'Ihr Konto wurde möglicherweise nicht bestätigt. Prüfen Sie Ihre E-Mails um Ihr Konto zu bestätigen.',
         'confirmation' => 'Ihr Konto wurde bestätigt. Sie können sich nun anmelden.',
         'wrong_confirmation' => 'Falscher Bestätigungscode.',
-        'password_forgot' => 'Die Informationen zum Zurücksetzen des Passworts wurden Ihnen per Email gesendet.',
+        'password_forgot' => 'Die Informationen zum Zurücksetzen des Passworts wurden Ihnen per E-Mail gesendet.',
         'wrong_password_forgot' => 'Benutzer nicht gefunden.',
         'password_reset' => 'Ihr Passwort wurde erfolgreich geändert.',
         'wrong_password_reset' => 'Falsches Passwort. Erneut versuchen.',
@@ -47,7 +47,6 @@ return array(
         'account_confirmation' => array(
             'subject' => 'Kontobestätigung',
             'greetings' => 'Hallo :name',
-            'body' => 'Please access the link below to confirm your account.',
             'body' => 'Bitte folgen Sie dem unten stehenden Link um Ihr Konto zu bestätigen.',
             'farewell' => 'Vielen Dank',
         ),
