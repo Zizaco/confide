@@ -108,10 +108,14 @@ class ConfideEloquentRepository implements ConfideRepository
         $user = $this->model();
 
         $first = true;
+        $hasWhere = false;
+
         foreach ($identityColumns as $attribute) {
             
             if(isset($credentials[$attribute]))
             {
+                $hasWhere = true;
+
                 if($first)
                 {
                     $user = $user->where($attribute, $credentials[$attribute]);        
@@ -124,12 +128,15 @@ class ConfideEloquentRepository implements ConfideRepository
             }            
             else
             {
-                return null;
+                continue;
             }
         }
 
-        $user = $user->get();
-
+        if($hasWhere)
+	    {
+		    $user = $user->get();
+	    }
+      
         if(! empty($user)) {
             return $user->first();
         }
