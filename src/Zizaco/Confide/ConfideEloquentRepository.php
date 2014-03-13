@@ -133,14 +133,16 @@ class ConfideEloquentRepository implements ConfideRepository
         }
 
         if($hasWhere)
-	    {
-		    $user = $user->get();
-	    }
+	{
+	    $user = $user->get();
       
-        if(! empty($user)) {
-            return $user->first();
-        }
+            if(! empty($user)) 
+            {
+                return $user->first();
+            }
 
+	}
+	    
         return null;
     }
 
