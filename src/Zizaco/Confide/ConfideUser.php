@@ -147,6 +147,36 @@ class ConfideUser extends Ardent implements UserInterface {
             return false;
         }
     }
+    
+    /**
+     * Get the remember token for password resets
+     * 
+     * @return string 
+     */
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+    
+    /**
+     * Set the remember token for a password reset
+     * 
+     * @param string
+     */
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+    
+    /**
+     * Get the name of the remember token
+     * 
+     * @return string
+     */
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
 
     /**
      * Overwrite the Ardent save method. Saves model into
