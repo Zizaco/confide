@@ -150,6 +150,8 @@ class ConfideUser extends Ardent implements UserInterface {
     
     /**
      * Get the remember token for password resets
+     * 
+     * @return string 
      */
     public function getRememberToken()
     {
@@ -158,6 +160,8 @@ class ConfideUser extends Ardent implements UserInterface {
     
     /**
      * Set the remember token for a password reset
+     * 
+     * @param string
      */
     public function setRememberToken($value)
     {
@@ -166,6 +170,8 @@ class ConfideUser extends Ardent implements UserInterface {
     
     /**
      * Get the name of the remember token
+     * 
+     * @return string
      */
     public function getRememberTokenName()
     {
