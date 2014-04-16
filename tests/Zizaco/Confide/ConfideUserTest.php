@@ -88,7 +88,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         App::shouldReceive('make')
-            ->once()->with('ConfideUserValidator')
+            ->once()->with('confide.user_validator')
             ->andReturn($validator);
 
         $validator->shouldReceive('validate')

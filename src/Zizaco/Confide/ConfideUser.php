@@ -54,10 +54,10 @@ trait ConfideUser {
      */
     public function isValid()
     {
-        // Instantiate the ConfideUserValidator and calls the
+        // Instantiate the Zizaco\Confide\UserValidator and calls the
         // validate method. Feel free to use your own validation
         // class.
-        $validator = App::make('ConfideUserValidator');
+        $validator = App::make('confide.user_validator');
 
         $validator->validate($this);
     }
