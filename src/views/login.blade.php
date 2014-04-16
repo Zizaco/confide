@@ -9,7 +9,7 @@
         <label for="password">
             {{{ Lang::get('confide::confide.password') }}}
             <small>
-                <a href="{{{ (Confide::checkAction('UserController@forgot_password')) ?: 'forgot' }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
+                <a href="{{{ URL::to('/users/forgot') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
             </small>
         </label>
         <input class="form-control" tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
