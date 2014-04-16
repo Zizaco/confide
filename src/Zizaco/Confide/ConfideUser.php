@@ -59,7 +59,7 @@ trait ConfideUser {
         // class.
         $validator = App::make('confide.user_validator');
 
-        $validator->validate($this);
+        return $validator->validate($this);
     }
 
     /**

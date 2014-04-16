@@ -100,7 +100,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Assertion
         |------------------------------------------------------------
         */
-        $user->isValid();
+        $this->assertTrue($user->isValid());
     }
 
     public function testShouldValidateAndSave()
