@@ -52,7 +52,8 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
             'Zizaco\Confide\ServiceProvider'.
             '[registerRepository,registerPasswordService,'.
             'registerConfide,registerCommands,'.
-            'registerLoginThrottleService]',
+            'registerLoginThrottleService,'.
+            'registerUserValidator]',
             ['something']
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -65,7 +66,8 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->shouldReceive(
                 'registerRepository','registerConfide',
                 'registerCommands','registerPasswordService',
-                'registerLoginThrottleService'
+                'registerLoginThrottleService',
+                'registerUserValidator'
             )
             ->once();
 
@@ -189,6 +191,44 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->registerLoginThrottleService();
+    }
+
+    public function testShouldRegisterUserValidator()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $test = $this;
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $app->shouldReceive('bind')
+            ->once()->andReturnUsing(
+                // Make sure that the name is 'confide.user_validator'
+                // and that the closure passed returns the correct
+                // kind of object.
+                function($name, $closure) use ($test, $app) {
+                    $test->assertEquals('confide.user_validator', $name);
+                    $test->assertInstanceOf(
+                        'Zizaco\Confide\UserValidator',
+                        $closure($app)
+                    );
+                }
+            );
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $sp->registerUserValidator();
     }
 
     public function testShouldRegisterConfide()

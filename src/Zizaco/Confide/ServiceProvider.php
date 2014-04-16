@@ -38,6 +38,8 @@ class ServiceProvider extends IlluminateServiceProvider
 
         $this->registerLoginThrottleService();
 
+        $this->registerUserValidator();
+
         $this->registerConfide();
 
         $this->registerCommands();
@@ -83,6 +85,20 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->bind('confide.throttle', function($app)
         {
             return new CacheLoginThrottleService($app);
+        });
+    }
+
+    /**
+     * Register the UserValidator class. The default class that
+     * used for user validation
+     *
+     * @return void
+     */
+    protected function registerUserValidator()
+    {
+        $this->app->bind('confide.user_validator', function($app)
+        {
+            return new UserValidator();
         });
     }
 
