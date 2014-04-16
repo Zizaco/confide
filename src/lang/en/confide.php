@@ -29,7 +29,8 @@ return array(
     ),
 
     'alerts' => array(
-        'account_created' => 'Your account has been successfully created. Please check your email for the instructions on how to confirm your account.',
+        'account_created' => 'Your account has been successfully created.',
+        'instructions_sent'       => 'Please check your email for the instructions on how to confirm your account.',
         'too_many_attempts' => 'Too many attempts. Try again in few minutes.',
         'wrong_credentials' => 'Incorrect username, email or password.',
         'not_confirmed' => 'Your account may not be confirmed. Check your email for the confirmation link',

@@ -46,7 +46,7 @@ to be confirmed to be able to login to the website.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "3.1.x"
+    "zizaco/confide": "3.2.x"
 
 Run the Composer update comand
 
