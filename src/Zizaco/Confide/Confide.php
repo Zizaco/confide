@@ -179,7 +179,7 @@ class Confide
         // Throttling delay!
         // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
         if($count > 2)
-            sleep(($count-1) * 400000);
+            usleep(($count-1) * 400000);
 
         return true;
     }

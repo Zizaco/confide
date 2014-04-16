@@ -184,7 +184,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         // Repo model method should return the model instance
         $repo->shouldReceive('getUserByIdentity')
-            ->with(['email'=>$username, 'username'=>$username])
+            ->with(['email'=>$username, 'username'=>strtolower($username)])
             ->andReturn($user);
 
         /*
