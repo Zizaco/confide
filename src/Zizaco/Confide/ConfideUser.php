@@ -147,30 +147,34 @@ class ConfideUser extends Ardent implements UserInterface {
             return false;
         }
     }
-    
+
     /**
-     * Get the remember token for password resets
-     * 
-     * @return string 
+     * Get the token value for the "remember me" session.
+     *
+     * @see \Illuminate\Auth\UserInterface
+     * @return string
      */
     public function getRememberToken()
     {
         return $this->remember_token;
     }
-    
+
     /**
-     * Set the remember token for a password reset
-     * 
-     * @param string
+     * Set the token value for the "remember me" session.
+     *
+     * @see \Illuminate\Auth\UserInterface
+     * @param  string  $value
+     * @return void
      */
     public function setRememberToken($value)
     {
         $this->remember_token = $value;
     }
-    
+
     /**
-     * Get the name of the remember token
-     * 
+     * Get the column name for the "remember me" token.
+     *
+     * @see \Illuminate\Auth\UserInterface
      * @return string
      */
     public function getRememberTokenName()
