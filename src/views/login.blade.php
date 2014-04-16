@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ Confide::checkAction('UserController@do_login') ?: URL::to('/user/login') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <div class="form-group">
