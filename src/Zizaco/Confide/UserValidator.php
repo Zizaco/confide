@@ -33,6 +33,7 @@ class UserValidator implements UserValidatorInterface {
     public function validate(ConfideUserInterface $user)
     {
         unset($user->password_confirmation);
+        $user->password = \Hash::make($user->password);
 
         return true;
     }
