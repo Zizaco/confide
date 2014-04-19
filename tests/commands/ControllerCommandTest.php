@@ -37,8 +37,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
         $command = m::mock('Zizaco\Confide\ControllerCommand', [$app]);
         $options = [
             ['name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'Users'],
-            ['--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'],
-            ['--repository', '-R', InputOption::VALUE_NONE, 'Generate a User Repository class.'],
+            ['--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.']
         ];
 
         /*
@@ -64,8 +63,7 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
             'class' => "UsersController",
             'namespace' => "The\\Namespace",
             'model' => "User",
-            'restful' => true,
-            'repository' => true,
+            'restful' => true
         ];
 
         /*
@@ -91,10 +89,6 @@ class ControllerCommandTest extends PHPUnit_Framework_TestCase
 
         $command->shouldReceive('option')
             ->once()->with('restful')
-            ->andReturn(true);
-
-        $command->shouldReceive('option')
-            ->once()->with('repository')
             ->andReturn(true);
 
         $command->shouldReceive('fire')

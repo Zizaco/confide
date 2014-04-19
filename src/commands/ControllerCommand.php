@@ -37,8 +37,7 @@ class ControllerCommand extends GenerateCommand
     {
         return array(
             array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'Users'),
-            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
-            array('--repository', '-R', InputOption::VALUE_NONE, 'Generate a User Repository class.'),
+            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.')
         );
     }
 
@@ -54,10 +53,9 @@ class ControllerCommand extends GenerateCommand
         $namespace = $this->getNamespace($this->option('name'));
         $model = $this->app['config']->get('auth.model');
         $restful = $this->option('restful');
-        $repository = $this->option('repository');
 
         $viewVars = compact(
-            'class','namespace','model','restful','repository'
+            'class','namespace','model','restful'
         );
 
         // Prompt
@@ -75,11 +73,10 @@ class ControllerCommand extends GenerateCommand
             $this->generateFile($filename, 'generators.controller', $viewVars);
             $this->info( "$class.php Successfully created!" );
 
-            if ($repository) {
-                $filename = 'models/'.$model.'Repository.php';
-                $this->generateFile($filename, 'generators.repository', $viewVars);
-                $this->info( "$model.'Repository.php Successfully created!" );
-            }
+            // Generate repository
+            $filename = 'models/'.$model.'Repository.php';
+            $this->generateFile($filename, 'generators.repository', $viewVars);
+            $this->info( "$model.'Repository.php Successfully created!" );
         }
     }
 
