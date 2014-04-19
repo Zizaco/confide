@@ -235,4 +235,36 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($validator->validateAttributes($userB));
         $this->assertEquals($errorBag, $userB->errors);
     }
+
+    public function testShouldAttachErrorMsg()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $errorBag = m::mock('ErrorBag');
+
+        App::shouldReceive('make')
+            ->with('Illuminate\Support\MessageBag')
+            ->andReturn($errorBag);
+
+        $validator = new UserValidator;
+        $user = m::mock('Zizaco\Confide\ConfideUserInterface');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $errorBag->shouldReceive('add')
+            ->with('confide', 'foobar');
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $validator->attachErrorMsg($user, 'foobar');
+    }
 }

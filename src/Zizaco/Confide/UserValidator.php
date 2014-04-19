@@ -142,4 +142,18 @@ class UserValidator implements UserValidatorInterface {
             return true;
         }
     }
+
+    /**
+     * Creates a \Illuminate\Support\MessageBag object, add the error message
+     * to it and then set the errors attribute of the user with that bag
+     * @param  ConfideUserInterface $user
+     * @param  string  $errorMsg The error messgae
+     * @return void
+     */
+    public function attachErrorMsg(ConfideUserInterface $user, $errorMsg)
+    {
+        $messageBag = App::make('Illuminate\Support\MessageBag');
+        $messageBag->add('confide', $errorMsg);
+        $user->errors = $messageBag;
+    }
 }
