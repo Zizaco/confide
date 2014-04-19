@@ -31,7 +31,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator = m::mock(
             'Zizaco\Confide\UserValidator'.
-            '[validatePassword,isUnique,validateFields]'
+            '[validatePassword,validateIsUnique,validateFields]'
         );
         $validator->shouldAllowMockingProtectedMethods();
 
@@ -45,7 +45,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $validator->shouldReceive('validatePassword')
             ->once()->andReturn(true);
 
-        $validator->shouldReceive('isUnique')
+        $validator->shouldReceive('validateIsUnique')
             ->once()->andReturn(true);
 
         $validator->shouldReceive('validateFields')
@@ -119,5 +119,71 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validator->validatePassword($userA));
         $this->assertFalse($validator->validatePassword($userB));
         $this->assertTrue($validator->validatePassword($userC));
+    }
+
+    public function testShouldValidateIsUnique()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $repo = m::mock('Zizaco\Confide\EloquentRepository');
+
+        $validator = new UserValidator;
+        $validator->repo = $repo;
+
+        $userA = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $userA->id = 1;
+        $userA->email = 'zizaco@gmail.com';
+        $userA->username = 'zizaco';
+
+        $userB = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $userB->id = '2';
+        $userB->email = 'foo@bar.com';
+        $userB->username = 'foo';
+
+        $userC = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $userC->id = '3';
+        $userC->email = 'something@somewhere.com';
+        $userC->username = 'something';
+
+        $userD = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $userD->id = ''; // No id
+        $userD->email = 'something@somewhere.com'; // Duplicated email
+        $userD->username = 'something';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $userA->shouldReceive('getKey')
+            ->andReturn($userA->id);
+
+        $userB->shouldReceive('getKey')
+            ->andReturn($userB->id);
+
+        $userC->shouldReceive('getKey')
+            ->andReturn($userC->id);
+
+        $userD->shouldReceive('getKey')
+            ->andReturn($userD->id);
+
+        $repo->shouldReceive('getUserByIdentity')
+            ->andReturnUsing(function($user) use ($userB, $userC) {
+                if ($user['email'] == $userB->email) return $userB;
+                if ($user['email'] == $userC->email) return $userC;
+            });
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($validator->validateIsUnique($userA));
+        $this->assertTrue($validator->validateIsUnique($userB));
+        $this->assertTrue($validator->validateIsUnique($userC));
+        $this->assertFalse($validator->validateIsUnique($userD));
     }
 }

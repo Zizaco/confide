@@ -64,7 +64,7 @@ class UserValidator implements UserValidatorInterface {
 
         // Validate object
         $result = $this->validatePassword($user) &&
-            $this->isUnique($user) &&
+            $this->validateIsUnique($user) &&
             $this->validateFields($user);
 
         return $result;
@@ -96,4 +96,19 @@ class UserValidator implements UserValidatorInterface {
         return true;
     }
 
+    public function validateIsUnique(ConfideUserInterface $user)
+    {
+        $identity = [
+            'username' => $user->username,
+            'email'    => $user->email,
+        ];
+
+        $similar = $this->repo->getUserByIdentity($identity);
+
+        if (!$similar || $similar->getKey() == $user->getKey()) {
+            return true;
+        }
+
+        return false;
+    }
 }
