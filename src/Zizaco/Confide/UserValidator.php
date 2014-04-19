@@ -119,6 +119,13 @@ class UserValidator implements UserValidatorInterface {
         return false;
     }
 
+    /**
+     * Uses Laravel Validator in order to check if the attributes of the
+     * $user object are valid for the given $ruleset
+     * @param  ConfideUserInterface $user
+     * @param  string               $ruleset The name of the key in the UserValidator->$rules array
+     * @return boolean  True if the attributes are valid
+     */
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
     {
         $attributes = $user->toArray();
