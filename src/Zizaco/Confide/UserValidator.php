@@ -39,7 +39,7 @@ class UserValidator implements UserValidatorInterface {
      *
      * @var array
      */
-    protected $rules = [
+    public $rules = [
         'create' => [
             'username' => 'required|alpha_dash',
             'email'    => 'required|email',
@@ -65,7 +65,7 @@ class UserValidator implements UserValidatorInterface {
         // Validate object
         $result = $this->validatePassword($user) &&
             $this->validateIsUnique($user) &&
-            $this->validateFields($user);
+            $this->validateAttributes($user, $ruleset);
 
         return $result;
     }
@@ -96,6 +96,13 @@ class UserValidator implements UserValidatorInterface {
         return true;
     }
 
+    /**
+     * Validates if the given user is unique. If there is another
+     * user with the same credentials but a different id, this
+     * method will return false.
+     * @param  ConfideUserInterface $user
+     * @return boolean  True if user is unique
+     */
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [
@@ -110,5 +117,22 @@ class UserValidator implements UserValidatorInterface {
         }
 
         return false;
+    }
+
+    public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
+    {
+        $attributes = $user->toArray();
+        $rules = $this->rules[$ruleset];
+
+        $validator = App::make('validator')
+            ->make( $attributes, $rules );
+
+        // Validate and attach errors
+        if ($validator->fails()) {
+            $user->errors = $validator->errors();
+            return false;
+        } else {
+            return true;
+        }
     }
 }

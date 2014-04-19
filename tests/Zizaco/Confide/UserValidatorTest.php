@@ -31,7 +31,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator = m::mock(
             'Zizaco\Confide\UserValidator'.
-            '[validatePassword,validateIsUnique,validateFields]'
+            '[validatePassword,validateIsUnique,validateAttributes]'
         );
         $validator->shouldAllowMockingProtectedMethods();
 
@@ -48,7 +48,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $validator->shouldReceive('validateIsUnique')
             ->once()->andReturn(true);
 
-        $validator->shouldReceive('validateFields')
+        $validator->shouldReceive('validateAttributes')
             ->once()->andReturn(true);
 
         /*
@@ -66,12 +66,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $repo = m::mock('Zizaco\Confide\EloquentRepository');
         $hash = m::mock('Hash');
-
-        App::shouldReceive('make')
-            ->with('confide.repository')
-            ->andReturn($repo);
 
         App::shouldReceive('make')
             ->with('hash')
@@ -185,5 +180,59 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validator->validateIsUnique($userB));
         $this->assertTrue($validator->validateIsUnique($userC));
         $this->assertFalse($validator->validateIsUnique($userD));
+    }
+
+    public function testShouldValidateAttributes()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $laravelValidator = m::mock('Validator');
+        $errorBag         = m::mock('ErrorBag');
+
+        App::shouldReceive('make')
+            ->with('validator')
+            ->andReturn($laravelValidator);
+
+        $validator = new UserValidator;
+
+        $userA = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $userB = m::mock('Zizaco\Confide\ConfideUserInterface');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $userA->shouldReceive('toArray')
+            ->andReturn(['username'=>'foo']);
+
+        $userB->shouldReceive('toArray')
+            ->andReturn(['username'=>'bar']);
+
+        $laravelValidator->shouldReceive('make')
+            ->with(['username'=>'foo'], $validator->rules['create'])
+            ->once()->andReturn($laravelValidator);
+
+        $laravelValidator->shouldReceive('make')
+            ->with(['username'=>'bar'], $validator->rules['create'])
+            ->once()->andReturn($laravelValidator);
+
+        $laravelValidator->shouldReceive('fails')
+            ->twice()->andReturn(false, true);
+
+        $laravelValidator->shouldReceive('errors')
+            ->once()->andReturn($errorBag);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($validator->validateAttributes($userA));
+        $this->assertFalse($validator->validateAttributes($userB));
+        $this->assertEquals($errorBag, $userB->errors);
     }
 }
