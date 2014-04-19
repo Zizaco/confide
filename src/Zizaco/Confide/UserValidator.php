@@ -1,6 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Support\Facades\App as App;
+use Illuminate\Support\Facades\Lang as Lang;
 
 /**
  * This is the default validator used by ConfideUser. You may overwrite this
@@ -89,6 +90,7 @@ class UserValidator implements UserValidatorInterface {
 
                 return true;
             } else {
+                $this->attachErrorMsg($user, 'validation.confirmed::confide.alerts.wrong_password_reset');
                 return false;
             }
         }
@@ -116,6 +118,7 @@ class UserValidator implements UserValidatorInterface {
             return true;
         }
 
+        $this->attachErrorMsg($user, 'confide::confide.alerts.duplicated_credentials');
         return false;
     }
 
@@ -153,7 +156,7 @@ class UserValidator implements UserValidatorInterface {
     public function attachErrorMsg(ConfideUserInterface $user, $errorMsg)
     {
         $messageBag = App::make('Illuminate\Support\MessageBag');
-        $messageBag->add('confide', $errorMsg);
+        $messageBag->add('confide', Lang::get($errorMsg));
         $user->errors = $messageBag;
     }
 }

@@ -3,6 +3,7 @@
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Facades\App as App;
+use Illuminate\Support\Facades\Lang as Lang;
 
 class UserValidatorTest extends PHPUnit_Framework_TestCase
 {
@@ -72,7 +73,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->with('hash')
             ->andReturn($hash);
 
-        $validator = new UserValidator;
+        $validator = m::mock('Zizaco\Confide\UserValidator[attachErrorMsg]');
 
         $userA = m::mock('Zizaco\Confide\ConfideUserInterface');
         $userA->password              = 'foo123';
@@ -106,6 +107,10 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->once()->with('foo123')
             ->andReturn('hashedPassword');
 
+        $validator->shouldReceive('attachErrorMsg')
+            ->atLeast(1)
+            ->with(m::any(), 'validation.confirmed::confide.alerts.wrong_password_reset');
+
         /*
         |------------------------------------------------------------
         | Assertion
@@ -125,7 +130,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         */
         $repo = m::mock('Zizaco\Confide\EloquentRepository');
 
-        $validator = new UserValidator;
+        $validator = m::mock('Zizaco\Confide\UserValidator[attachErrorMsg]');
         $validator->repo = $repo;
 
         $userA = m::mock('Zizaco\Confide\ConfideUserInterface');
@@ -170,6 +175,10 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
                 if ($user['email'] == $userB->email) return $userB;
                 if ($user['email'] == $userC->email) return $userC;
             });
+
+        $validator->shouldReceive('attachErrorMsg')
+            ->atLeast(1)
+            ->with(m::any(), 'confide::confide.alerts.duplicated_credentials');
 
         /*
         |------------------------------------------------------------
@@ -257,8 +266,12 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+        Lang::shouldReceive('get')
+            ->once()->with('foobar')
+            ->andReturn('translated_foobar');
+
         $errorBag->shouldReceive('add')
-            ->with('confide', 'foobar');
+            ->with('confide', 'translated_foobar');
 
         /*
         |------------------------------------------------------------
