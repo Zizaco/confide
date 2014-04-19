@@ -46,20 +46,20 @@ to be confirmed to be able to login to the website.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "3.2.x"
+    "zizaco/confide": "dev-huge-update"
 
 Run the Composer update comand
 
     $ composer update
 
-In your `config/app.php` add `'Zizaco\Confide\ConfideServiceProvider'` to the end of the `$providers` array
+In your `config/app.php` add `'Zizaco\Confide\ServiceProvider'` to the end of the `$providers` array
 
     'providers' => array(
 
         'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         ...
-        'Zizaco\Confide\ConfideServiceProvider',
+        'Zizaco\Confide\ServiceProvider',
 
     ),
 
