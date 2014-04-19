@@ -37,6 +37,30 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      */
     public function throttleIdentity($identity)
     {
+        $identity = $this->parseIdentity($identity);
+
+        // Increments and also retuns the current count
+        return $this->countThrottle($identity);
+    }
+
+    public function isThrottled($identity)
+    {
+        $identity = $this->parseIdentity($identity);
+
+        // Retuns the current count
+        return $this->countThrottle($identity, 0);
+    }
+
+    /**
+     * Parse the given identity in order to return a string with
+     * the relevant fields. I.E: if the attacker tries to use a
+     * bunch of different passwords, the identity will still be the
+     * same.
+     * @param  $mixed $identity
+     * @return string $identityString
+     */
+    protected function parseIdentity($identity)
+    {
         // If is an array, remove password, remember and then
         // transforms it into a string.
         if (is_array($identity))
@@ -45,9 +69,6 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
             unset($identity['remember']);
             $identity = serialize($identity);
         }
-
-        // Increments and also retuns the current count
-        return $this->countThrottle($identity);
     }
 
     /**
@@ -56,14 +77,15 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * identity.
      *
      * @param  string $identityString
+     * @param  integer $increments Amount that is going to be added to the throttling attemps for the given identity
      * @return integer How many times that same string was used
      */
-    protected function countThrottle($identityString)
+    protected function countThrottle($identityString, $increments = 1)
     {
         $count = $this->app['cache']
             ->get('login_throttling:'.md5($identityString), 0);
 
-        $count++;
+        $count = $count + $increments;
 
         $ttl = $this->app['config']->get('confide::throttle_time_period');
 

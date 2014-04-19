@@ -24,7 +24,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle]',[]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]',[]);
         $throttleService->shouldAllowMockingProtectedMethods();
 
         /*
@@ -32,6 +32,10 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+        $throttleService->shouldReceive('parseIdentity')
+            ->once()->with($identity)
+            ->andReturn(serialize(['email'=>'someone@somewhere.com']));
+
         $throttleService->shouldReceive('countThrottle')
             ->once()->with(serialize(['email'=>'someone@somewhere.com']))
             ->andReturn(5);
@@ -42,6 +46,69 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $this->assertEquals(5, $throttleService->throttleIdentity($identity));
+    }
+
+    public function testShouldCheckIsThrottled()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
+
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]',[]);
+        $throttleService->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $throttleService->shouldReceive('parseIdentity')
+            ->once()->with($identity)
+            ->andReturn(serialize(['email'=>'someone@somewhere.com']));
+
+        $throttleService->shouldReceive('countThrottle')
+            ->once()->with(serialize(['email'=>'someone@somewhere.com']), 0)
+            ->andReturn(5);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(5, $throttleService->isThrottled($identity));
+    }
+
+    public function parseIdentity()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]',[]);
+        $throttleService->shouldAllowMockingProtectedMethods();
+        $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $throttleService->shouldReceive('parseIdentity')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            serialize(['email'=>'someone@somewhere.com']),
+            $throttleService->parseIdentity($identity)
+        );
     }
 
     public function testShouldCountThrottle()
