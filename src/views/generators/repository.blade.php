@@ -6,7 +6,7 @@
  * This service abstracts some interactions that occurs within Confide and
  * the Database.
  */
-class Repository
+class UserRepository
 {
     /**
      * Signup a new account with the given parameters
