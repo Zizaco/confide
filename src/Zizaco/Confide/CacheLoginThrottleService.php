@@ -43,6 +43,11 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
         return $this->countThrottle($identity);
     }
 
+    /**
+     * Tells if the given identity has reached the throttle_limit
+     * @param  mixed $identity The login identity
+     * @return boolean True if the identity has reached the throttle_limit
+     */
     public function isThrottled($identity)
     {
         $identity = $this->parseIdentity($identity);
