@@ -185,6 +185,17 @@ class Confide
     }
 
     /**
+     * Asks the loginThrottler service if the given identity has reached the
+     * throttle_limit
+     * @param  mixed $identity The login identity
+     * @return boolean True if the identity has reached the throttle_limit
+     */
+    public function isThrottled($identity)
+    {
+        return $this->loginThrottler->isThrottled($identity);
+    }
+
+    /**
      * If an user with the given email exists then generate
      * a token for password change and saves it in the
      * 'password_reminders' table with the email of the

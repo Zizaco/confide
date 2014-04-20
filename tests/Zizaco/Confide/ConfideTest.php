@@ -636,6 +636,45 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($confide->loginThrottling($throttledUserEmail));
     }
 
+    public function testIsThrottled()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $repo = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+
+        $confide = m::mock(
+            'Zizaco\Confide\Confide[isThrottled]',
+            [$repo, $passService, $loginThrottler, $app]
+        );
+
+        $userEmail = 'someone@somewhere.com';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $confide->shouldReceive('isThrottled')
+            ->passthru();
+
+        $loginThrottler->shouldReceive('isThrottled')
+            ->once()->with($userEmail)
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($confide->isThrottled($userEmail));
+    }
+
     public function testShouldForgotPassword()
     {
         /*
