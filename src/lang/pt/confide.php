@@ -32,7 +32,7 @@ return array(
         'account_created' => 'Sua conta foi criada com sucesso! Por favor verifique em seu e-mail as instruções para confirmar a sua conta.',
         'wrong_credentials' => 'Nome de usuário ou senha incorretos.',
         'too_many_attempts' => 'Muitas tentativas incorretas. Tente novamente mais tarde.',
-        'not confirmed' => 'Sua conta pode não estar confirmada. Verifique seu email e procure pelo link de confirmação',
+        'not_confirmed' => 'Sua conta pode não estar confirmada. Verifique seu email e procure pelo link de confirmação',
         'confirmation' => 'Sua conta foi confirmada! Você pode entrar agora.',
         'wrong_confirmation' => 'Código de confirmação incorreto.',
         'password_forgot' => 'As informações para a troca de senha foram enviadas ao seu e-mail.',
