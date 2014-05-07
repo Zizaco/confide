@@ -100,5 +100,5 @@ interface ConfideRepository
      */
     public function confirmUser( $user );
 
-    public function validate(array $rules, array $customMessages);
+    public function validate(array $data, array $rules, array $customMessages);
 }
