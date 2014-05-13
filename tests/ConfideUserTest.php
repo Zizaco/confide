@@ -110,6 +110,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( true )
             ->once();
 
+        ConfideUser::$app['confide.repository']->shouldReceive('model')
+            ->andReturn( new ConfideUser )
+            ->once();
+
         $this->populateUser();
 
         $old_password = $this->confide_user->password;
@@ -134,6 +138,10 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         // Should call validate method
         ConfideUser::$app['confide.repository']->shouldReceive('validate')
             ->andReturn( false )
+            ->times(4);
+
+        ConfideUser::$app['confide.repository']->shouldReceive('model')
+            ->andReturn( new ConfideUser )
             ->times(4);
 
         $this->populateUser();
@@ -175,15 +183,27 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
             ->andReturn( 1 )
             ->once();
 
-        ConfideUser::$app['confide.repository']->shouldReceive('validate')
-            ->andReturn( true )
+        $this->populateUser();
+        $this->confide_user->confirmation_code = '';
+        $this->confide_user->confirmed = false;
+
+        $this->assertFalse( $this->confide_user->save() );
+    }
+
+    public function testShouldSaveValidUser()
+    {
+        // Make sure that userExists return 0 to simulates a valid user
+        ConfideUser::$app['confide.repository'] = m::mock( 'ConfideRepository' );
+        ConfideUser::$app['confide.repository']->shouldReceive('userExists')
+            ->with( $this->confide_user )
+            ->andReturn( 0 )
             ->once();
 
         $this->populateUser();
         $this->confide_user->confirmation_code = '';
         $this->confide_user->confirmed = false;
 
-        $this->assertFalse( $this->confide_user->save() );
+        $this->assertTrue( $this->confide_user->save() );
     }
 
     public function testShouldGenerateConfirmationCodeOnSave()
@@ -278,13 +298,13 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase {
         $app['db'] = m::mock( 'DatabaseManager' );
         $app['db']->shouldReceive('connection')
             ->andReturn( $app['db'] );
-            
+
         $app['db']->shouldReceive('table')
             ->andReturn( $app['db'] );
-            
+
         $app['db']->shouldReceive('insert')
             ->andReturn( $app['db'] );
-            
+
         $app['db']->shouldReceive('where')
             ->andReturn( $app['db'] );
 

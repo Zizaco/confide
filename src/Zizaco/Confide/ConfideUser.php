@@ -137,10 +137,14 @@ class ConfideUser extends Ardent implements UserInterface {
             'password' => static::$rules['password'],
             'password_confirmation' => static::$rules['password_confirmation'],
         );
-        $validationResult = static::$app['confide.repository']->validate(array(
+        $user = static::$app['confide.repository']->model();
+        $user->unguard();
+        $user->fill(array(
             'password' => $password,
             'password_confirmation' => $passwordConfirmation,
-            ), $passwordValidators);
+        ));
+        $user->reguard();
+        $validationResult = static::$app['confide.repository']->validate($user, $passwordValidators);
 
         if ( $validationResult )
         {
@@ -212,7 +216,6 @@ class ConfideUser extends Ardent implements UserInterface {
         }
         else
         {
-            static::$app['confide.repository']->validate();
             $this->validationErrors->add(
                 'duplicated',
                 static::$app['translator']->get('confide::confide.alerts.duplicated_credentials')
