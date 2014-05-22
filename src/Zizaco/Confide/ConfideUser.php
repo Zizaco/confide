@@ -136,7 +136,7 @@ class ConfideUser extends Ardent implements UserInterface {
             'password' => static::$rules['password'],
             'password_confirmation' => static::$rules['password_confirmation'],
         );
-        $validationResult = static::$app['confide.repository']->validate($passwordValidators);
+        $validationResult = static::$app['confide.repository']->validate($params, $passwordValidators);
 
         if ( $validationResult )
         {
