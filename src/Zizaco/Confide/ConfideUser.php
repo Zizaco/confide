@@ -205,6 +205,16 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         $duplicated = false;
 
+        /*
+         * When EloquentUserProvider call updateRememberToken
+         * it doesn't retrieve rules, so validation on Ardent fails
+         */
+        if (!empty($this->remember_token) && empty($rules))
+        {
+            $rules = static::$rules;
+            $rules = array_diff(array_keys($rules), array('password_confirmation'));
+        }
+
         if(! $this->id)
         {
             $duplicated = static::$app['confide.repository']->userExists( $this );
