@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (Confide::checkAction('UserController@store')) ?: URL::to('user')  }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (Confide::checkAction( Config::get('auth.model') . 'Controller@store')) ?: URL::to(Config::get('auth.table'))  }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <div class="form-group">

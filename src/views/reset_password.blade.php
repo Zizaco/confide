@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ (Confide::checkAction('UserController@do_reset_password'))    ?: URL::to('/user/reset') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ (Confide::checkAction( Config::get('auth.model') . 'Controller@do_reset_password'))    ?: URL::to('/' . Config::get('auth.table') . '/reset') }}}" accept-charset="UTF-8">
     <input type="hidden" name="token" value="{{{ $token }}}">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 
