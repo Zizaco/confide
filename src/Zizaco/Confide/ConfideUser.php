@@ -131,12 +131,20 @@ class ConfideUser extends Ardent implements UserInterface {
     public function resetPassword( $params )
     {
         $password = array_get($params, 'password', '');
+        $passwordConfirmation = array_get($params, 'password_confirmation', '');
 
         $passwordValidators = array(
             'password' => static::$rules['password'],
             'password_confirmation' => static::$rules['password_confirmation'],
         );
-        $validationResult = static::$app['confide.repository']->validate($passwordValidators);
+        $user = static::$app['confide.repository']->model();
+        $user->unguard();
+        $user->fill(array(
+            'password' => $password,
+            'password_confirmation' => $passwordConfirmation,
+        ));
+        $user->reguard();
+        $validationResult = static::$app['confide.repository']->validate($user, $passwordValidators);
 
         if ( $validationResult )
         {
@@ -197,6 +205,16 @@ class ConfideUser extends Ardent implements UserInterface {
     {
         $duplicated = false;
 
+        /*
+         * When EloquentUserProvider call updateRememberToken
+         * it doesn't retrieve rules, so validation on Ardent fails
+         */
+        if (!empty($this->remember_token) && empty($rules))
+        {
+            $rules = static::$rules;
+            $rules = array_diff(array_keys($rules), array('password_confirmation'));
+        }
+
         if(! $this->id)
         {
             $duplicated = static::$app['confide.repository']->userExists( $this );
@@ -208,7 +226,6 @@ class ConfideUser extends Ardent implements UserInterface {
         }
         else
         {
-            static::$app['confide.repository']->validate();
             $this->validationErrors->add(
                 'duplicated',
                 static::$app['translator']->get('confide::confide.alerts.duplicated_credentials')

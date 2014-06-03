@@ -292,9 +292,9 @@ class ConfideEloquentRepository implements ConfideRepository
         return true;
     }
 
-    public function validate(array $rules = array(), array $customMessages = array())
+    public function validate($user, array $rules = array(), array $customMessages = array())
     {
-        return $this->model()->validate($rules, $customMessages);
+        return $user->validate($rules, $customMessages);
     }
 
 }
