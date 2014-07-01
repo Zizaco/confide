@@ -215,7 +215,7 @@ class ConfideUser extends Ardent implements UserInterface {
             $rules = array_diff(array_keys($rules), array('password_confirmation'));
         }
 
-        if(! $this->id)
+        if(! $this->getKey())
         {
             $duplicated = static::$app['confide.repository']->userExists( $this );
         }
@@ -245,7 +245,8 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function beforeSave($forced = false)
     {
-        if ( empty($this->id) )
+        $id=$this->getKey();
+        if ( empty($id) )
         {
             $this->confirmation_code = md5( uniqid(mt_rand(), true) );
         }
@@ -273,7 +274,7 @@ class ConfideUser extends Ardent implements UserInterface {
      */
     public function afterSave($success=true, $forced = false)
     {
-        if (! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->id) )
+        if (! $this->confirmed && ! static::$app['cache']->get('confirmation_email_'.$this->getKey()) )
         {
             // on behalf or the config file we should send and email or not
             if (static::$app['config']->get('confide::signup_email') == true)
@@ -285,7 +286,7 @@ class ConfideUser extends Ardent implements UserInterface {
             $signup_cache = (int)static::$app['config']->get('confide::signup_cache');
             if ($signup_cache !== 0)
             {
-                static::$app['cache']->put('confirmation_email_'.$this->id, true, $signup_cache);
+                static::$app['cache']->put('confirmation_email_'.$this->getKey(), true, $signup_cache);
             }
         }
 
