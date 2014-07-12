@@ -77,6 +77,7 @@ abstract class GenerateCommand extends Command
 
     /**
      * Encapsulates mkdir function
+     * @codeCoverageIgnore
      * @param  string $directory
      * @param  int $mode
      * @param  bool $recursive
@@ -89,6 +90,7 @@ abstract class GenerateCommand extends Command
 
     /**
      * Encapsulates file_put_contents function
+     * @codeCoverageIgnore
      * @param  string $filename
      * @param  string $data
      * @param  int $flags

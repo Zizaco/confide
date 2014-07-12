@@ -31,7 +31,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
             'view'=>$view,
             'path'=>'/where/the/app/is',
         ];
-        $command = m::mock('Zizaco\Confide\Support\_GenerateCommandStub', [$app]);
+        $command = m::mock('Zizaco\Confide\Support\_GenerateCommandStub[makeDir,filePutContents]', [$app]);
         $command->shouldAllowMockingProtectedMethods();
         $filename = 'path/to/file.php';
         $viewName = 'generate.my_view';
@@ -59,12 +59,12 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldReceive('makeDir')
             ->with("/where/the/app/is/path/to", 493, true)
             ->once()
-            ->passthru();
+            ->andReturn(true);
 
         $command->shouldReceive('filePutContents')
             ->with("/where/the/app/is/path/to/file.php", "The rendered content")
             ->once()
-            ->passthru();
+            ->andReturn(true);
 
         /*
         |------------------------------------------------------------
@@ -88,7 +88,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
             'view'=>$view,
             'path'=>'/where/the/app/is',
         ];
-        $command = m::mock('Zizaco\Confide\Support\_GenerateCommandStub', [$app]);
+        $command = m::mock('Zizaco\Confide\Support\_GenerateCommandStub[makeDir,filePutContents]', [$app]);
         $command->shouldAllowMockingProtectedMethods();
         $filename = 'path/to/file.php';
         $viewName = 'generate.my_view';
@@ -116,12 +116,12 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldReceive('makeDir')
             ->with("/where/the/app/is/path/to", 493, true)
             ->once()
-            ->passthru();
+            ->andReturn(true);
 
         $command->shouldReceive('filePutContents')
             ->with("/where/the/app/is/path/to/file.php", "The rendered content", 8)
             ->once()
-            ->passthru();
+            ->andReturn(true);
 
         /*
         |------------------------------------------------------------
