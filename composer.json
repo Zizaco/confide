@@ -15,13 +15,13 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.1.x"
+        "illuminate/support": "~4.1"
     },
     "require-dev": {
-        "mockery/mockery": "0.9.*@dev",
-        "illuminate/database": "4.1.x",
-        "illuminate/auth": "4.1.x",
-        "illuminate/console": "4.1.x"
+        "mockery/mockery": "~0.8",
+        "illuminate/database": "~4.1",
+        "illuminate/auth": "~4.1",
+        "illuminate/console": "~4.1"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
@@ -34,6 +34,5 @@
         "psr-0": {
             "Zizaco\\Confide": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
