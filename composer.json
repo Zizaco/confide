@@ -35,6 +35,5 @@
         "psr-0": {
             "Zizaco\\Confide": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
