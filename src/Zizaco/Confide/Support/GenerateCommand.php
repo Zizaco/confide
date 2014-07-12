@@ -85,7 +85,8 @@ abstract class GenerateCommand extends Command
      */
     protected function makeDir($directory, $mode, $recursive)
     {
-        @mkdir($directory, $mode, $recursive);
+        if (! is_dir($directory))
+            @mkdir($directory, $mode, $recursive);
     }
 
     /**

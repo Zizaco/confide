@@ -74,7 +74,7 @@ class ControllerCommand extends GenerateCommand
             $this->info( "$class.php Successfully created!" );
 
             // Generate repository
-            $filename = 'models/'.$model.'Repository.php';
+            $filename = 'models/'.str_replace('\\', '/', $model).'Repository.php';
             $this->generateFile($filename, 'generators.repository', $viewVars);
             $this->info( $model.'Repository.php Successfully created!');
         }
