@@ -73,9 +73,29 @@ class UserRepository
      */
     public function existsButNotConfirmed($input)
     {
-        $user = App::make('{{ $model }}');
+        $user = Confide::getUserByEmailOrUsername($input);
 
-        return $user->checkUserExists($input) and !$user->isConfirmed($input);
+        if ($user)
+            return ! $user->confirmed;
+    }
+
+    /**
+     * Resets a password of a user. The $input['token'] will tell which user.
+     * @param  array  $input Array containing 'token', 'password' and 'password_confirmation' keys.
+     * @return boolean Success
+     */
+    public function resetPassword($input)
+    {
+        $result = false;
+        $user   = Confide::userByResetPasswordToken($input['token']);
+
+        if ($user) {
+            $user->password              = $input['password'];
+            $user->password_confirmation = $input['password_confirmation'];
+            $result = $this->save($user);
+        }
+
+        return $result;
     }
 
     /**

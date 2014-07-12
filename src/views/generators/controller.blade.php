@@ -1,5 +1,6 @@
 {{ '<?php' }}{{ $namespace ? ' namespace '.$namespace.';' : '' }}
 
+<?php $repositoryClass = strstr($model, '\\') ? substr($model, 0, -strlen(strrchr($model, '\\'))).'\UserRepository' : 'UserRepository' ?>
 @if ($namespace)
 
 use App, View, Input, Config, Redirect, Lang, Confide;
@@ -28,7 +29,7 @@ class {{ $class }} extends Controller {
      */
     public function {{ (! $restful) ? 'store' : 'postIndex' }}()
     {
-        $repo = App::make('UserRepository');
+        $repo = App::make('{{ $repositoryClass }}');
         $user = $repo->signup(Input::all());
 
         if ($user->id)
@@ -68,7 +69,7 @@ class {{ $class }} extends Controller {
      */
     public function {{ (! $restful) ? 'do_login' : 'postLogin' }}()
     {
-        $repo = App::make('UserRepository');
+        $repo = App::make('{{ $repositoryClass }}');
         $input = Input::all();
 
         if ($repo->login($input))
@@ -163,14 +164,15 @@ class {{ $class }} extends Controller {
      */
     public function {{ (! $restful) ? 'do_reset_password' : 'postReset' }}()
     {
+        $repo = App::make('{{ $repositoryClass }}');
         $input = array(
-            'token'=>Input::get( 'token' ),
-            'password'=>Input::get( 'password' ),
-            'password_confirmation'=>Input::get( 'password_confirmation' ),
+            'token'                 =>Input::get( 'token' ),
+            'password'              =>Input::get( 'password' ),
+            'password_confirmation' =>Input::get( 'password_confirmation' ),
         );
 
         // By passing an array with the token, password and confirmation
-        if( Confide::resetPassword( $input ) )
+        if( $repo->resetPassword( $input ) )
         {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
             return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')

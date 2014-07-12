@@ -207,6 +207,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $wrongConfirmCode = 'IdontExist';
         $user = m::mock('_mockedUser');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]',[]);
+        $repo->shouldAllowMockingProtectedMethods();
 
         /*
         |------------------------------------------------------------

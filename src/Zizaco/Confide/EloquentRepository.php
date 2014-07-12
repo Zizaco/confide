@@ -128,4 +128,16 @@ class EloquentRepository implements RepositoryInterface
             return false;
         }
     }
+
+    /**
+     * Updated the given user in the database. Set the 'confirmed' attribute to
+     * true.
+     * @param  ConfideUser User object
+     * @return bool  Success
+     */
+    protected function confirmUser($user)
+    {
+        $user->confirmed = true;
+        return $user->save();
+    }
 }

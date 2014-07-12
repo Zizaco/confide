@@ -93,6 +93,21 @@ class Confide
     }
 
     /**
+     * Checks if a user with the given identity (email or username) already
+     * exists and retrieve it
+     *
+     * @param  array $identity Array containing at least 'username' or 'email'.
+     * @return \Zizaco\Confide\ConfideUserInterface|null
+     */
+    public function getUserByEmailOrUsername($identity)
+    {
+        if (is_array($identity))
+            $identity = $this->extractIdentityFromArray($identity);
+
+        return $this->repo->getUserByEmailOrUsername($identity);
+    }
+
+    /**
      * Attempt to log a user into the application with
      * password and identity field(s), usually email or username.
      *
