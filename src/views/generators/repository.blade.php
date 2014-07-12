@@ -1,9 +1,15 @@
-{{ '<?php' }}
+{{ '<?php' }}{{ strstr($model, '\\') ? ' namespace '.substr($model, 0, -strlen(strrchr($model, '\\'))).';' : '' }}
+
+<?php $nonNamespacedName = (strstr($model, '\\')) ? substr(strrchr($model, '\\'), 1) : $model ?>
+@if (strstr($model, '\\'))
+
+use App, Config, Confide;
+@endif
 
 /**
  * Class UserRepository
  *
- * This service abstracts some interactions that occurs within Confide and
+ * This service abstracts some interactions that occurs between Confide and
  * the Database.
  */
 class UserRepository
@@ -11,11 +17,11 @@ class UserRepository
     /**
      * Signup a new account with the given parameters
      * @param  array $input Array containing 'username', 'email' and 'password'.
-     * @return {{ $model }} {{ $model }} object that may or may not be saved successfully. Check the id to make sure.
+     * @return {{ $nonNamespacedName }} {{ $nonNamespacedName }} object that may or may not be saved successfully. Check the id to make sure.
      */
     public function signup($input)
     {
-        $user = new {{ $model }};
+        $user = new {{ $nonNamespacedName }};
 
         $user->username = array_get($input, 'username');
         $user->email    = array_get($input, 'email');
@@ -74,10 +80,10 @@ class UserRepository
 
     /**
      * Simply saves the given instance
-     * @param  {{ $model }} $instance
+     * @param  {{ $nonNamespacedName }} $instance
      * @return boolean           Success
      */
-    public function save({{ $model }} $instance)
+    public function save({{ $nonNamespacedName }} $instance)
     {
         return $instance->save();
     }
