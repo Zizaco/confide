@@ -52,7 +52,7 @@ class RoutesCommand extends GenerateCommand
         $controllerName = $this->option('controller');
         $restful = $this->option('restful');
 
-        $url = 'user';
+        $url = 'users';
 
         $viewVars = compact(
             'controllerName',
