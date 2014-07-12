@@ -56,8 +56,10 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
+        $config = m::mock('Config');
+        $app = ['config'=>$config];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]',[]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]',[$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
 
         /*
@@ -71,14 +73,57 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
 
         $throttleService->shouldReceive('countThrottle')
             ->once()->with(serialize(['email'=>'someone@somewhere.com']), 0)
-            ->andReturn(5);
+            ->andReturn(10); // More than the limit specified bellow
+
+        $config->shouldReceive('get')
+            ->once()->with('confide::throttle_limit')
+            ->andReturn(9);
 
         /*
         |------------------------------------------------------------
         | Assertion
         |------------------------------------------------------------
         */
-        $this->assertEquals(5, $throttleService->isThrottled($identity));
+        $this->assertTrue($throttleService->isThrottled($identity));
+    }
+
+    public function testShouldCheckIsThrottledOnNonThrottled()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
+        $config = m::mock('Config');
+        $app = ['config'=>$config];
+
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]',[$app]);
+        $throttleService->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $throttleService->shouldReceive('parseIdentity')
+            ->once()->with($identity)
+            ->andReturn(serialize(['email'=>'someone@somewhere.com']));
+
+        $throttleService->shouldReceive('countThrottle')
+            ->once()->with(serialize(['email'=>'someone@somewhere.com']), 0)
+            ->andReturn(5); // Less than the limit specified bellow
+
+        $config->shouldReceive('get')
+            ->once()->with('confide::throttle_limit')
+            ->andReturn(9);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertFalse($throttleService->isThrottled($identity));
     }
 
     public function parseIdentity()

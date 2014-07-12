@@ -53,7 +53,9 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
         $identity = $this->parseIdentity($identity);
 
         // Retuns the current count
-        return $this->countThrottle($identity, 0);
+        $count = $this->countThrottle($identity, 0);
+
+        return $count >= $this->app['config']->get('confide::throttle_limit');
     }
 
     /**
