@@ -20,7 +20,7 @@
         "laravelbook/ardent": "~2.4"
     },
     "require-dev": {
-        "mockery/mockery": "0.7.2",
+        "mockery/mockery": "~0.8",
         "illuminate/database": "~4.1",
         "illuminate/auth": "~4.1"
     },
@@ -35,6 +35,5 @@
         "psr-0": {
             "Zizaco\\Confide": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
