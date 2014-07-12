@@ -1,4 +1,4 @@
-{{ "\n\n\n\n" }}
+//
 @if (! $restful)
 
 // Confide routes
@@ -16,6 +16,6 @@ Route::get( '{{ $url }}/logout',                 '{{ $controllerName }}@logout')
 
 // Confide RESTful route
 Route::get('{{ $url }}/confirm/{code}', '{{ $controllerName }}@getConfirm');
-Route::get('{{ $url }}/reset/{token}', '{{ $controllerName }}@getReset');
+Route::get('{{ $url }}/reset/{token}',  '{{ $controllerName }}@getReset');
 Route::controller( '{{ $url }}', '{{ $controllerName }}');
 @endif
