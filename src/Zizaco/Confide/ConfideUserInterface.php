@@ -1,6 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;
 
 /**
  * Interface that declares the methods that must be
@@ -13,7 +14,7 @@ use Illuminate\Auth\UserInterface;
  * @license MIT
  * @package  Zizaco\Confide
  */
-interface ConfideUserInterface extends UserInterface
+interface ConfideUserInterface extends UserInterface, RemindableInterface
 {
     /**
      * Confirm the user (usually means that the user)

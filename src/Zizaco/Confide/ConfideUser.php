@@ -30,7 +30,7 @@ trait ConfideUser {
      */
     public function confirm()
     {
-        $this->confirmed = 1;
+        $this->confirmed = true;
 
         return ConfideFacade::confirm($this->confirmation_code);
     }
@@ -147,5 +147,16 @@ trait ConfideUser {
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+
+    /**
+     * Get the e-mail address where password reminders are sent.
+     *
+     * @see \Illuminate\Auth\Reminders\RemindableInterface
+     * @return string
+     */
+    public function getReminderEmail()
+    {
+        return $this->email;
     }
 }
