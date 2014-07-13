@@ -23,7 +23,7 @@
         "illuminate/console": "~4.2",
         "phpunit/phpunit": "~4.0",
         "satooshi/php-coveralls": "dev-master",
-        "mockery/mockery": "~0.8"
+        "mockery/mockery": "~0.9"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
@@ -41,5 +41,6 @@
         "branch-alias": {
             "dev-huge-update": "4.0-dev"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
