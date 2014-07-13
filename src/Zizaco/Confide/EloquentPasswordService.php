@@ -52,6 +52,8 @@ class EloquentPasswordService implements PasswordServiceInterface
             ->table('password_reminders')
             ->insert($values);
 
+        $this->sendEmail($user, $token);
+
         return $token;
     }
 
@@ -101,5 +103,24 @@ class EloquentPasswordService implements PasswordServiceInterface
         }
 
         return $email;
+    }
+
+    /**
+     * Sends an email containing the reset password link with the given token to
+     * the user
+     * @param  RemindableInterface $user  An existent user
+     * @param  string $token  Password reset token
+     * @return void
+     */
+    protected function sendEmail($user, $token)
+    {
+        $config = $this->app['config'];
+        $lang   = $this->app['translator'];
+
+        $this->app['mailer']->send($config->get('confide::email_reset_password'), compact('user', 'token'), function($message) use ($user, $token, $lang) {
+            $message
+                ->to($user->email, $user->username)
+                ->subject($lang->get('confide::confide.email.password_reset.subject'));
+        });
     }
 }

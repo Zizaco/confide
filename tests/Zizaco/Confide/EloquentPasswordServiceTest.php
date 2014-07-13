@@ -36,7 +36,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $generatedToken = '123456789';
 
         $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken]',[]);
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]',[]);
         $db = m::mock('connection');
 
         $passService->shouldAllowMockingProtectedMethods();
@@ -57,6 +57,11 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         // for generating tokens
         $passService->shouldReceive('generateToken')
             ->andReturn($generatedToken);
+
+        // The email containing the reset link should be sent
+        $passService->shouldReceive('sendEmail')
+            ->once()
+            ->andReturn($user, $generatedToken);
 
         // Mocks DB in order to check for the following query:
         //     DB::table('password_reminders')->insert(array(
