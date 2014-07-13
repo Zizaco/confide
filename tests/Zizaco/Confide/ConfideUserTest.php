@@ -182,6 +182,37 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($user->save());
     }
 
+    public function testShouldGetErrors()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new _ConfideUserStub;
+        $newMessageBag = m::mock('Illuminate\Support\MessageBag');
+        $existentMessageBag = m::mock('Illuminate\Support\MessageBag');
+        $user->errors = $existentMessageBag;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        App::shouldReceive('make')
+            ->once()->with('Illuminate\Support\MessageBag')
+            ->andReturn($newMessageBag);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals($existentMessageBag, $user->errors());
+        $user->errors = null;
+        $this->assertEquals($newMessageBag, $user->errors());
+    }
+
     public function testShouldGetAuthIdentifier()
     {
         /*
@@ -215,7 +246,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = m::mock('Zizaco\Confide\_ConfideUserStub[getKey]');
+        $user = new _ConfideUserStub;
         $user->password = '1234';
 
         /*
@@ -226,7 +257,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('1234', $user->getAuthPassword());
     }
 
-    public function testShouldGetErrors()
+    public function testShouldGetRememberToken()
     {
         /*
         |------------------------------------------------------------
@@ -234,27 +265,68 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $user = new _ConfideUserStub;
-        $newMessageBag = m::mock('Illuminate\Support\MessageBag');
-        $existentMessageBag = m::mock('Illuminate\Support\MessageBag');
-        $user->errors = $existentMessageBag;
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-        App::shouldReceive('make')
-            ->once()->with('Illuminate\Support\MessageBag')
-            ->andReturn($newMessageBag);
+        $user->remember_token = '1234';
 
         /*
         |------------------------------------------------------------
         | Assertion
         |------------------------------------------------------------
         */
-        $this->assertEquals($existentMessageBag, $user->errors());
-        $user->errors = null;
-        $this->assertEquals($newMessageBag, $user->errors());
+        $this->assertEquals('1234', $user->getRememberToken());
+    }
+
+    public function testShouldSetRememberToken()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new _ConfideUserStub;
+        $user->remember_token = null;
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $user->setRememberToken('123');
+        $this->assertEquals('123', $user->remember_token);
+    }
+
+    public function testShouldGetRememberTokenName()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new _ConfideUserStub;
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals('remember_token', $user->getRememberTokenName());
+    }
+
+    public function testShouldGetReminderEmail()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new _ConfideUserStub;
+        $user->email = 'someone@somewhere.com';
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals('someone@somewhere.com', $user->getReminderEmail());
     }
 }
 

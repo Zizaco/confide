@@ -138,6 +138,7 @@ class EloquentRepository implements RepositoryInterface
     protected function confirmUser($user)
     {
         $user->confirmed = true;
+
         return $user->save();
     }
 }

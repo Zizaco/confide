@@ -239,4 +239,31 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($repo->confirmByCode($confirmCode));
         $this->assertFalse($repo->confirmByCode($wrongConfirmCode));
     }
+
+    public function testShouldConfirmUser()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[confirmUser]',[]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $user->shouldReceive('save')
+            ->once()
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($repo->confirmUser($user));
+    }
 }

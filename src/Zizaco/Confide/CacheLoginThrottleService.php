@@ -76,6 +76,8 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
             unset($identity['remember']);
             $identity = serialize($identity);
         }
+
+        return $identity;
     }
 
     /**

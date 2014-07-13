@@ -126,7 +126,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($throttleService->isThrottled($identity));
     }
 
-    public function parseIdentity()
+    public function testShouldParseIdentity()
     {
         /*
         |------------------------------------------------------------

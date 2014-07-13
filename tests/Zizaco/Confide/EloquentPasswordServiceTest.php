@@ -222,4 +222,68 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($email, $passService->unwrapEmail($emailArray));
         $this->assertEquals($email, $passService->unwrapEmail($emailObject));
     }
+
+    public function testShouldSendEmail()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[sendEmail]');
+        $passService->shouldAllowMockingProtectedMethods();
+
+        $mailer                         = m::mock('Mailer');
+        $config                         = m::mock('Config');
+        $translator                     = m::mock('Translator');
+        $passService->app['mailer']     = $mailer;
+        $passService->app['config']     = $config;
+        $passService->app['translator'] = $translator;
+
+        $token = '123';
+        $user  = m::mock('UserWithEmail');
+        $user->email = 'someone@somewhere.com';
+        $user->username = 'Someone';
+
+        $test = $this;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('sendEmail')
+            ->passthru();
+
+        $mailer->shouldReceive('send')
+            ->once()->with('view.name', ['user'=>$user, 'token'=>$token], m::any())
+            ->andReturnUsing(function($a,$b,$closure) use ($test, $user) {
+                $message = m::mock('Message');
+
+                $message->shouldReceive('to')
+                    ->once()->with($user->email, $user->username)
+                    ->andReturn($message);
+
+                $message->shouldReceive('subject')
+                    ->once()->with('the-email-subject')
+                    ->andReturn($message);
+
+                $closure($message);
+            });
+
+        $translator->shouldReceive('get')
+            ->once()->with('confide::confide.email.password_reset.subject')
+            ->andReturn('the-email-subject');
+
+        $config->shouldReceive('get')
+            ->once()->with('confide::email_reset_password')
+            ->andReturn('view.name');
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $passService->sendEmail($user, $token);
+    }
 }
