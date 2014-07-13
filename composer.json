@@ -35,5 +35,10 @@
         "psr-0": {
             "Zizaco\\Confide": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.2-dev"
+        }
     }
 }
