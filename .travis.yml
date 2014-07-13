@@ -11,6 +11,7 @@ before_script:
   - travis_retry composer install --no-interaction --prefer-source --dev
 
 script:
+  - mkdir -p build/logs
   - vendor/bin/phpunit --verbose
 
 after_script:

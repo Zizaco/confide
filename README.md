@@ -3,6 +3,7 @@
 ![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
 
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
+[![Coverage Status](https://coveralls.io/repos/Zizaco/confide/badge.png?branch=huge-update)](https://coveralls.io/r/Zizaco/confide?branch=huge-update)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Zizaco/confide/badges/quality-score.png)](https://scrutinizer-ci.com/g/Zizaco/confide/)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
 [![Latest Stable Version](https://poser.pugx.org/zizaco/confide/v/stable.png)](https://packagist.org/packages/zizaco/confide)
