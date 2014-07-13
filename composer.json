@@ -22,7 +22,7 @@
         "illuminate/auth": "~4.2",
         "illuminate/console": "~4.2",
         "phpunit/phpunit": "~4.0",
-        "satooshi/php-coveralls": "dev-master",
+        "satooshi/php-coveralls": "~0.7",
         "mockery/mockery": "~0.9"
     },
     "suggest": {
