@@ -5,7 +5,7 @@
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
 
-Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
+Confide is an authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
 
@@ -238,7 +238,7 @@ The [generated controller](https://github.com/Zizaco/confide/blob/master/src/vie
 
 __I receive a "Your account may not be confirmed" when trying to login__
 
-You need to confirm a newly created user _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_. You can easly confirm a user manually using Laravel's `artisan tinker` tool.
+You need to confirm a newly created user _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_. You can easly confirm an user manually using Laravel's `artisan tinker` tool.
 
 __I'm not able to generate a controller with namespaces__
 
@@ -250,6 +250,14 @@ __Users are able to login without confirming account__
 
 If you want only confirmed users to login, in your `UserController`, instead of simply calling `logAttempt( $input )`, call `logAttempt( $input, true )`. The second parameter stands for _"confirmed_only"_.
 
+__My application is crashing since I ran composer update__
+
+*Confide 4.0.0* was a huge update where all the codebase has been rewritten. Some classes changed, the generators has been improved in order to match some better practices (like repositories and separated validator classes). See the _Release Notes_ bellow.
+
+If you have a legacy project that uses an older version of Confide, don't worry. You will be always able to specify a previous version in your `composer.json` file.
+
+For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0 but will be able to download bugfixes of version 3.2.
+
 ## Release Notes
 
 ### Version 4.0.0 Beta 1
@@ -257,7 +265,7 @@ If you want only confirmed users to login, in your `UserController`, instead of 
 * Updated to support Laravel 4.2
 * Dropped support for PHP 5.3
 * ConfideUser is going to be a trait+interface from now on.
-* Controller generation now also generates a UserRepository class.
+* Controller generation now also generates an UserRepository class.
 * Removed deprecated variables, functions and classes.
 * All the codebase has been rewritten.
 
