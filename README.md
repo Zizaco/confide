@@ -4,6 +4,11 @@
 
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
+[![Latest Stable Version](https://poser.pugx.org/zizaco/confide/v/stable.png)](https://packagist.org/packages/zizaco/confide)
+[![Total Downloads](https://poser.pugx.org/zizaco/confide/downloads.png)](https://packagist.org/packages/zizaco/confide)
+[![License](https://poser.pugx.org/zizaco/confide/license.png)](http://opensource.org/licenses/MIT)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e/small.png)](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e)
 
 Confide is an authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
 
