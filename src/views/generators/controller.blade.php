@@ -41,14 +41,14 @@ class {{ $name }} extends BaseController {
         // Save if valid. Password field will be hashed before save
         ${{ lcfirst(Config::get('auth.model')) }}->save();
 
-        if ( ${{ lcfirst(Config::get('auth.model')) }}->id )
+        if ( ${{ lcfirst(Config::get('auth.model')) }}->getKey() )
         {
             @if ( Config::get('confide::signup_confirm') && Config::get('confide::signup_email'))
-            $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent'); 
+            $notice = Lang::get('confide::confide.alerts.account_created') . ' ' . Lang::get('confide::confide.alerts.instructions_sent');
             @else
-            $notice = Lang::get('confide::confide.alerts.account_created'); 
+            $notice = Lang::get('confide::confide.alerts.account_created');
             @endif
-        
+
             // Redirect with success message, You may replace "Lang::get(..." for your custom message.
             @if (! $restful)
             return Redirect::action('{{ $name }}@login')
@@ -80,7 +80,7 @@ class {{ $name }} extends BaseController {
     {
         if( Confide::user() )
         {
-            // If user is logged, redirect to internal 
+            // If user is logged, redirect to internal
             // page, change it to '/admin', '/dashboard' or something
             return Redirect::to('/');
         }
@@ -107,7 +107,7 @@ class {{ $name }} extends BaseController {
         // with the second parameter as true.
         // logAttempt will check if the 'email' perhaps is the username.
         // Get the value from the config file instead of changing the controller
-        if ( Confide::logAttempt( $input, Config::get('confide::signup_confirm') ) ) 
+        if ( Confide::logAttempt( $input, Config::get('confide::signup_confirm') ) )
         {
             // Redirect the user to the URL they were trying to access before
             // caught by the authentication filter IE Redirect::guest('user/login').
@@ -263,7 +263,7 @@ class {{ $name }} extends BaseController {
     public function {{ (! $restful) ? 'logout' : 'getLogout' }}()
     {
         Confide::logout();
-        
+
         return Redirect::to('/');
     }
 
