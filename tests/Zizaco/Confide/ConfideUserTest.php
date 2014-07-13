@@ -110,7 +110,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newQueryWithDeleted]');
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newQueryWithoutScopes]');
 
         /*
         |------------------------------------------------------------
@@ -126,7 +126,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
             ->andReturn(true);
 
         // Throw an exception instead of actually saving the object
-        $user->shouldReceive('newQueryWithDeleted')
+        $user->shouldReceive('newQueryWithoutScopes')
             ->once()
             ->andReturnUsing(function(){
                 throw new \Exception('Saved in database');
