@@ -2,7 +2,6 @@
 
 use Zizaco\Confide\Support\GenerateCommand;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * This command dumps some routes at the end of the routes.php

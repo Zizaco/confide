@@ -2,7 +2,6 @@
 
 use Zizaco\Confide\Support\GenerateCommand;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * This command renders the package view generator.migration and also
