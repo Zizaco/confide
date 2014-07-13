@@ -18,7 +18,8 @@
         "illuminate/support": "~4.2"
     },
     "require-dev": {
-        "mockery/mockery": "0.9.*@dev",
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.8",
         "illuminate/database": "~4.2",
         "illuminate/auth": "~4.2",
         "illuminate/console": "~4.2"
