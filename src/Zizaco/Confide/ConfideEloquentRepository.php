@@ -228,22 +228,27 @@ class ConfideEloquentRepository implements ConfideRepository
      */
     public function forgotPassword( $user )
     {
-        $token = md5( uniqid(mt_rand(), true) );
+        if ( $query = $this->app['db']->connection()->table('password_reminders')->where('email', $user->email)->first() ) {
+			$token = $query->token;
+		} else {
+        
+            $token = md5( uniqid(mt_rand(), true) );
 
-        $values = array(
-            'email'=> $user->email,
-            'token'=> $token,
-            'created_at'=> new \DateTime
-        );
+            $values = array(
+                'email'=> $user->email,
+                'token'=> $token,
+                'created_at'=> new \DateTime
+            );
 
-        $this->app['db']->connection()->table('password_reminders')
-            ->insert( $values );
-        // I.E:
-        //     DB::table('password_reminders')->insert(array(
-        //    'email'=> $this->email,
-        //    'token'=> $token,
-        //    'created_at'=> new \DateTime
-        //));
+            $this->app['db']->connection()->table('password_reminders')
+                ->insert( $values );
+            // I.E:
+            //     DB::table('password_reminders')->insert(array(
+            //    'email'=> $this->email,
+            //    'token'=> $token,
+            //    'created_at'=> new \DateTime
+            //));
+		}
         
         return $token;
     }
