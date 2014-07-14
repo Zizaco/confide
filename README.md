@@ -178,7 +178,28 @@ Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
 #### Custom user validation
 
-To save an user that use the `Zizaco\Confide\ConfideUser` trait you'll need to make sure the `isValid` method is returning true. Take a look at the `Zizaco\Confide\UserValidator` class in order to understand the "default" user validation. Feel free to replace the validator by your own class and rules.
+You can implement your own validator by creating a class that implements the `UserValidatorInterface` and registering that class as *"confide.user_validator"*.
+ 
+For example, create your custom validator class:
+ 
+
+    // app/models/MyOwnValidator.php
+    class MyOwnValidator implements UserValidatorInterface {
+        
+        public function validate(ConfideUserInterface $user)
+        {
+            unset($user->password_confirmation);
+            return true; // If the user valid
+        }
+    }
+
+Then register it in IoC container as *"confide.user_validator"*
+
+    // app/start/global.php
+    ...
+    App::bind('confide.user_validator', 'MyOwnValidator');
+ 
+Also, don't forget that your validator should unset the 'password_confirmation' attribute of the user before saving it.
 
 #### Passing additional information to the "make" methods
 
