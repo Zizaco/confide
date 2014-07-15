@@ -90,7 +90,7 @@ class UserValidator implements UserValidatorInterface {
 
                 return true;
             } else {
-                $this->attachErrorMsg($user, 'validation.confirmed::confide.alerts.wrong_password_reset');
+                $this->attachErrorMsg($user, 'confide::confide.alerts.wrong_confirmation');
                 return false;
             }
         }
