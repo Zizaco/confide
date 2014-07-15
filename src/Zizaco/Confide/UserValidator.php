@@ -66,7 +66,7 @@ class UserValidator implements UserValidatorInterface {
         // Set the $repo as a ConfideRepository object
         $this->repo = App::make('confide.repository');
 
-				// Set $user->errors as a MessageBag object
+		// Set $user->errors as a MessageBag object
         $user->errors = App::make('Illuminate\Support\MessageBag');
 
         // Validate object
@@ -118,18 +118,18 @@ class UserValidator implements UserValidatorInterface {
             'email'    => $user->email,
         ];
 
-				foreach($identity as $attribute => $value) {
+			foreach($identity as $attribute => $value) {
 
-					$similar = $this->repo->getUserByIdentity(array($attribute => $value));
+				$similar = $this->repo->getUserByIdentity(array($attribute => $value));
 
-					if (!$similar || $similar->getKey() == $user->getKey()) {
-							return true;
-					}
+				if (!$similar || $similar->getKey() == $user->getKey()) {
+						return true;
+				}
 
 
-					$this->attachErrorMsg($user->errors, 'confide::confide.alerts.duplicated_credentials', $attribute);
-					return false;
-			 }
+				$this->attachErrorMsg($user->errors, 'confide::confide.alerts.duplicated_credentials', $attribute);
+				return false;
+			}
     }
 
     /**
@@ -157,20 +157,20 @@ class UserValidator implements UserValidatorInterface {
     }
 
     /**
-		 * Attach errorMsg to a bag accordingly to type and provides key option
-		 * to allow checking of this locally and get correct Lang msg. 
+	 * Attach errorMsg to a bag accordingly to type and provides key option
+	 * to allow checking of this locally and get correct Lang msg. 
      * Otherwise works as defaults MessageBag merge method. 
      * @param  \Illuminate\Support\MessageBag $messageBag
-     * @param  mixed 													$errorMsg The error key and message
-		 * @param  string
+     * @param  mixed 			              $errorMsg The error key and message
+	 * @param  string     
      * @return void
      */
     public function attachErrorMsg(MessageBag $messageBag, $errorMsg, $key = 'confide')
     {
-				if( is_array($errorMsg) || $errorMsg instanceof MessageProviderInterface) {
-					$messageBag->merge($errorMsg);
-				} else {
-					$messageBag->add($key, Lang::get($errorMsg));
-				}
+		if( is_array($errorMsg) || $errorMsg instanceof MessageProviderInterface) {
+			$messageBag->merge($errorMsg);
+		} else {
+			$messageBag->add($key, Lang::get($errorMsg));
+		}
     }
 }
