@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
+use Illuminate\Support\MessageBag as MessageBag;
+use Illuminate\Support\Contracts\MessageProviderInterface as MessageProviderInterface;
+
 
 /**
  * This is the default validator used by ConfideUser. You may overwrite this
@@ -63,6 +66,9 @@ class UserValidator implements UserValidatorInterface {
         // Set the $repo as a ConfideRepository object
         $this->repo = App::make('confide.repository');
 
+		// Set $user->errors as a MessageBag object
+        $user->errors = App::make('Illuminate\Support\MessageBag');
+
         // Validate object
         $result = $this->validatePassword($user) &&
             $this->validateIsUnique($user) &&
@@ -90,7 +96,7 @@ class UserValidator implements UserValidatorInterface {
 
                 return true;
             } else {
-                $this->attachErrorMsg($user, 'validation.confirmed::confide.alerts.wrong_password_reset');
+                $this->attachErrorMsg($user->errors, 'confide::confide.alerts.wrong_confirmation', 'password_confirmation');
                 return false;
             }
         }
@@ -112,14 +118,18 @@ class UserValidator implements UserValidatorInterface {
             'email'    => $user->email,
         ];
 
-        $similar = $this->repo->getUserByIdentity($identity);
+			foreach($identity as $attribute => $value) {
 
-        if (!$similar || $similar->getKey() == $user->getKey()) {
-            return true;
-        }
+				$similar = $this->repo->getUserByIdentity(array($attribute => $value));
 
-        $this->attachErrorMsg($user, 'confide::confide.alerts.duplicated_credentials');
-        return false;
+				if (!$similar || $similar->getKey() == $user->getKey()) {
+						return true;
+				}
+
+
+				$this->attachErrorMsg($user->errors, 'confide::confide.alerts.duplicated_credentials', $attribute);
+				return false;
+			}
     }
 
     /**
@@ -143,7 +153,7 @@ class UserValidator implements UserValidatorInterface {
 
         // Validate and attach errors
         if ($validator->fails()) {
-            $user->errors = $validator->errors();
+						$this->attachErrorMsg($user->errors, $validator->errors());
             return false;
         } else {
             return true;
@@ -151,16 +161,20 @@ class UserValidator implements UserValidatorInterface {
     }
 
     /**
-     * Creates a \Illuminate\Support\MessageBag object, add the error message
-     * to it and then set the errors attribute of the user with that bag
-     * @param  ConfideUserInterface $user
-     * @param  string  $errorMsg The error messgae
+	 * Attach errorMsg to a bag accordingly to type and provides key option
+	 * to allow checking of this locally and get correct Lang msg. 
+     * Otherwise works as defaults MessageBag merge method. 
+     * @param  \Illuminate\Support\MessageBag $messageBag
+     * @param  mixed 			              $errorMsg The error key and message
+	 * @param  string     
      * @return void
      */
-    public function attachErrorMsg(ConfideUserInterface $user, $errorMsg)
+    public function attachErrorMsg(MessageBag $messageBag, $errorMsg, $key = 'confide')
     {
-        $messageBag = App::make('Illuminate\Support\MessageBag');
-        $messageBag->add('confide', Lang::get($errorMsg));
-        $user->errors = $messageBag;
+		if( is_array($errorMsg) || $errorMsg instanceof MessageProviderInterface) {
+			$messageBag->merge($errorMsg);
+		} else {
+			$messageBag->add($key, Lang::get($errorMsg));
+		}
     }
 }
