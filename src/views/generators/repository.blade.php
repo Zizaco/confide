@@ -1,4 +1,4 @@
-{{ '<'.'?php' }}{{ strstr($model, '\\') ? ' namespace '.substr($model, 0, -strlen(strrchr($model, '\\'))).';' : '' }}
+<?php echo "<?php\n"; ?>{{ strstr($model, '\\') ? ' namespace '.substr($model, 0, -strlen(strrchr($model, '\\'))).';' : '' }}
 
 <?php $nonNamespacedName = (strstr($model, '\\')) ? substr(strrchr($model, '\\'), 1) : $model ?>
 @if (strstr($model, '\\'))

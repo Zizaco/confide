@@ -1,4 +1,4 @@
-{{ '<'.'?php' }}{{ $namespace ? ' namespace '.$namespace.';' : '' }}
+<?php echo "<?php\n"; ?>{{ $namespace ? ' namespace '.$namespace.';' : '' }}
 
 <?php $repositoryClass = strstr($model, '\\') ? substr($model, 0, -strlen(strrchr($model, '\\'))).'\UserRepository' : 'UserRepository' ?>
 @if ($namespace)
