@@ -4,6 +4,19 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Database Connection
+    |--------------------------------------------------------------------------
+    |
+    | Defines which database connection to use when 
+    | looking for the users table. The default null value uses the default connection.
+    | To use a connection besides the default define it like:
+    | 'connection' => 'myConnection'
+    |
+    */
+    'connection' => null,
+
+    /*
+    |--------------------------------------------------------------------------
     | Login Throttle
     |--------------------------------------------------------------------------
     |
