@@ -132,6 +132,10 @@ class UserValidator implements UserValidatorInterface {
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
     {
         $attributes = $user->toArray();
+
+        // Force getting password since it may be hidden from array form
+        $attributes['password'] = $user->getAuthPassword();
+
         $rules = $this->rules[$ruleset];
 
         $validator = App::make('validator')

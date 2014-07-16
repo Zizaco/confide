@@ -215,18 +215,33 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+
         $userA->shouldReceive('toArray')
             ->andReturn(['username'=>'foo']);
+
+        // Password must be retrieved separately since it may
+        // be hidden from toArray method.
+        $userA->shouldReceive('getAuthPassword')
+            ->andReturn('secret');
 
         $userB->shouldReceive('toArray')
             ->andReturn(['username'=>'bar']);
 
+        $userB->shouldReceive('getAuthPassword')
+            ->andReturn('p@ss');
+
         $laravelValidator->shouldReceive('make')
-            ->with(['username'=>'foo'], $validator->rules['create'])
+            ->with(
+                ['username'=>'foo', 'password'=>'secret'],
+                $validator->rules['create']
+            )
             ->once()->andReturn($laravelValidator);
 
         $laravelValidator->shouldReceive('make')
-            ->with(['username'=>'bar'], $validator->rules['create'])
+            ->with(
+                ['username'=>'bar', 'password'=>'p@ss'],
+                $validator->rules['create']
+            )
             ->once()->andReturn($laravelValidator);
 
         $laravelValidator->shouldReceive('fails')
