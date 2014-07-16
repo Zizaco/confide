@@ -24,7 +24,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-    public function testSouldRequestChangePassword()
+    public function testShouldRequestChangePassword()
     {
         /*
         |------------------------------------------------------------
@@ -35,13 +35,15 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $userEmail = 'someone@somewhere.com';
         $generatedToken = '123456789';
 
-        $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
+        $user        = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]',[]);
-        $db = m::mock('connection');
+        $db          = m::mock('connection');
+        $config      = m::mock('Config');
 
         $passService->shouldAllowMockingProtectedMethods();
 
-        $passService->app['db'] = $db;
+        $passService->app['db']     = $db;
+        $passService->app['config'] = $config;
 
         /*
         |------------------------------------------------------------
@@ -87,6 +89,10 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn(true);
 
+        $config->shouldReceive('get')
+            ->once()->with('confide::connection')
+            ->andReturn('connection');
+
         /*
         |------------------------------------------------------------
         | Assertion
@@ -105,13 +111,16 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $userEmail = 'someone@somewhere.com';
-        $token = '123456789';
+        $userEmail   = 'someone@somewhere.com';
+        $token       = '123456789';
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
-        $passService->shouldAllowMockingProtectedMethods();
-        $db = m::mock('connection');
+        $db          = m::mock('connection');
+        $config      = m::mock('Config');
 
-        $passService->app['db'] = $db;
+        $passService->shouldAllowMockingProtectedMethods();
+
+        $passService->app['db']     = $db;
+        $passService->app['config'] = $config;
 
         /*
         |------------------------------------------------------------
@@ -152,6 +161,10 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $db->shouldReceive('first')
             ->once()
             ->andReturn(['email' => $userEmail]);
+
+        $config->shouldReceive('get')
+            ->once()->with('confide::connection')
+            ->andReturn('connection');
 
         /*
         |------------------------------------------------------------

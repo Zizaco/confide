@@ -38,8 +38,9 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function requestChangePassword(RemindableInterface $user)
     {
-        $email = $user->getReminderEmail();
-        $token = $this->generateToken();
+        $email  = $user->getReminderEmail();
+        $token  = $this->generateToken();
+        $config = $this->app['config'];
 
         $values = array(
             'email'=> $email,
@@ -48,7 +49,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         );
 
         $this->app['db']
-            ->connection()
+            ->connection($config->get('confide::connection'))
             ->table('password_reminders')
             ->insert($values);
 
@@ -65,8 +66,9 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function getEmailByToken($token)
     {
-        $email = $this->app['db']
-            ->connection()
+        $config = $this->app['config'];
+        $email  = $this->app['db']
+            ->connection($config->get('confide::connection'))
             ->table('password_reminders')
             ->select('email')->where('token','=',$token)
             ->first();
