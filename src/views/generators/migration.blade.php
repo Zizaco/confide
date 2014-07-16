@@ -1,4 +1,4 @@
-{{ '<'.'?php' }}
+<?php echo "<?php\n"; ?>
 
 use Illuminate\Database\Migrations\Migration;
 
