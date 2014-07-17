@@ -179,13 +179,13 @@ Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 #### Custom user validation
 
 You can implement your own validator by creating a class that implements the `UserValidatorInterface` and registering that class as *"confide.user_validator"*.
- 
+
 For example, create your custom validator class:
- 
+
 
     // app/models/MyOwnValidator.php
     class MyOwnValidator implements UserValidatorInterface {
-        
+
         public function validate(ConfideUserInterface $user)
         {
             unset($user->password_confirmation);
@@ -198,7 +198,7 @@ Then register it in IoC container as *"confide.user_validator"*
     // app/start/global.php
     ...
     App::bind('confide.user_validator', 'MyOwnValidator');
- 
+
 Also, don't forget that your validator should unset the 'password_confirmation' attribute of the user before saving it.
 
 #### Passing additional information to the "make" methods
@@ -287,6 +287,12 @@ If you have a legacy project that uses an older version of Confide, don't worry.
 For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0 but will be able to download bugfixes of version 3.2.
 
 ## Release Notes
+
+### Version 4.0.0 Beta 2
+* UserValidator now adds errors to a existing MessageBag instead of replacing it.
+* Password reset token will expire after 7 days.
+* Added support for custom connections using the $connection attribute of the model.
+* Password reset requests are deleted after being used.
 
 ### Version 4.0.0 Beta 1
 * Dropped Ardent dependency.
