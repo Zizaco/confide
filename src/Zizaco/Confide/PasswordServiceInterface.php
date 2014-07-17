@@ -23,8 +23,17 @@ interface PasswordServiceInterface
     /**
      * Returns the email associated with the given reset
      * password token
+     *
      * @param  string $token
      * @return string Email
      */
     public function getEmailByToken($token);
+
+    /**
+     * Delete the record of the given token from database
+     *
+     * @param  string $token
+     * @return boolean Success
+     */
+    public function destroyToken($token);
 }

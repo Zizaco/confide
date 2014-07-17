@@ -80,6 +80,26 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
+     * Delete the record of the given token from database
+     *
+     * @param  string $token
+     * @return boolean Success
+     */
+    public function destroyToken($token)
+    {
+        $connection = $this->app['confide.repository']
+            ->model()->connection;
+
+        $affected = $this->app['db']
+            ->connection($connection)
+            ->table('password_reminders')
+            ->where('token','=',$token)
+            ->delete();
+
+        return $affected > 0;
+    }
+
+    /**
      * Generates a random password change token
      *
      * @return  string

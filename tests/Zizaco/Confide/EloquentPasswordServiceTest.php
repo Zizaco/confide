@@ -173,6 +173,67 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testShouldDestroyToken()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $token       = '123456789';
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $db          = m::mock('connection');
+        $repository  = m::mock('Zizaco\Confide\RepositoryInterface');
+        $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
+
+        $userModel->connection = 'db_name';
+        $passService->app['db'] = $db;
+        $passService->app['confide.repository'] = $repository;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $repository->shouldReceive('model')
+            ->andReturn($userModel);
+
+        $passService->shouldReceive('destroyToken')
+            ->passthru();
+
+        // Mocks DB in order to check for the following query:
+        //     DB::connection('db_name')
+        //         ->table('password_reminders')
+        //         ->where('token','=',$token)
+        //         ->delete();
+        $db->shouldReceive('connection')
+            ->once()->with($userModel->connection)
+            ->andReturn( $db );
+
+        $db->shouldReceive('table')
+            ->with('password_reminders')
+            ->andReturn( $db )
+            ->once();
+
+        $db->shouldReceive('where')
+            ->with('token', '=', $token)
+            ->andReturn( $db )
+            ->once();
+
+        $db->shouldReceive('delete')
+            ->once()
+            ->andReturn(1);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue(
+            $passService->destroyToken($token)
+        );
+    }
+
     public function testShouldGenerateToken()
     {
         /*
