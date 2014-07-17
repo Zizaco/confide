@@ -48,7 +48,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         );
 
         $this->app['db']
-            ->connection($user->connection)
+            ->connection($user->getConnectionName())
             ->table('password_reminders')
             ->insert($values);
 
@@ -65,8 +65,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function getEmailByToken($token)
     {
-        $connection = $this->app['confide.repository']
-            ->model()->connection;
+        $connection = $this->getConnection();
 
         $email = $this->app['db']
             ->connection($connection)
@@ -87,8 +86,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function destroyToken($token)
     {
-        $connection = $this->app['confide.repository']
-            ->model()->connection;
+        $connection = $this->getConnection();
 
         $affected = $this->app['db']
             ->connection($connection)
@@ -97,6 +95,19 @@ class EloquentPasswordService implements PasswordServiceInterface
             ->delete();
 
         return $affected > 0;
+    }
+
+    /**
+     * Returns a possible custom connection that may has being used
+     * for the user model. If null is returned by this method than
+     * the default connection is going to be used.
+     *
+     * @return string Original $connection value of the user model.
+     */
+    protected function getConnection()
+    {
+        return $this->app['confide.repository']
+            ->model()->getConnectionName();
     }
 
     /**

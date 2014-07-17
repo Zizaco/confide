@@ -36,7 +36,6 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $generatedToken = '123456789';
 
         $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
-        $user->connection = 'db_name';
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]',[]);
         $db = m::mock('connection');
 
@@ -53,6 +52,10 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         // See: http://laravel.com/docs/security#password-reminders-and-reset
         $user->shouldReceive('getReminderEmail')
             ->andReturn($userEmail);
+
+        // Retrieve the connection name that is being used in the user model
+        $user->shouldReceive('getConnectionName')
+            ->andReturn('db_name');
 
         // The PasswordService generate token method is the responsible
         // for generating tokens
@@ -71,7 +74,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //             'created_at'=> new \DateTime
         //         ));
         $db->shouldReceive('connection')
-            ->once()->with($user->connection)
+            ->once()->with('db_name')
             ->andReturn( $db );
 
         $db->shouldReceive('table')
@@ -110,24 +113,21 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $token       = '123456789';
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
         $db          = m::mock('connection');
-        $repository  = m::mock('Zizaco\Confide\RepositoryInterface');
         $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
 
         $passService->shouldAllowMockingProtectedMethods();
-        $userModel->connection = 'db_name';
         $passService->app['db'] = $db;
-        $passService->app['confide.repository'] = $repository;
 
         /*
         |------------------------------------------------------------
         | Expectation
         |------------------------------------------------------------
         */
-        $repository->shouldReceive('model')
-            ->andReturn($userModel);
-
         $passService->shouldReceive('getEmailByToken')
             ->passthru();
+
+        $passService->shouldReceive('getConnection')
+            ->once()->andReturn('db_name');
 
         $passService->shouldReceive('unwrapEmail')
             ->once()->with(['email'=>$userEmail])
@@ -140,7 +140,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //         ->where('token','=',$token)
         //         ->first();
         $db->shouldReceive('connection')
-            ->once()->with($userModel->connection)
+            ->once()->with('db_name')
             ->andReturn( $db );
 
         $db->shouldReceive('table')
@@ -183,23 +183,20 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $token       = '123456789';
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
         $db          = m::mock('connection');
-        $repository  = m::mock('Zizaco\Confide\RepositoryInterface');
-        $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
 
-        $userModel->connection = 'db_name';
+        $passService->shouldAllowMockingProtectedMethods();
         $passService->app['db'] = $db;
-        $passService->app['confide.repository'] = $repository;
 
         /*
         |------------------------------------------------------------
         | Expectation
         |------------------------------------------------------------
         */
-        $repository->shouldReceive('model')
-            ->andReturn($userModel);
-
         $passService->shouldReceive('destroyToken')
             ->passthru();
+
+        $passService->shouldReceive('getConnection')
+            ->once()->andReturn('db_name');
 
         // Mocks DB in order to check for the following query:
         //     DB::connection('db_name')
@@ -207,7 +204,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //         ->where('token','=',$token)
         //         ->delete();
         $db->shouldReceive('connection')
-            ->once()->with($userModel->connection)
+            ->once()->with('db_name')
             ->andReturn( $db );
 
         $db->shouldReceive('table')
@@ -231,6 +228,45 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         */
         $this->assertTrue(
             $passService->destroyToken($token)
+        );
+    }
+
+    public function testShouldGetConnection()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $repository    = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService   = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $modelInstance = m::mock('Zizaco\Confide\ConfideUserInterface');
+
+        $passService->shouldAllowMockingProtectedMethods();
+        $passService->app['confide.repository'] = $repository;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('getConnection')
+            ->passthru();
+
+        $repository->shouldReceive('model')
+            ->once()->andReturn($modelInstance);
+
+        $modelInstance->shouldReceive('getConnectionName')
+            ->once()->andReturn('db_name');
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            'db_name',
+            $passService->getConnection()
         );
     }
 
