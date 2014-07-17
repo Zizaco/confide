@@ -109,8 +109,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $userEmail   = 'someone@somewhere.com';
-        $token       = '123456789';
+        $userEmail       = 'someone@somewhere.com';
+        $token           = '123456789';
+        $oldestValidDate = '2014-07-16 22:20:26';
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
         $db          = m::mock('connection');
         $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
@@ -128,6 +129,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 
         $passService->shouldReceive('getConnection')
             ->once()->andReturn('db_name');
+
+        $passService->shouldReceive('getOldestValidDate')
+            ->once()->andReturn($oldestValidDate);
 
         $passService->shouldReceive('unwrapEmail')
             ->once()->with(['email'=>$userEmail])
@@ -155,6 +159,11 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 
         $db->shouldReceive('where')
             ->with('token', '=', $token)
+            ->andReturn( $db )
+            ->once();
+
+        $db->shouldReceive('where')
+            ->with('created_at', '>=', $oldestValidDate)
             ->andReturn( $db )
             ->once();
 
@@ -391,5 +400,48 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $passService->sendEmail($user, $token);
+    }
+
+    public function testShouldGetOldestValidDate()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $oldestValidDate = '2014-07-16 22:20:26';
+        $carbon      = m::mock('Carbon\Carbon');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+
+        $passService->shouldAllowMockingProtectedMethods();
+        $passService->app['Carbon\Carbon'] = $carbon;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('getOldestValidDate')
+            ->passthru();
+
+        $carbon->shouldReceive('now')
+            ->once()->andReturn($carbon);
+
+        $carbon->shouldReceive('subHours')
+            ->once()->with(7)
+            ->andReturn($carbon);
+
+        $carbon->shouldReceive('toDateTimeString')
+            ->once()->andReturn($oldestValidDate);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            $oldestValidDate,
+            $passService->getOldestValidDate()
+        );
     }
 }

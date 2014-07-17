@@ -70,7 +70,9 @@ class EloquentPasswordService implements PasswordServiceInterface
         $email = $this->app['db']
             ->connection($connection)
             ->table('password_reminders')
-            ->select('email')->where('token','=',$token)
+            ->select('email')
+            ->where('token','=',$token)
+            ->where('created_at','>=',$this->getOldestValidDate())
             ->first();
 
         $email = $this->unwrapEmail($email);
@@ -140,8 +142,9 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
-     * Sends an email containing the reset password link with the given token to
-     * the user
+     * Sends an email containing the reset password link with the
+     * given token to the user
+     *
      * @param  RemindableInterface $user  An existent user
      * @param  string $token  Password reset token
      * @return void
@@ -156,5 +159,22 @@ class EloquentPasswordService implements PasswordServiceInterface
                 ->to($user->email, $user->username)
                 ->subject($lang->get('confide::confide.email.password_reset.subject'));
         });
+    }
+
+    /**
+     * Returns a date to limit the acceptable password reset
+     * requests.
+     *
+     * @return string 'Y-m-d H:i:s' formated string
+     */
+    protected function getOldestValidDate()
+    {
+        // Instantiate a carbon object (that is a dependency of
+        // 'illuminate/database')
+        $carbon = $this->app['Carbon\Carbon'];
+
+        return $carbon->now()
+            ->subHours(7)
+            ->toDateTimeString();
     }
 }
