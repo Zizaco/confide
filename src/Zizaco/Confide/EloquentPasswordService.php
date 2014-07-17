@@ -48,7 +48,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         );
 
         $this->app['db']
-            ->connection()
+            ->connection($user->connection)
             ->table('password_reminders')
             ->insert($values);
 
@@ -65,8 +65,11 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function getEmailByToken($token)
     {
+        $connection = $this->app['confide.repository']
+            ->model()->connection;
+
         $email = $this->app['db']
-            ->connection()
+            ->connection($connection)
             ->table('password_reminders')
             ->select('email')->where('token','=',$token)
             ->first();
