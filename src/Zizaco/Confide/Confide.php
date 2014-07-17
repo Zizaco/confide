@@ -230,6 +230,18 @@ class Confide
     }
 
     /**
+     * Delete the record of the given token from 'password_reminders'
+     * table.
+     *
+     * @param  string $token Token retrieved from a forgotPassword
+     * @return boolean Success
+     */
+    public function destroyForgotPasswordToken($token)
+    {
+        return $this->passService->destroyToken($token);
+    }
+
+    /**
      * Returns a user that corresponds to the given reset
      * password token or false if there is no user with the
      * given token.

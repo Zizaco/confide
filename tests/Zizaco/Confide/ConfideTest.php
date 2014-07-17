@@ -766,6 +766,45 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($confide->forgotPassword('wrong@somewhere.com'));
     }
 
+    public function testShouldDestroyForgotPasswordToken()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = [];
+        $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
+        $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
+        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
+
+        $confide = m::mock(
+            'Zizaco\Confide\Confide[destroyForgotPasswordToken]',
+            [$repo, $passService, $loginThrottler, $app]
+        );
+
+        $token = '123456789';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $confide->shouldReceive('destroyForgotPasswordToken')
+            ->passthru();
+
+        $passService->shouldReceive('destroyToken')
+            ->once()->with($token)
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($confide->destroyForgotPasswordToken($token));
+    }
+
     public function testShouldGetUserByPasswordResetToken()
     {
         /*

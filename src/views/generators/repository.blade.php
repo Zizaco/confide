@@ -98,6 +98,10 @@ class UserRepository
             $result = $this->save($user);
         }
 
+        // If result is positive, destroy token
+        if ($result)
+            Confide::destroyForgotPasswordToken($input['token']);
+
         return $result;
     }
 
