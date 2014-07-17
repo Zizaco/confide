@@ -109,7 +109,11 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator->shouldReceive('attachErrorMsg')
             ->atLeast(1)
-            ->with(m::any(), 'validation.confirmed::confide.alerts.wrong_password_reset');
+            ->with(
+                m::any(),
+                'validation.confirmed::confide.alerts.wrong_confirmation',
+                'password_confirmation'
+            );
 
         /*
         |------------------------------------------------------------
@@ -260,14 +264,14 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($errorBag, $userB->errors);
     }
 
-    public function testShouldAttachErrorMsg()
+    public function testShouldAttachErrorMsgOnEmpty()
     {
         /*
         |------------------------------------------------------------
         | Set
         |------------------------------------------------------------
         */
-        $errorBag = m::mock('ErrorBag');
+        $errorBag = m::mock('Illuminate\Support\MessageBag');
 
         App::shouldReceive('make')
             ->with('Illuminate\Support\MessageBag')
@@ -275,6 +279,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator = new UserValidator;
         $user = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $user->errors = null;
 
         /*
         |------------------------------------------------------------
@@ -286,7 +291,8 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->andReturn('translated_foobar');
 
         $errorBag->shouldReceive('add')
-            ->with('confide', 'translated_foobar');
+            ->with('confide', 'translated_foobar')
+            ->andReturn(true);
 
         /*
         |------------------------------------------------------------
@@ -294,5 +300,45 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $validator->attachErrorMsg($user, 'foobar');
+        $this->assertInstanceOf('Illuminate\Support\MessageBag', $user->errors);
+    }
+
+    public function testShouldAttachErrorMsgOnExisting()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $errorBag = m::mock('Illuminate\Support\MessageBag');
+
+        App::shouldReceive('make')
+            ->with('Illuminate\Support\MessageBag')
+            ->never();
+
+        $validator = new UserValidator;
+        $user = m::mock('Zizaco\Confide\ConfideUserInterface');
+        $user->errors = $errorBag;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        Lang::shouldReceive('get')
+            ->once()->with('foobar')
+            ->andReturn('translated_foobar');
+
+        $errorBag->shouldReceive('add')
+            ->with('confide', 'translated_foobar')
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $validator->attachErrorMsg($user, 'foobar');
+        $this->assertInstanceOf('Illuminate\Support\MessageBag', $user->errors);
     }
 }

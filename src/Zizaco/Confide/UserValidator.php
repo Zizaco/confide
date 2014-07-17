@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
+use Illuminate\Support\MessageBag;
 
 /**
  * This is the default validator used by ConfideUser. You may overwrite this
@@ -90,7 +91,11 @@ class UserValidator implements UserValidatorInterface {
 
                 return true;
             } else {
-                $this->attachErrorMsg($user, 'validation.confirmed::confide.alerts.wrong_password_reset');
+                $this->attachErrorMsg(
+                    $user,
+                    'validation.confirmed::confide.alerts.wrong_confirmation',
+                    'password_confirmation'
+                );
                 return false;
             }
         }
@@ -118,7 +123,9 @@ class UserValidator implements UserValidatorInterface {
             return true;
         }
 
-        $this->attachErrorMsg($user, 'confide::confide.alerts.duplicated_credentials');
+        $this->attachErrorMsg(
+            $user, 'confide::confide.alerts.duplicated_credentials'
+        );
         return false;
     }
 
@@ -154,13 +161,19 @@ class UserValidator implements UserValidatorInterface {
      * Creates a \Illuminate\Support\MessageBag object, add the error message
      * to it and then set the errors attribute of the user with that bag
      * @param  ConfideUserInterface $user
-     * @param  string  $errorMsg The error messgae
+     * @param  string  $errorMsg The error message
+     * @param  string  $key The key if the error message
      * @return void
      */
-    public function attachErrorMsg(ConfideUserInterface $user, $errorMsg)
+    public function attachErrorMsg(ConfideUserInterface $user, $errorMsg, $key = 'confide')
     {
-        $messageBag = App::make('Illuminate\Support\MessageBag');
-        $messageBag->add('confide', Lang::get($errorMsg));
+        $messageBag = $user->errors;
+
+        if (! $messageBag instanceof MessageBag) {
+            $messageBag = App::make('Illuminate\Support\MessageBag');
+        }
+
+        $messageBag->add($key, Lang::get($errorMsg));
         $user->errors = $messageBag;
     }
 }
