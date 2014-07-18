@@ -82,6 +82,7 @@ Set the properly values to the `config/auth.php`. This values will be used by co
 
 Set the `address` and `name` from the `from` array in `config/mail.php`. Those will be used to send account confirmation and password reset emails to the users.
 
+<a name="user-model"></a>
 ### User model
 
 Now generate the Confide migration and the reminder password table migration:
@@ -263,6 +264,10 @@ Finally, it'll auto redirect if your controller's users/login function uses Redi
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
 
 ## Troubleshooting
+
+__[2014-07-18 01:13:15] production.ERROR: exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'password_confirmation' in 'field list' (SQL: insert into \`users\` ...__
+
+The `password_confirmation` attribute should be removed from the object before being sent to the database. Make sure your user model implement the `ConfideUserInterface` and that it use the `ConfideUser` trait [as described above](#user-model). Otherwise if you are using a custom validator, you will have to unset `password_confirmation` before saving the user.
 
 __I receive a "Your account may not be confirmed" when trying to login__
 
