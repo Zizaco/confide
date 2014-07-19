@@ -162,7 +162,7 @@ First, publish the config files:
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
-#### Update an User
+#### Update a User
 
 To update an user already in the database you'll Need to make sure your ruleset is using the unique validator within the User model.
 
