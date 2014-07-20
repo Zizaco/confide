@@ -10,6 +10,12 @@
          stopOnFailure="false"
          syntaxCheck="false"
 >
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/Zizaco</directory>
+            <directory suffix=".php">./src/commands</directory>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="Package Test Suite">
             <directory>./tests/</directory>

@@ -1,11 +1,18 @@
-# Confide (Laravel4 Package)
+# Confide _(A Laravel4 Package)_
 
 ![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
 
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
+[![Coverage Status](https://coveralls.io/repos/Zizaco/confide/badge.png?branch=master)](https://coveralls.io/r/Zizaco/confide?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Zizaco/confide/badges/quality-score.png)](https://scrutinizer-ci.com/g/Zizaco/confide/)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
+[![Latest Stable Version](https://poser.pugx.org/zizaco/confide/v/stable.png)](https://packagist.org/packages/zizaco/confide)
+[![Total Downloads](https://poser.pugx.org/zizaco/confide/downloads.png)](https://packagist.org/packages/zizaco/confide)
+[![License](https://poser.pugx.org/zizaco/confide/license.png)](http://opensource.org/licenses/MIT)
 
-Confide is a authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e/small.png)](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e)
+
+Confide is an authentication solution for **Laravel4** made to eliminate repetitive tasks involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
 
@@ -17,11 +24,11 @@ Confide aims to be simple to use, quick to configure and flexible.
 - Account confirmation (through confirmation link).
 - Password reset (sending email with a change password link).
 - Easily render forms for login, signup and password reset.
-- Generate customizable routes for login, signup, password reset, confirmation, etc.
+- Generate routes for login, signup, password reset, confirmation, etc.
 - Generate a customizable controller that handles the basic user account actions.
-- Contains a set of methods to help basic user features.
-- Integrated with the Laravel Auth component/configs.
-- Field/model validation (Powered by [Ardent](http://laravelbook.github.com/ardent "Ardent")).
+- Contains a set of methods to help with basic user features.
+- Integrated with the Laravel _Auth_ and _Reminders_ component/configs.
+- User validation.
 - Login throttling.
 - Redirecting to previous route after authentication.
 - Checks for unique email and username in signup
@@ -30,15 +37,10 @@ If you are looking for user roles and permissions see [Entrust](https://github.c
 
 For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
 
-**Planned:**
-- Captcha in user signup and password reset.
-
-**Warning:**
-
-By default a confirmation email is sent and users are required to confirm the email address.
+**Warning:** _By default a confirmation email is sent and users are required to confirm the email address.
 It is easy to change this in the confide config file.
-Change signup_email and signup_confirm to false if you do not want to send them an email and they do not need
-to be confirmed to be able to login to the website.
+Change `signup_email` and `signup_confirm` to false if you do not want to send them an email and they do not need
+to be confirmed to be able to login to the website._
 
 ## Quick start
 
@@ -46,31 +48,31 @@ to be confirmed to be able to login to the website.
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "3.2.x"
+    "zizaco/confide": "~4.0"
 
 Run the Composer update comand
 
     $ composer update
 
-In your `config/app.php` add `'Zizaco\Confide\ConfideServiceProvider'` to the end of the `$providers` array
+In your `config/app.php` add `'Zizaco\Confide\ServiceProvider'` to the end of the `providers` array
 
     'providers' => array(
 
         'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         ...
-        'Zizaco\Confide\ConfideServiceProvider',
+        'Zizaco\Confide\ServiceProvider',
 
     ),
 
-At the end of `config/app.php` add `'Confide'    => 'Zizaco\Confide\ConfideFacade'` to the `$aliases` array
+At the end of `config/app.php` add `'Confide' => 'Zizaco\Confide\Facade'` to the `aliases` array
 
     'aliases' => array(
 
         'App'        => 'Illuminate\Support\Facades\App',
         'Artisan'    => 'Illuminate\Support\Facades\Artisan',
         ...
-        'Confide'    => 'Zizaco\Confide\ConfideFacade',
+        'Confide'    => 'Zizaco\Confide\Facade',
 
     ),
 
@@ -80,6 +82,7 @@ Set the properly values to the `config/auth.php`. This values will be used by co
 
 Set the `address` and `name` from the `from` array in `config/mail.php`. Those will be used to send account confirmation and password reset emails to the users.
 
+<a name="user-model"></a>
 ### User model
 
 Now generate the Confide migration and the reminder password table migration:
@@ -90,23 +93,24 @@ It will generate the `<timestamp>_confide_setup_users_table.php` migration. You 
 
     $ php artisan migrate
 
-It will setup a table containing `email`, `password`, `confirmation_code` and `confirmed` fields, which are the default fields needed for Confide use. Feel free to add more fields to the database.
+It will setup a table containing `email`, `password`, `remember_token`, `confirmation_code` and `confirmed` columns, which are the default fields needed for Confide use. Feel free to add more columns to the table later.
 
 Change your User model in `app/models/User.php` to:
 
     <?php
 
     use Zizaco\Confide\ConfideUser;
+    use Zizaco\Confide\ConfideUserInterface;
 
-    class User extends ConfideUser {
-
+    class User extends Eloquent implements ConfideUserInterface {
+        use ConfideUser;
     }
 
-`ConfideUser` class will take care of some behaviors of the user model.
+`ConfideUser` trait will take care of some behaviors of the user model.
 
 ### Dump the default accessors
 
-Lastly, you can dump a default controller and the default routes for Confide.
+Lastly, you can dump a default controller, repository and the default routes for Confide.
 
     $ php artisan confide:controller
     $ php artisan confide:routes
@@ -115,44 +119,55 @@ Don't forget to dump composer autoload
 
     $ composer dump-autoload
 
-**And you are ready to go.**
-Access `http://yourapp/user/create` to create your first user. Check the `app/routes.php` to see the available routes.
+**And you are ready to go.** Access `http://yourapp/users/create` to create your first user. Check the `app/routes.php` to see the available routes. **You may need to confirm a newly created user** _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_.
+
 
 ## Usage in detail
 
 **Basic setup:**
 
 1. Database connection in `config/database.php` running properly.
-2. Correct model and table names in `config/auth.php`. They will be used by Confide all the time.
+2. Correct model and table names in `config/auth.php`. They will be used by Confide all the time _(specially when generating migrations and controllers)_.
 3. `from` configuration in `config/mail.php`.
 
 **Configuration:**
 
-1. `ConfideServiceProvider` and `ConfideFacade` entry in `config/app.php` `'providers'` and `'aliases'` respectively.
-2. User model (with the same name as in `config/auth.php`) should extend `ConfideUser` class. This will cause to methods like `resetPassword()`, `confirm()` and a overloaded `save()` to be available.
+1. `'Zizaco\Confide\ServiceProvider'` and `'Confide' => 'Zizaco\Confide\Facade'` entry in `config/app.php` `'providers'` and `'aliases'` respectively.
+2. User model (with the same name as in `config/auth.php`) should implement `Zizaco\Confide\ConfideUserInterface` interface. This will cause to methods like `forgotPassword()` and `confirm()` to be available.
 
 **Optional steps:**
 
-1. Use `Confide` facade to dump login and signup forms easly with `makeLoginForm()` and `makeSignupForm()`. You can render the forms within your views by doing `{{ Confide::makeLoginForm()->render() }}`.
-2. Generate a controller with the template contained in Confide throught the artisan command `$ php artisan confide:controller`. If a controller with the same name exists it will **NOT** be overwritten.
-3. Generate routes matching the controller template throught the artisan command `$ php artisan confide:routes`. Your `routes.php` will **NOT** be overwritten.
+1. Optionally you can use the trait `Zizaco\Confide\ConfideUser` in your user model. This will save a lot of time and will use "confide's default" implementation for the user. If you wish more customization you can write your own code.
+2. Use `Confide` facade to dump login and signup forms easly with `makeLoginForm()` and `makeSignupForm()`. You can render the forms within your views by doing `{{ Confide::makeLoginForm()->render() }}`.
+3. Generate a **controller** and a **repository** with the template contained in Confide throught the artisan command `$ php artisan confide:controller`. If a controller with the same name exists it will **NOT** be overwritten.
+4. Generate routes matching the controller template throught the artisan command `$ php artisan confide:routes`. Don't worry, your `routes.php` will **NOT** be overwritten.
 
 ### Advanced
 
-#### Using custom table / model name
+#### The `UserRepository` class
 
-You can change the model name that will be authenticated in the `config/auth.php` file.
+You may have noticed that when generating the controller a `UserRepository` class has also been created. This class contains some code that doesn't belong to the "controller" purpose and will make your users controller a cleaner and more testable class. If you still have no idea why that class exists I recommend you to google _"Creating flexible Controllers in Laravel 4 using Repositories"_. _(wink)_
+
+#### Using custom class, table or model name
+
+You can change the model name that will be considered the user in the `config/auth.php` file.
 Confide uses the values present in that configuration file.
 
 To change the controller name when dumping the default controller template you can use the --name option.
 
-    $ php artisan confide:controller --name Employee
+    $ php artisan confide:controller --name=Employee
 
 Will result in `EmployeeController`
 
 Then, when dumping the routes, you should use the --controller option to match the existing controller.
 
-    $ php artisan confide:routes --controller Employee
+    $ php artisan confide:routes --controller=Employee
+
+You can also generate controllers with namespace
+
+    $ php artisan confide:controller --name=MyProject\\Auth\\User
+
+**Warning:** In bash, you will need to use double '\\\\' backslashes. This will result in `MyProject\Auth\UserController`. Also the generated file will be inside a directory equivalent to the namespace. _(wink)_
 
 #### Using custom form or emails
 
@@ -162,86 +177,44 @@ First, publish the config files:
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
-#### Update a User
+#### Custom user validation
 
-To update an user already in the database you'll Need to make sure your ruleset is using the unique validator within the User model.
+You can implement your own validator by creating a class that implements the `UserValidatorInterface` and registering that class as *"confide.user_validator"*.
 
-    <?php
+For example, create your custom validator class:
 
-    use Zizaco\Confide\ConfideUser;
 
-    class User extends ConfideUser {
-    
-    public static $rules = array(
-        'username' => 'unique:users,username',
-        'email' => 'email'
-    );
-    
-    ?>
+    // app/models/MyOwnValidator.php
+    class MyOwnValidator implements UserValidatorInterface {
 
-    <?php 
-    
-    class UserController extends Controller {
-    
-        public function postCreate() {
-    
-            // In real usage you'll need to find the user that is being modified.
-            // 1 is set just as an example.
-            $user = User::find(1);
-        
-            // Update a user attribute from a form.
-            // Using email as an example.
-            $user->email = Input::get('email'); 
-        
-            // Save
-            // This was previously update, but Ardent changed.
-            $user->updateUniques(); 
-      
+        public function validate(ConfideUserInterface $user)
+        {
+            unset($user->password_confirmation);
+            return true; // If the user valid
         }
     }
-    
-    ?>
-    
-This will allow you to update the current user.
 
-#### Validate model fields
+Then register it in IoC container as *"confide.user_validator"*
 
-To change the validation rules of the User model you can take a look at [Ardent](http://laravelbook.github.com/ardent/#validation "Ardent Validation Rulez"). For example:
+    // app/start/global.php
+    ...
+    App::bind('confide.user_validator', 'MyOwnValidator');
 
-    <?php
+Also, don't forget that your validator should unset the 'password_confirmation' attribute of the user before saving it.
 
-    use Zizaco\Confide\ConfideUser;
+#### Passing additional information to the "make" methods
 
-    class User extends ConfideUser {
-
-        /**
-         * Validation rules
-         */
-        public static $rules = array(
-            'email' => 'required|email',
-            'password' => 'required|between:4,11|confirmed',
-        );
-
-    }
-
-Feel free to add more fields to your table and to the validation array. Then you should build your own sign-up form with the additional fields.
-
-NOTE: If you add fields to your validation rules into your model like above, do not forget you have to add those fields to the UserController store function also. If you forget this, the form will always return with an error.
-Example: $user->terms = Input::get('terms');
-
-#### Passing additional information to the make methods
-
-If you want to pass additional parameters to the forms, you can use an alternate syntax to achieve this. 
+If you want to pass additional parameters to the forms being rendered, you can use an alternate syntax to achieve this.
 
 Instead of using the make method:
-    
+
     Confide::makeResetPasswordForm( $token ):
 
 You would use:
 
     View::make(Config::get('confide::reset_password_form'))
         ->with('token', $token);
-        
+
 It produces the same output, but you would be able to add more inputs using 'with' just like any other view.
 
 #### RESTful controller
@@ -255,70 +228,93 @@ Will result in a [RESTful controller](https://github.com/laravel/docs/blob/maste
 Then, when dumping the routes, you should use the --restful option to match the existing controller.
 
     $ php artisan confide:routes --restful
-    
+
 #### User roles and permissions
 
-In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
+In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). Enstrust couples very well with Confide.
 
 See [Entrust](https://github.com/Zizaco/entrust)
 
 #### Redirecting to previous route after login
 
-When defining your filter you should use the Redirect::guest('user/login') within your auth filter. For example:
+When defining your filter you should use the Redirect::guest('users/login') within your auth filter. For example:
 
     // filters.php
 
-    Route::filter('auth', function()
-    {
-        if ( Auth::guest() ) // If the user is not logged in
-        {
-            return Redirect::guest('user/login');
+    Route::filter('auth', function() {
+         // If the user is not logged in
+        if (Auth::guest()) {
+            return Redirect::guest('users/login');
         }
     });
 
     // Only authenticated users will be able to access routes that begins with
     // 'admin'. Ex: 'admin/posts', 'admin/categories'.
-    Route::when('admin*', 'auth'); 
+    Route::when('admin*', 'auth');
 
 or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
     // filters.php
 
     Entrust::routeNeedsRole( 'admin*', 'Admin', function(){
-            return Redirect::guest('user/login');
+            return Redirect::guest('users/login');
     } );
 
-Finally, it'll auto redirect if your controller's user/login function uses Redirect:intended('a/default/url/here') after a successful login.
+Finally, it'll auto redirect if your controller's users/login function uses Redirect:intended('a/default/url/here') after a successful login.
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
-    
-#### Validating a route
-
-If you want to validate whether a route exists, the `Confide::checkAction` function is what you are looking for.
-
-Currently it is used within the views to determine Non-RESTful vs RESTful routes.
 
 ## Troubleshooting
 
-__[Exception] SQLSTATE[HY000]: General error: 1364 Field 'confirmation_code' doesn't have a default value...__
+__[2014-07-18 01:13:15] production.ERROR: exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42S22]: Column not found: 1054 Unknown column 'password_confirmation' in 'field list' (SQL: insert into \`users\` ...__
 
-If you overwrite the `beforeSave()` method in your model, make sure to call `parent::beforeSave()`:
+The `password_confirmation` attribute should be removed from the object before being sent to the database. Make sure your user model implement the `ConfideUserInterface` and that it use the `ConfideUser` trait [as described above](#user-model). Otherwise if you are using a custom validator, you will have to unset `password_confirmation` before saving the user.
 
-    public function beforeSave( $forced = false ){
+__I receive a "Your account may not be confirmed" when trying to login__
 
-        parent::beforeSave( $forced) // Don't forget this
+You need to confirm a newly created user _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_. You can easly confirm an user manually using Laravel's `artisan tinker` tool.
 
-        // Your stuff
-    }
+__I'm not able to generate a controller with namespaces__
 
-__Confirmation link is not sent when user signup__
+In bash, you will need to use double '\\\\' backslashes. Also the generated file will be inside a directory equivalent to the namespace:
 
-Same as above. If you overwrite the `afterSave()` method in your model, make sure to call `parent::afterSave()`:
+    $ php artisan confide:controller --name=MyProject\\Auth\\User
 
 __Users are able to login without confirming account__
 
 If you want only confirmed users to login, in your `UserController`, instead of simply calling `logAttempt( $input )`, call `logAttempt( $input, true )`. The second parameter stands for _"confirmed_only"_.
 
+__My application is crashing since I ran composer update__
+
+*Confide 4.0.0* was a huge update where all the codebase has been rewritten. Some classes changed, the generators has been improved in order to match some better practices (like repositories and separated validator classes). See the _Release Notes_ bellow.
+
+If you have a legacy project that uses an older version of Confide, don't worry. You will be always able to specify a previous version in your `composer.json` file.
+
+For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0 but will be able to download bugfixes of version 3.2.
+
 ## Release Notes
+
+### Version 4.0.0 Beta 3
+* Now you can customize how long will take for a password reset request to expire (default to 7 hours).
+* Reordered validations
+* Now all validations are called even if one of them fails. So all validation messages are sent at once.
+* `validateIsUnique` method now sends key to attachErrorMsg and also check for errors on each `$identity` field at once
+
+### Version 4.0.0 Beta 2
+* UserValidator now adds errors to an existing MessageBag instead of replacing it.
+* Password reset token will expire after 7 days.
+* Added support for custom connections using the $connection attribute of the model.
+* Password reset requests are deleted after being used.
+
+### Version 4.0.0 Beta 1
+* Dropped Ardent dependency.
+* Updated to support Laravel 4.2
+* Dropped support for PHP 5.3
+* ConfideUser is going to be a trait+interface from now on.
+* Controller generation now also generates an UserRepository class.
+* Removed deprecated variables, functions and classes.
+* All the codebase has been rewritten.
+
+__Upgrade note:__ A partial update from previous versions is not recommended. In order to upgrade from v3.* to v4.0.0 the best approach is to update the class names in the providers and aliases array, re-generate the user table with the new migration, re-write the "user" class and finally re-generate the controllers. It's very likely any customization made in your codebase will be affected.
 
 ### Version 3.0.0
 Updated to support Laravel 4.1

@@ -1,6 +1,12 @@
 <?php namespace Zizaco\Confide;
 
-class ConfideFacade extends \Illuminate\Support\Facades\Facade {
+use Illuminate\Support\Facades\Facade as IlluminateFacade;
+
+/**
+ * @see \Zizaco\Confide\Facade
+ * @package  Zizaco\Confide
+ */
+class Facade extends IlluminateFacade {
 
     /**
      * Get the registered name of the component.

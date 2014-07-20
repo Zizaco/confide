@@ -1,52 +1,69 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\View\Environment;
-use Illuminate\Config\Repository;
-use InvalidArgumentException;
-use Zizaco\Confide\ObjectProvider;
-
+/**
+ * This class is the main entry point to use the confide
+ * services. Usually this is the only service class that the
+ * application will interact directly with.
+ *
+ * @license MIT
+ * @package  Zizaco\Confide
+ */
 class Confide
 {
     /**
      * Laravel application
-     * 
-     * @var Illuminate\Foundation\Application
+     *
+     * @var \Illuminate\Foundation\Application
      */
     public $app;
 
     /**
      * Confide repository instance
-     * 
-     * @var Zizaco\Confide\ConfideRepository
+     *
+     * @var \Zizaco\Confide\RepositoryInterface
      */
     public $repo;
 
     /**
-     * Create a new confide instance.
+     * Confide password service instance
      *
-     * @param  ConfideRepository $repo A "repository" to abstract all the database interaction.
-     * @return void
+     * @var \Zizaco\Confide\PasswordServiceInterface
      */
-    public function __construct(ConfideRepository $repo)
-    {
-        $this->repo = $repo;
-        $this->app = app();
-    }
+    public $passService;
 
     /**
-     * Returns the Laravel application
-     * 
-     * @return Illuminate\Foundation\Application
+     * Confide login throttling service instance
+     *
+     * @var \Zizaco\Confide\LoginThrottleServiceInterface
      */
-    public function app()
+    public $loginThrottler;
+
+    /**
+     * Create a new Confide class
+     *
+     * @param  \Zizaco\Confide\RepositoryInterface           $repo
+     * @param  \Zizaco\Confide\PasswordServiceInterface      $passService
+     * @param  \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
+     * @param  \Illuminate\Foundation\Application     $app Laravel application object
+     * @return void
+     */
+    public function __construct(
+        RepositoryInterface       $repo,
+        PasswordServiceInterface  $passService,
+        LoginThrottleServiceInterface $loginThrottler,
+        $app = null
+    )
     {
-        return $this->app;
+        $this->repo           = $repo;
+        $this->passService    = $passService;
+        $this->loginThrottler = $loginThrottler;
+        $this->app            = $app ?: app();
     }
 
     /**
      * Returns an object of the model set in auth config
      *
-     * @return object
+     * @return mixed
      */
     public function model()
     {
@@ -56,7 +73,7 @@ class Confide
     /**
      * Get the currently authenticated user or null.
      *
-     * @return Zizaco\Confide\ConfideUser|null
+     * @return \Zizaco\Confide\ConfideUserInterface|null
      */
     public function user()
     {
@@ -64,148 +81,182 @@ class Confide
     }
 
     /**
-     * Set the user confirmation to true.
+     * Sets the 'confirmed' field of the user with the
+     * matching code to true.
      *
      * @param string $code
-     * @return bool
+     * @return bool Success
      */
-    public function confirm( $code )
+    public function confirm($code)
     {
-        return $this->repo->confirm( $code );
+        return $this->repo->confirmByCode($code);
+    }
+
+    /**
+     * Checks if a user with the given identity (email or username) already
+     * exists and retrieve it
+     *
+     * @param  array $identity Array containing at least 'username' or 'email'.
+     * @return \Zizaco\Confide\ConfideUserInterface|null
+     */
+    public function getUserByEmailOrUsername($identity)
+    {
+        if (is_array($identity))
+            $identity = $this->extractIdentityFromArray($identity);
+
+        return $this->repo->getUserByEmailOrUsername($identity);
     }
 
     /**
      * Attempt to log a user into the application with
      * password and identity field(s), usually email or username.
      *
-     * @param  array $credentials
-     * @param  bool $confirmed_only
-     * @param  mixed $identity_columns
+     * @param  array $input Array containing at least 'username' or 'email' and 'password'. Optionally the 'remember' boolean.
+     * @param  bool $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
      * @return boolean Success
      */
-    public function logAttempt( $credentials, $confirmed_only = false, $identity_columns = array() )
+    public function logAttempt($input, $mustBeConfirmed = true)
     {
-        // If identity columns is not provided, use all columns of credentials
-        // except password and remember.
-        if(empty($identity_columns))
-        {
-            $identity_columns = array_diff(
-                array_keys($credentials),
-                array('password','remember')
+        $remember = $this->extractRememberFromArray($input);
+        $emailOrUsername = $this->extractIdentityFromArray($input);
+
+        if (!$this->loginThrottling($emailOrUsername))
+            return false;
+
+        $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
+
+        if ($user) {
+            if (! $user->confirmed && $mustBeConfirmed )
+                return false;
+
+            $correctPassword = $this->app['hash']->check(
+                isset($input['password']) ? $input['password'] : false,
+                $user->password
             );
+
+            if (! $correctPassword)
+                return false;
+
+            $this->app['auth']->login($user, $remember);
+            return true;
         }
-
-        // Check for throttle limit then log-in
-        if(! $this->reachedThrottleLimit( $credentials ) )
-        {
-            $user = $this->repo->getUserByIdentity($credentials, $identity_columns);
-
-            if(
-                $user &&
-                ($user->confirmed || ! $confirmed_only ) &&
-                $this->app['hash']->check(
-                    $credentials['password'],
-                    $user->password
-                )
-            )
-            {
-                $remember = isset($credentials['remember']) ? $credentials['remember'] : false;
-
-                $this->app['auth']->login( $user, $remember );
-                return true;
-            }
-        }
-
-        $this->throttleCount( $credentials );
 
         return false;
     }
 
     /**
-     * Checks if the credentials has been throttled by too
-     * much failed login attempts
-     * 
-     * @param array $credentials
-     * @return mixed Value.
+     * Extracts the value of the remember key of the given
+     * array
+     * @param  array $input An array containing the key 'remember'
+     * @return boolean
      */
-    public function isThrottled( $credentials )
+    protected function extractRememberFromArray($input)
     {
-        // Check how many failed tries have been done
-        $attempt_key = $this->attemptCacheKey( $credentials );
-        $attempts = $this->app['cache']->get($attempt_key, 0);
-
-        if( $attempts >= $this->app['config']->get('confide::throttle_limit') )
-        {
-            return true;
-        }
-        else
-        {
+        if (isset($input['remember'])) {
+            return $input['remember'];
+        } else {
             return false;
         }
     }
 
     /**
-     * Send email with information about password reset
+     * Extracts the email or the username key of the given
+     * array
+     * @param  array $input An array containing the key 'email' or 'username'
+     * @return mixed
+     */
+    protected function extractIdentityFromArray($input)
+    {
+        if (isset($input['email'])) {
+            return $input['email'];
+        } elseif (isset($input['username'])) {
+            return $input['username'];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Calls throttleIdentity of the loginThrottler and returns false
+     * if the throttleCount is grater then the 'throttle_limit' config.
+     * Also sleeps a little in order to avoid dicionary attacks.
+     * @param  mixed $identity
+     * @return boolean False if the identity has reached the 'throttle_limit'
+     */
+    protected function loginThrottling($identity)
+    {
+        $count = $this->loginThrottler
+            ->throttleIdentity($identity);
+
+        if ($count >= $this->app['config']->get('confide::throttle_limit'))
+            return false;
+
+        // Throttling delay!
+        // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
+        if($count > 2)
+            usleep(($count-1) * 400000);
+
+        return true;
+    }
+
+    /**
+     * Asks the loginThrottler service if the given identity has reached the
+     * throttle_limit
+     * @param  mixed $identity The login identity
+     * @return boolean True if the identity has reached the throttle_limit
+     */
+    public function isThrottled($identity)
+    {
+        return $this->loginThrottler->isThrottled($identity);
+    }
+
+    /**
+     * If an user with the given email exists then generate
+     * a token for password change and saves it in the
+     * 'password_reminders' table with the email of the
+     * user.
      *
      * @param string  $email
-     * @return bool
+     * @return string $token
      */
-    public function forgotPassword( $email )
+    public function forgotPassword($email)
     {
-        $user = $this->repo->getUserByMail( $email );
-        if( $user )
-        {
-            $user->forgotPassword();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        $user = $this->repo->getUserByEmail($email);
+
+        if ($user)
+            return $this->passService->requestChangePassword($user);
+
+        return false;
     }
 
     /**
-     * Checks to see if the user has a valid token.
-     * 
-     * @param $token
-     * @return bool
-     */
-    public function isValidToken( $token )
-    {
-        $count = $this->repo->getPasswordRemindersCount( $token );
-
-        return ($count != 0);
-    }
-
-    /**
-     * Change user password
+     * Delete the record of the given token from 'password_reminders'
+     * table.
      *
-     * @return string
+     * @param  string $token Token retrieved from a forgotPassword
+     * @return boolean Success
      */
-    public function resetPassword( $params )
+    public function destroyForgotPasswordToken($token)
     {
-        $token = array_get($params, 'token', '');
-        $email = $this->repo->getEmailByReminderToken( $token );
-        $user = $this->repo->getUserByMail( $email );
+        return $this->passService->destroyToken($token);
+    }
 
-        if( $user )
-        {
-            if($user->resetPassword( $params ))
-            {
-                // Password reset success, remove token from database
-                $this->repo->deleteEmailByReminderToken( $token );
+    /**
+     * Returns a user that corresponds to the given reset
+     * password token or false if there is no user with the
+     * given token.
+     * @param  string $token
+     * @return ConfideUser
+     */
+    public function userByResetPasswordToken($token)
+    {
+        $email = $this->passService->getEmailByToken($token);
 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        if ($email) {
+            return $this->repo->getUserByEmail($email);
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /**
@@ -215,110 +266,59 @@ class Confide
      */
     public function logout()
     {
-        $this->app['auth']->logout();
+        return $this->app['auth']->logout();
     }
 
     /**
      * Display the default login view
      *
-     * @deprecated
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeLoginForm()
     {
-        return $this->app['view']->make($this->app['config']->get('confide::login_form'));
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::login_form')
+            );
     }
 
     /**
      * Display the default signup view
      *
-     * @deprecated
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeSignupForm()
     {
-        return $this->app['view']->make( $this->app['config']->get('confide::signup_form') );
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::signup_form')
+            );
     }
 
     /**
      * Display the forget password view
      *
-     * @deprecated
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app['view']->make( $this->app['config']->get('confide::forgot_password_form') );
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::forgot_password_form')
+            );
     }
 
     /**
      * Display the forget password view
      *
-     * @deprecated
-     * @return Illuminate\View\View
+     * @return \Illuminate\View\View
      */
     public function makeResetPasswordForm( $token )
     {
-        return $this->app['view']->make( $this->app['config']->get('confide::reset_password_form') , array('token'=>$token));
-    }
-
-    /**
-     * Check whether the controller's action exists.
-     * Returns the url if it does. Otherwise false.
-     * @param $controllerAction
-     * @return string
-     */
-    public function checkAction( $action, $parameters = array(), $absolute = true )
-    {
-        try {
-            $url = $this->app['url']->action($action, $parameters, $absolute);
-        } catch( InvalidArgumentException $e ) {
-            return false;
-        }
-
-        return $url;
-    }
-
-    /**
-     * Returns the name of the cache key that will be used
-     * to store the failed attempts
-     *
-     * @param array $credentials.
-     * @return string.
-     */
-    protected function attemptCacheKey( $credentials )
-    {
-        return 'confide_flogin_attempt_'
-            .$this->app['request']->server('REMOTE_ADDR')
-            .$credentials[$this->app['config']->get('confide::login_cache_field')];
-    }
-
-    /**
-     * Checks if the current IP / email has reached the throttle
-     * limit
-     * 
-     * @param array $credentials
-     * @return bool Value.
-     */
-    protected function reachedThrottleLimit( $credentials )
-    {
-        $attempt_key = $this->attemptCacheKey( $credentials );
-        $attempts = $this->app['cache']->get($attempt_key, 0);
-
-        return $attempts >= $this->app['config']->get('confide::throttle_limit');
-    }
-
-    /**
-     * Increment IP / email throttle count
-     * 
-     * @param array $credentials
-     * @return void
-     */
-    protected function throttleCount( $credentials )
-    {
-        $attempt_key = $this->attemptCacheKey( $credentials );
-        $attempts = $this->app['cache']->get($attempt_key, 0);
-
-        $this->app['cache']->put($attempt_key, $attempts+1, $this->app['config']->get('confide::throttle_time_period')); // used throttling login attempts
+        return $this->app['view']
+            ->make(
+                $this->app['config']->get('confide::reset_password_form'),
+                array('token'=>$token)
+            );
     }
 }

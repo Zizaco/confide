@@ -1,11 +1,18 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Console\Command;
+use Zizaco\Confide\Support\GenerateCommand;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
-class RoutesCommand extends Command {
-
+/**
+ * This command dumps some routes at the end of the routes.php
+ * file in order to make the actions of the controller generated
+ * by the ControllerCommand reachable.
+ *
+ * @license MIT
+ * @package  Zizaco\Confide
+ */
+class RoutesCommand extends GenerateCommand
+{
     /**
      * The console command name.
      *
@@ -21,15 +28,16 @@ class RoutesCommand extends Command {
     protected $description = 'Append the default Confide controller routes to the routes.php';
 
     /**
-     * Create a new command instance.
+     * Get the console command options.
      *
-     * @return void
+     * @return array
      */
-    public function __construct()
+    protected function getOptions()
     {
-        parent::__construct();
-        $app = app();
-        $app['view']->addNamespace('confide',substr(__DIR__,0,-8).'views');
+        return array(
+            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'UsersController'),
+            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
+        );
     }
 
     /**
@@ -39,120 +47,52 @@ class RoutesCommand extends Command {
      */
     public function fire()
     {
-        $name = $this->prepareName($this->option('controller'));
+        // Prepare variables
+        $controllerName = $this->option('controller');
         $restful = $this->option('restful');
 
+        $url = 'users';
+
+        $viewVars = compact(
+            'controllerName',
+            'url',
+            'restful'
+        );
+
+        // Prompt
         $this->line('');
         $this->info( "Routes file: app/routes.php" );
 
-        if(! $restful)
-        {
-            $message = "The default Confide routes (to use with the Controller template)".
-            " will be appended to your routes.php file.";
-        }
-        else
-        {
-            $message = "A single route to handle every action in a RESTful controller".
-            " will be appended to your routes.php file. This may be used with a confide".
-            " controller generated using [-r|--restful] option.";
-        }
-        
+        $message = $this->getFireMessage($restful);
 
-        $this->comment( $message );
+        $this->comment($message);
         $this->line('');
 
         if ( $this->confirm("Proceed with the append? [Yes|no]") )
         {
-            $this->line('');
-
             $this->info( "Appending routes..." );
-            if( $this->appendRoutes( $name, $restful ) )
-            {
-                $this->info( "app/routes.php Patched successfully!" );
-            }
-            else{
-                $this->error( 
-                    "Coudn't append content to app/routes.php\nCheck the".
-                    " write permissions within the file."
-                );
-            }
+            // Generate
+            $filename = 'routes.php';
+            $this->appendInFile($filename, 'generators.routes', $viewVars);
 
-            $this->line('');
-
+            $this->info("app/routes.php Patched successfully!");
         }
     }
 
     /**
-     * Get the console command options.
-     *
-     * @return array
+     * Returns a message that should explain what is about to be done.
+     * @param  boolean $restful If the restful option is being used
+     * @return string           The message
      */
-    protected function getOptions()
+    protected function getFireMessage($restful = false)
     {
-        $app = app();
-
-        return array(
-            array('controller', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', $app['config']->get('auth.model')),
-            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
-        );
-    }
-
-    /**
-     * Prepare the controller name
-     *
-     * @param string  $name
-     * @return string
-     */
-    protected function prepareName( $name = '' )
-    {
-        $name = ( $name != '') ? ucfirst($name) : 'User';
-        
-        if( substr($name,-10) == 'controller' )
-        {
-            $name = substr($name, 0, -10).'Controller';
-        }
-        else
-        {
-            $name .= 'Controller';
-        }
-
-        return $name;
-    }
-
-    /**
-     * Create the controller
-     *
-     * @param  string $name
-     * @return bool
-     */
-    protected function appendRoutes( $name = '', $restful = false )
-    {        
-        $app = app();
-        $routes_file = $this->laravel->path.'/routes.php';
-        $confide_routes = $app['view']->make('confide::generators.routes')
-            ->with('name', $name)
-            ->with('restful', $restful)
-            ->render();
-
-        if( file_exists( $routes_file ) )
-        {
-            $fs = fopen($routes_file, 'a');
-            if ( $fs )
-            {
-                fwrite($fs, $confide_routes);
-                $this->line($confide_routes);
-                fclose($fs);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
+        if(! $restful) {
+            return "The default Confide routes (to use with the Controller template)".
+            " will be appended to your routes.php file.";
+        } else {
+            return "A single route to handle every action in a RESTful controller".
+            " will be appended to your routes.php file. This may be used with a confide".
+            " controller generated using [-r|--restful] option.";
         }
     }
-
 }
