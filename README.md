@@ -3,7 +3,7 @@
 ![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
 
 [![Build Status](https://api.travis-ci.org/Zizaco/confide.png)](https://travis-ci.org/Zizaco/confide)
-[![Coverage Status](https://coveralls.io/repos/Zizaco/confide/badge.png?branch=huge-update)](https://coveralls.io/r/Zizaco/confide?branch=huge-update)
+[![Coverage Status](https://coveralls.io/repos/Zizaco/confide/badge.png?branch=master)](https://coveralls.io/r/Zizaco/confide?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Zizaco/confide/badges/quality-score.png)](https://scrutinizer-ci.com/g/Zizaco/confide/)
 [![ProjectStatus](http://stillmaintained.com/Zizaco/confide.png)](http://stillmaintained.com/Zizaco/confide)
 [![Latest Stable Version](https://poser.pugx.org/zizaco/confide/v/stable.png)](https://packagist.org/packages/zizaco/confide)
@@ -292,6 +292,12 @@ If you have a legacy project that uses an older version of Confide, don't worry.
 For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0 but will be able to download bugfixes of version 3.2.
 
 ## Release Notes
+
+### Version 4.0.0 Beta 3
+* Now you can customize how long will take for a password reset request to expire (default to 7 hours).
+* Reordered validations
+* Now all validations are called even if one of them fails. So all validation messages are sent at once.
+* `validateIsUnique` method now sends key to attachErrorMsg and also check for errors on each `$identity` field at once
 
 ### Version 4.0.0 Beta 2
 * UserValidator now adds errors to an existing MessageBag instead of replacing it.
