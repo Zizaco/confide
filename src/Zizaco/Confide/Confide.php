@@ -115,7 +115,7 @@ class Confide
      * @param  bool $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
      * @return boolean Success
      */
-    public function logAttempt($input, $mustBeConfirmed = true)
+    public function logAttempt(array $input, $mustBeConfirmed = true)
     {
         $remember = $this->extractRememberFromArray($input);
         $emailOrUsername = $this->extractIdentityFromArray($input);
@@ -150,13 +150,13 @@ class Confide
      * @param  array $input An array containing the key 'remember'
      * @return boolean
      */
-    protected function extractRememberFromArray($input)
+    protected function extractRememberFromArray(array $input)
     {
         if (isset($input['remember'])) {
             return $input['remember'];
-        } else {
-            return false;
         }
+        
+        return false;
     }
 
     /**
@@ -165,15 +165,15 @@ class Confide
      * @param  array $input An array containing the key 'email' or 'username'
      * @return mixed
      */
-    protected function extractIdentityFromArray($input)
+    protected function extractIdentityFromArray(array $input)
     {
         if (isset($input['email'])) {
             return $input['email'];
         } elseif (isset($input['username'])) {
             return $input['username'];
-        } else {
-            return false;
         }
+        
+        return false;
     }
 
     /**
