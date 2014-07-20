@@ -65,9 +65,9 @@ class UserValidator implements UserValidatorInterface {
         $this->repo = App::make('confide.repository');
 
         // Validate object
-        $result = $this->validatePassword($user) &&
-            $this->validateIsUnique($user) &&
-            $this->validateAttributes($user, $ruleset);
+        $result = $this->validateAttributes($user, $ruleset) ? true : false;
+        $result = ($this->validatePassword($user) && $result) ? true : false;
+        $result = ($this->validateIsUnique($user) && $result) ? true : false;
 
         return $result;
     }
@@ -113,20 +113,29 @@ class UserValidator implements UserValidatorInterface {
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [
-            'username' => $user->username,
             'email'    => $user->email,
+            'username' => $user->username,
         ];
 
-        $similar = $this->repo->getUserByIdentity($identity);
+        foreach($identity as $attribute => $value) {
 
-        if (!$similar || $similar->getKey() == $user->getKey()) {
-            return true;
+          $similar = $this->repo->getUserByIdentity([$attribute => $value]);
+
+          if (!$similar || $similar->getKey() == $user->getKey()) {
+              unset($identity[$attribute]);
+          } else {
+            $this->attachErrorMsg(
+                $user, 'confide::confide.alerts.duplicated_credentials', $attribute
+            );
+          }
+
         }
 
-        $this->attachErrorMsg(
-            $user, 'confide::confide.alerts.duplicated_credentials'
-        );
-        return false;
+      if(!$identity) {
+        return true;
+      }
+
+      return false;
     }
 
     /**
