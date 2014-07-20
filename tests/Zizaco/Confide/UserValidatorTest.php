@@ -175,14 +175,14 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->andReturn($userD->id);
 
         $repo->shouldReceive('getUserByIdentity')
-            ->andReturnUsing(function($user) use ($userB, $userC) {
-                if ($user['email'] == $userB->email) return $userB;
-                if ($user['email'] == $userC->email) return $userC;
+          ->andReturnUsing(function($user) use ($userB, $userC) {
+              if (isset($user['email']) && $user['email'] == $userB->email) return $userB;
+              if (isset($user['email']) && $user['email'] == $userC->email) return $userC;
             });
 
         $validator->shouldReceive('attachErrorMsg')
             ->atLeast(1)
-            ->with(m::any(), 'confide::confide.alerts.duplicated_credentials');
+            ->with(m::any(), 'confide::confide.alerts.duplicated_credentials', 'email');
 
         /*
         |------------------------------------------------------------
