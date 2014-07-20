@@ -83,7 +83,7 @@ class UserValidator implements UserValidatorInterface {
         $hash = App::make('hash');
 
         if($user->getOriginal('password') != $user->password) {
-            if ($user->password == $user->password_confirmation) {
+            if ($user->password === $user->password_confirmation) {
 
                 // Hashes password and unset password_confirmation field
                 $user->password = $hash->make($user->password);
