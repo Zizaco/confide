@@ -294,7 +294,7 @@ For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0
 ## Release Notes
 
 ### Version 4.0.0 Beta 2
-* UserValidator now adds errors to a existing MessageBag instead of replacing it.
+* UserValidator now adds errors to an existing MessageBag instead of replacing it.
 * Password reset token will expire after 7 days.
 * Added support for custom connections using the $connection attribute of the model.
 * Password reset requests are deleted after being used.
