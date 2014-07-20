@@ -172,9 +172,10 @@ class EloquentPasswordService implements PasswordServiceInterface
         // Instantiate a carbon object (that is a dependency of
         // 'illuminate/database')
         $carbon = $this->app['Carbon\Carbon'];
+        $config = $this->app['config'];
 
         return $carbon->now()
-            ->subHours(7)
+            ->subHours($config->get('confide::confide.password_reset_expiration', 7))
             ->toDateTimeString();
     }
 }

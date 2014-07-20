@@ -411,10 +411,12 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         */
         $oldestValidDate = '2014-07-16 22:20:26';
         $carbon      = m::mock('Carbon\Carbon');
+        $config      = m::mock('Config');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
 
         $passService->shouldAllowMockingProtectedMethods();
         $passService->app['Carbon\Carbon'] = $carbon;
+        $passService->app['config']        = $config;
 
         /*
         |------------------------------------------------------------
@@ -424,11 +426,15 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('getOldestValidDate')
             ->passthru();
 
+        $config->shouldReceive('get')
+            ->once()->with('confide::confide.password_reset_expiration', 7)
+            ->andReturn(14);
+
         $carbon->shouldReceive('now')
             ->once()->andReturn($carbon);
 
         $carbon->shouldReceive('subHours')
-            ->once()->with(7)
+            ->once()->with(14)
             ->andReturn($carbon);
 
         $carbon->shouldReceive('toDateTimeString')
