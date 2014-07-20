@@ -293,7 +293,7 @@ For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0
 
 ## Release Notes
 
-### Version 4.0.0 Beta 3
+### [Version 4.0.0 Beta 3](https://github.com/Zizaco/confide/pull/209)
 * Now you can customize how long will take for a password reset request to expire (default to 7 hours).
 * Reordered validations
 * Now all validations are called even if one of them fails. So all validation messages are sent at once.
