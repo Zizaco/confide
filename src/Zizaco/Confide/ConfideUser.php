@@ -73,23 +73,20 @@ trait ConfideUser {
     {
         if ($this->isValid()) {
             return parent::save($options);
-        } else {
-            return false;
         }
+        
+        return false;
     }
 
     /**
      * Returns a MessageBag object that store any error
      * regarding the user validation
      *
-     * @var \Illuminate\Support\MessageBag
+     * @return \Illuminate\Support\MessageBag
      */
     public function errors()
     {
-        if (!$this->errors)
-            $this->errors = App::make('Illuminate\Support\MessageBag');
-
-        return $this->errors;
+        return $this->errors ?: $this->errors = App::make('Illuminate\Support\MessageBag');
     }
 
     /**
@@ -123,7 +120,7 @@ trait ConfideUser {
      */
     public function getRememberToken()
     {
-        return $this->remember_token;
+        return $this->{$this->getRememberTokenName()};
     }
 
     /**
@@ -135,7 +132,7 @@ trait ConfideUser {
      */
     public function setRememberToken($value)
     {
-        $this->remember_token = $value;
+        $this->{$this->getRememberTokenName()} = $value;
     }
 
     /**
