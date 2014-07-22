@@ -17,8 +17,6 @@ class ServiceProvider extends IlluminateServiceProvider
 
     /**
      * Bootstrap the service provider.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -27,8 +25,6 @@ class ServiceProvider extends IlluminateServiceProvider
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
@@ -48,8 +44,6 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register the repository that will handle all the database
      * interaction.
-     *
-     * @return void
      */
     protected function registerRepository()
     {
@@ -61,8 +55,6 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register the service that abstracts all user password management
      * related methods
-     *
-     * @return void
      */
     protected function registerPasswordService()
     {
@@ -75,8 +67,6 @@ class ServiceProvider extends IlluminateServiceProvider
      * Register the service that Throttles login after
      * too many failed attempts. This is a secure measure in
      * order to avoid brute force attacks.
-     *
-     * @return void
      */
     protected function registerLoginThrottleService()
     {
@@ -88,8 +78,6 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register the UserValidator class. The default class that
      * used for user validation
-     *
-     * @return void
      */
     protected function registerUserValidator()
     {
@@ -100,8 +88,6 @@ class ServiceProvider extends IlluminateServiceProvider
 
     /**
      * Register the application bindings.
-     *
-     * @return void
      */
     protected function registerConfide()
     {
@@ -117,8 +103,6 @@ class ServiceProvider extends IlluminateServiceProvider
 
     /**
      * Register the artisan commands.
-     *
-     * @return void
      */
     protected function registerCommands()
     {

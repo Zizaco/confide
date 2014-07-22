@@ -15,6 +15,7 @@ interface LoginThrottleServiceInterface
      * also returns the current value for that identity.
      *
      * @param  mixed $identity The login identity
+     *
      * @return integer How many times that same identity was used
      */
     public function throttleIdentity($identity);
@@ -23,6 +24,7 @@ interface LoginThrottleServiceInterface
      * Tells if the given identity has reached the throttle_limit
      *
      * @param  mixed $identity The login identity
+     *
      * @return boolean True if the identity has reached the throttle_limit
      */
     public function isThrottled($identity);

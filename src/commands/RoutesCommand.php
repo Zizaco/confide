@@ -42,8 +42,6 @@ class RoutesCommand extends GenerateCommand
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function fire()
     {
@@ -81,8 +79,9 @@ class RoutesCommand extends GenerateCommand
     /**
      * Returns a message that should explain what is about to be done.
      *
-     * @param  boolean $restful If the restful option is being used
-     * @return string           The message
+     * @param boolean $restful If the restful option is being used
+     *
+     * @return string The message
      */
     protected function getFireMessage($restful = false)
     {

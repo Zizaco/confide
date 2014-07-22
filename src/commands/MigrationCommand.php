@@ -40,8 +40,6 @@ class MigrationCommand extends GenerateCommand
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function fire()
     {

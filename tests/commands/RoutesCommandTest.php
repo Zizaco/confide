@@ -16,8 +16,6 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
 
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {

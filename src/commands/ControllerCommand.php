@@ -42,8 +42,6 @@ class ControllerCommand extends GenerateCommand
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function fire()
     {
@@ -87,8 +85,9 @@ class ControllerCommand extends GenerateCommand
      * Returns the name of the controller class that will handle a
      * resource with the given name.
      *
-     * @param  string $name Resource name
-     * @return string       Controller class name
+     * @param string $name Resource name
+     *
+     * @return string Controller class name
      */
     protected function getControllerName($name)
     {
@@ -111,8 +110,9 @@ class ControllerCommand extends GenerateCommand
     /**
      * Returns the namespace of the given class name
      *
-     * @param  string $name Class name
-     * @return string       Namespace
+     * @param string $name Class name
+     *
+     * @return string Namespace
      */
     protected function getNamespace($name)
     {

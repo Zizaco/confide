@@ -108,7 +108,8 @@ class {{ $class }} extends Controller
     /**
      * Attempt to confirm account with code
      *
-     * @param  string  $code
+     * @param string $code
+     *
      * @return Illuminate\Http\Response
      */
     public function {{ (! $restful) ? 'confirm' : 'getConfirm' }}($code)
@@ -156,7 +157,8 @@ class {{ $class }} extends Controller
     /**
      * Shows the change password form with the given token
      *
-     * @param  string  $token
+     * @param string $token
+     *
      * @return Illuminate\Http\Response
      */
     public function {{ (! $restful) ? 'reset_password' : 'getReset' }}($token)

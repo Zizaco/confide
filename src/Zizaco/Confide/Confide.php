@@ -44,8 +44,7 @@ class Confide
      * @param  \Zizaco\Confide\RepositoryInterface           $repo
      * @param  \Zizaco\Confide\PasswordServiceInterface      $passService
      * @param  \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param  \Illuminate\Foundation\Application     $app Laravel application object
-     * @return void
+     * @param  \Illuminate\Foundation\Application            $app            Laravel application object
      */
     public function __construct(
         RepositoryInterface       $repo,
@@ -80,10 +79,10 @@ class Confide
     }
 
     /**
-     * Sets the 'confirmed' field of the user with the
-     * matching code to true.
+     * Sets the 'confirmed' field of the user with the matching code to true.
      *
      * @param string $code
+     *
      * @return bool Success
      */
     public function confirm($code)
@@ -96,6 +95,7 @@ class Confide
      * exists and retrieve it
      *
      * @param  array $identity Array containing at least 'username' or 'email'.
+     *
      * @return \Zizaco\Confide\ConfideUserInterface|null
      */
     public function getUserByEmailOrUsername($identity)
@@ -108,11 +108,13 @@ class Confide
     }
 
     /**
-     * Attempt to log a user into the application with
-     * password and identity field(s), usually email or username.
+     * Attempt to log a user into the application with password and 
+     * identity field(s), usually email or username.
      *
-     * @param  array $input Array containing at least 'username' or 'email' and 'password'. Optionally the 'remember' boolean.
-     * @param  bool $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
+     * @param  array $input           Array containing at least 'username' or 'email' and 'password'. 
+     *                                Optionally the 'remember' boolean.
+     * @param  bool  $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
+     *
      * @return boolean Success
      */
     public function logAttempt(array $input, $mustBeConfirmed = true)
@@ -148,10 +150,10 @@ class Confide
     }
 
     /**
-     * Extracts the value of the remember key of the given
-     * array
+     * Extracts the value of the remember key of the given array
      *
      * @param  array $input An array containing the key 'remember'
+     *
      * @return boolean
      */
     protected function extractRememberFromArray(array $input)
@@ -164,10 +166,10 @@ class Confide
     }
 
     /**
-     * Extracts the email or the username key of the given
-     * array
+     * Extracts the email or the username key of the given array
      *
      * @param  array $input An array containing the key 'email' or 'username'
+     *
      * @return mixed
      */
     protected function extractIdentityFromArray(array $input)
@@ -187,6 +189,7 @@ class Confide
      * Also sleeps a little in order to avoid dicionary attacks.
      *
      * @param  mixed $identity
+     *
      * @return boolean False if the identity has reached the 'throttle_limit'
      */
     protected function loginThrottling($identity)
@@ -212,6 +215,7 @@ class Confide
      * throttle_limit
      *
      * @param  mixed $identity The login identity
+     *
      * @return boolean True if the identity has reached the throttle_limit
      */
     public function isThrottled($identity)
@@ -220,12 +224,12 @@ class Confide
     }
 
     /**
-     * If an user with the given email exists then generate
-     * a token for password change and saves it in the
-     * 'password_reminders' table with the email of the
-     * user.
+     * If an user with the given email exists then generate a token for password
+     * change and saves it in the 'password_reminders' table with the email 
+     * of the user.
      *
      * @param string  $email
+     *
      * @return string $token
      */
     public function forgotPassword($email)
@@ -240,10 +244,10 @@ class Confide
     }
 
     /**
-     * Delete the record of the given token from 'password_reminders'
-     * table.
+     * Delete the record of the given token from 'password_reminders' table.
      *
      * @param  string $token Token retrieved from a forgotPassword
+     *
      * @return boolean Success
      */
     public function destroyForgotPasswordToken($token)
@@ -252,11 +256,11 @@ class Confide
     }
 
     /**
-     * Returns a user that corresponds to the given reset
-     * password token or false if there is no user with the
-     * given token.
+     * Returns a user that corresponds to the given reset password token or 
+     * false if there is no user with the given token.
      *
      * @param  string $token
+     *
      * @return ConfideUser
      */
     public function userByResetPasswordToken($token)
@@ -272,8 +276,6 @@ class Confide
 
     /**
      * Log the user out of the application.
-     *
-     * @return void
      */
     public function logout()
     {

@@ -21,7 +21,6 @@ class EloquentPasswordService implements PasswordServiceInterface
      * Create a new PasswordService
      *
      * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
      */
     public function __construct($app = null)
     {
@@ -34,6 +33,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * user.
      *
      * @param  RemindableInterface $user     An existent user
+     *
      * @return string Password reset token
      */
     public function requestChangePassword(RemindableInterface $user)
@@ -62,6 +62,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * password token
      *
      * @param  string $token
+     *
      * @return string Email
      */
     public function getEmailByToken($token)
@@ -85,6 +86,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * Delete the record of the given token from database
      *
      * @param  string $token
+     *
      * @return boolean Success
      */
     public function destroyToken($token)
@@ -127,6 +129,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * Extracts the email of the given object or array
      *
      * @param  mixed $email An object, array or email string
+     *
      * @return string       The email address
      */
     protected function unwrapEmail($email)
@@ -146,7 +149,6 @@ class EloquentPasswordService implements PasswordServiceInterface
      *
      * @param  RemindableInterface $user  An existent user
      * @param  string $token  Password reset token
-     * @return void
      */
     protected function sendEmail($user, $token)
     {

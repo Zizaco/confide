@@ -22,6 +22,7 @@ interface RepositoryInterface
      * will be retrieved.
      *
      * @param  array $identity  An array of attributes and values to search for
+     *
      * @return ConfideUser      User object
      */
     public function getUserByIdentity($identity);
@@ -30,6 +31,7 @@ interface RepositoryInterface
      * Find a user by the given email
      *
      * @param  string $email The email to be used in the query
+     *
      * @return ConfideUser   User object
      */
     public function getUserByEmail($email);
@@ -38,6 +40,7 @@ interface RepositoryInterface
      * Find a user by the given email or username
      *
      * @param  string $emailOrUsername Username of email to be used in the query
+     *
      * @return ConfideUser   User object
      */
     public function getUserByEmailOrUsername($emailOrUsername);
@@ -47,6 +50,7 @@ interface RepositoryInterface
      * is found with the given confirmation code.
      *
      * @param string $code
+     *
      * @return bool Success
      */
     public function confirmByCode($code);

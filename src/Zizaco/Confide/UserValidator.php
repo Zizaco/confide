@@ -59,7 +59,8 @@ class UserValidator implements UserValidatorInterface
      * Validates the given user. Should check if all the fields are correctly
      *
      * @param  ConfideUserInterface $user Instance to be tested
-     * @return boolean                    True if the $user is valid
+     *
+     * @return boolean True if the $user is valid
      */
     public function validate(ConfideUserInterface $user, $ruleset = 'create')
     {
@@ -79,6 +80,7 @@ class UserValidator implements UserValidatorInterface
      * user
      *
      * @param  ConfideUserInterface $user
+     *
      * @return boolean  True if password is valid
      */
     public function validatePassword(ConfideUserInterface $user)
@@ -112,6 +114,7 @@ class UserValidator implements UserValidatorInterface
      * method will return false.
      *
      * @param  ConfideUserInterface $user
+     *
      * @return boolean  True if user is unique
      */
     public function validateIsUnique(ConfideUserInterface $user)
@@ -150,6 +153,7 @@ class UserValidator implements UserValidatorInterface
      *
      * @param  ConfideUserInterface $user
      * @param  string               $ruleset The name of the key in the UserValidator->$rules array
+     *
      * @return boolean  True if the attributes are valid
      */
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
@@ -180,7 +184,6 @@ class UserValidator implements UserValidatorInterface
      * @param  ConfideUserInterface $user
      * @param  string  $errorMsg The error message
      * @param  string  $key The key if the error message
-     * @return void
      */
     public function attachErrorMsg(ConfideUserInterface $user, $errorMsg, $key = 'confide')
     {
