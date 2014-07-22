@@ -5,12 +5,12 @@
 Route::get('{{ $url }}/create', '{{ $controllerName }}@create');
 Route::post('{{ $url }}', '{{ $controllerName }}@store');
 Route::get('{{ $url }}/login', '{{ $controllerName }}@login');
-Route::post('{{ $url }}/login', '{{ $controllerName }}@do_login');
+Route::post('{{ $url }}/login', '{{ $controllerName }}@doLogin');
 Route::get('{{ $url }}/confirm/{code}', '{{ $controllerName }}@confirm');
-Route::get('{{ $url }}/forgot_password', '{{ $controllerName }}@forgot_password');
-Route::post('{{ $url }}/forgot_password', '{{ $controllerName }}@do_forgot_password');
-Route::get('{{ $url }}/reset_password/{token}', '{{ $controllerName }}@reset_password');
-Route::post('{{ $url }}/reset_password', '{{ $controllerName }}@do_reset_password');
+Route::get('{{ $url }}/forgot_password', '{{ $controllerName }}@forgotPassword');
+Route::post('{{ $url }}/forgot_password', '{{ $controllerName }}@doForgotPassword');
+Route::get('{{ $url }}/reset_password/{token}', '{{ $controllerName }}@resetPassword');
+Route::post('{{ $url }}/reset_password', '{{ $controllerName }}@doResetPassword');
 Route::get('{{ $url }}/logout', '{{ $controllerName }}@logout');
 @else
 

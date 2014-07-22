@@ -83,7 +83,7 @@ class {{ $class }} extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function {{ (! $restful) ? 'do_login' : 'postLogin' }}()
+    public function {{ (! $restful) ? 'doLogin' : 'postLogin' }}()
     {
         $repo = App::make('{{ $repositoryClass }}');
         $input = Input::all();
@@ -130,7 +130,7 @@ class {{ $class }} extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function {{ (! $restful) ? 'forgot_password' : 'getForgot' }}()
+    public function {{ (! $restful) ? 'forgotPassword' : 'getForgot' }}()
     {
         return View::make(Config::get('confide::forgot_password_form'));
     }
@@ -140,7 +140,7 @@ class {{ $class }} extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function {{ (! $restful) ? 'do_forgot_password' : 'postForgot' }}()
+    public function {{ (! $restful) ? 'doForgotPassword' : 'postForgot' }}()
     {
         if (Confide::forgotPassword(Input::get('email'))) {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
@@ -161,7 +161,7 @@ class {{ $class }} extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function {{ (! $restful) ? 'reset_password' : 'getReset' }}($token)
+    public function {{ (! $restful) ? 'resetPassword' : 'getReset' }}($token)
     {
         return View::make(Config::get('confide::reset_password_form'))
                 ->with('token', $token);
@@ -172,7 +172,7 @@ class {{ $class }} extends Controller
      *
      * @return Illuminate\Http\Response
      */
-    public function {{ (! $restful) ? 'do_reset_password' : 'postReset' }}()
+    public function {{ (! $restful) ? 'doResetPassword' : 'postReset' }}()
     {
         $repo = App::make('{{ $repositoryClass }}');
         $input = array(
