@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\App as App;
  * @license MIT
  * @package  Zizaco\Confide
  */
-trait ConfideUser {
+trait ConfideUser
+{
 
     /**
      * A MessageBag object that store any error regarding

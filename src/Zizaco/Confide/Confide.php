@@ -52,8 +52,7 @@ class Confide
         PasswordServiceInterface  $passService,
         LoginThrottleServiceInterface $loginThrottler,
         $app = null
-    )
-    {
+    ) {
         $this->repo           = $repo;
         $this->passService    = $passService;
         $this->loginThrottler = $loginThrottler;
@@ -101,8 +100,9 @@ class Confide
      */
     public function getUserByEmailOrUsername($identity)
     {
-        if (is_array($identity))
+        if (is_array($identity)) {
             $identity = $this->extractIdentityFromArray($identity);
+        }
 
         return $this->repo->getUserByEmailOrUsername($identity);
     }
@@ -120,22 +120,25 @@ class Confide
         $remember = $this->extractRememberFromArray($input);
         $emailOrUsername = $this->extractIdentityFromArray($input);
 
-        if (!$this->loginThrottling($emailOrUsername))
+        if (!$this->loginThrottling($emailOrUsername)) {
             return false;
+        }
 
         $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
 
         if ($user) {
-            if (! $user->confirmed && $mustBeConfirmed )
+            if (! $user->confirmed && $mustBeConfirmed) {
                 return false;
+            }
 
             $correctPassword = $this->app['hash']->check(
                 isset($input['password']) ? $input['password'] : false,
                 $user->password
             );
 
-            if (! $correctPassword)
+            if (! $correctPassword) {
                 return false;
+            }
 
             $this->app['auth']->login($user, $remember);
             return true;
@@ -147,6 +150,7 @@ class Confide
     /**
      * Extracts the value of the remember key of the given
      * array
+     *
      * @param  array $input An array containing the key 'remember'
      * @return boolean
      */
@@ -162,6 +166,7 @@ class Confide
     /**
      * Extracts the email or the username key of the given
      * array
+     *
      * @param  array $input An array containing the key 'email' or 'username'
      * @return mixed
      */
@@ -180,6 +185,7 @@ class Confide
      * Calls throttleIdentity of the loginThrottler and returns false
      * if the throttleCount is grater then the 'throttle_limit' config.
      * Also sleeps a little in order to avoid dicionary attacks.
+     *
      * @param  mixed $identity
      * @return boolean False if the identity has reached the 'throttle_limit'
      */
@@ -188,13 +194,15 @@ class Confide
         $count = $this->loginThrottler
             ->throttleIdentity($identity);
 
-        if ($count >= $this->app['config']->get('confide::throttle_limit'))
+        if ($count >= $this->app['config']->get('confide::throttle_limit')) {
             return false;
+        }
 
         // Throttling delay!
         // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
-        if($count > 2)
+        if ($count > 2) {
             usleep(($count-1) * 400000);
+        }
 
         return true;
     }
@@ -202,6 +210,7 @@ class Confide
     /**
      * Asks the loginThrottler service if the given identity has reached the
      * throttle_limit
+     *
      * @param  mixed $identity The login identity
      * @return boolean True if the identity has reached the throttle_limit
      */
@@ -223,8 +232,9 @@ class Confide
     {
         $user = $this->repo->getUserByEmail($email);
 
-        if ($user)
+        if ($user) {
             return $this->passService->requestChangePassword($user);
+        }
 
         return false;
     }
@@ -245,6 +255,7 @@ class Confide
      * Returns a user that corresponds to the given reset
      * password token or false if there is no user with the
      * given token.
+     *
      * @param  string $token
      * @return ConfideUser
      */
@@ -313,7 +324,7 @@ class Confide
      *
      * @return \Illuminate\View\View
      */
-    public function makeResetPasswordForm( $token )
+    public function makeResetPasswordForm($token)
     {
         return $this->app['view']
             ->make(

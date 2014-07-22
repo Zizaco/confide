@@ -24,7 +24,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]',[]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]', []);
         $throttleService->shouldAllowMockingProtectedMethods();
 
         /*
@@ -59,7 +59,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $config = m::mock('Config');
         $app = ['config'=>$config];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]',[$app]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
 
         /*
@@ -98,7 +98,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $config = m::mock('Config');
         $app = ['config'=>$config];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]',[$app]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
 
         /*
@@ -133,7 +133,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]',[]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', []);
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
 
@@ -168,7 +168,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $config = m::mock('Config');
         $app = ['cache'=>$cache, 'config'=>$config];
 
-        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle]',[$app]);
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle]', [$app]);
 
         $ttl = 3;
 

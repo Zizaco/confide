@@ -45,6 +45,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
 
     /**
      * Tells if the given identity has reached the throttle_limit
+     *
      * @param  mixed $identity The login identity
      * @return boolean True if the identity has reached the throttle_limit
      */
@@ -63,6 +64,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * the relevant fields. I.E: if the attacker tries to use a
      * bunch of different passwords, the identity will still be the
      * same.
+     *
      * @param  $mixed $identity
      * @return string $identityString
      */
@@ -70,8 +72,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
     {
         // If is an array, remove password, remember and then
         // transforms it into a string.
-        if (is_array($identity))
-        {
+        if (is_array($identity)) {
             unset($identity['password']);
             unset($identity['remember']);
             $identity = serialize($identity);

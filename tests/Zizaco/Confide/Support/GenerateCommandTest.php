@@ -137,4 +137,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
  *
  * @see \Zizaco\Confide\Support\GenerateCommand
  */
-class _GenerateCommandStub extends GenerateCommand {}
+class _GenerateCommandStub extends GenerateCommand
+{
+
+}

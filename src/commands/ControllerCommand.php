@@ -54,53 +54,54 @@ class ControllerCommand extends GenerateCommand
         $restful = $this->option('restful');
 
         $viewVars = compact(
-            'class','namespace','model','restful'
+            'class',
+            'namespace',
+            'model',
+            'restful'
         );
 
         // Prompt
         $this->line('');
-        $this->info("Controller name: $class".(($restful) ? "\nRESTful: Yes" : '') );
-        $this->comment("An authentication ".(($restful) ? 'RESTful ' : '')."controller template with the name ".($namespace ? $namespace.'\\' : '')."$class.php".
-        " will be created in app/controllers directory");
+        $this->info("Controller name: $class".(($restful) ? "\nRESTful: Yes" : ''));
+        $this->comment(
+            "An authentication ".(($restful) ? 'RESTful ' : '')."controller template with the name ".
+            ($namespace ? $namespace.'\\' : '')."$class.php"." will be created in app/controllers directory"
+        );
         $this->line('');
 
-        if ( $this->confirm("Proceed with the controller creation? [Yes|no]") )
-        {
-            $this->info( "Creating $class..." );
+        if ($this->confirm("Proceed with the controller creation? [Yes|no]")) {
+            $this->info("Creating $class...");
             // Generate
             $filename = 'controllers/'.($namespace ? str_replace('\\', '/', $namespace).'/' : '').$class.'.php';
             $this->generateFile($filename, 'generators.controller', $viewVars);
-            $this->info( "$class.php Successfully created!" );
+            $this->info("$class.php Successfully created!");
 
             // Generate repository
             $filename = 'models/'.str_replace('\\', '/', $model).'Repository.php';
             $this->generateFile($filename, 'generators.repository', $viewVars);
-            $this->info( $model.'Repository.php Successfully created!');
+            $this->info($model.'Repository.php Successfully created!');
         }
     }
 
     /**
      * Returns the name of the controller class that will handle a
      * resource with the given name.
+     *
      * @param  string $name Resource name
      * @return string       Controller class name
      */
     protected function getControllerName($name)
     {
-        if (strstr($name, '\\'))
-        {
+        if (strstr($name, '\\')) {
             $name = explode('\\', $name);
             $name = array_pop($name);
         }
 
         $name = ( $name != '') ? ucfirst($name) : 'Users';
 
-        if( substr(strtolower($name),-10) == 'controller' )
-        {
+        if (substr(strtolower($name), -10) == 'controller') {
             $name = substr($name, 0, -10).'Controller';
-        }
-        else
-        {
+        } else {
             $name .= 'Controller';
         }
 
@@ -109,13 +110,13 @@ class ControllerCommand extends GenerateCommand
 
     /**
      * Returns the namespace of the given class name
+     *
      * @param  string $name Class name
      * @return string       Namespace
      */
     protected function getNamespace($name)
     {
-        if (strstr($name, '\\'))
-        {
+        if (strstr($name, '\\')) {
             $name = explode('\\', $name);
             array_pop($name);
             $name = implode('\\', $name);

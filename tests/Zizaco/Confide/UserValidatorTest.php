@@ -24,7 +24,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-       $repo = m::mock('Zizaco\Confide\EloquentRepository');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository');
 
         App::shouldReceive('make')
             ->with('confide.repository')
@@ -175,9 +175,13 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->andReturn($userD->id);
 
         $repo->shouldReceive('getUserByIdentity')
-          ->andReturnUsing(function($user) use ($userB, $userC) {
-              if (isset($user['email']) && $user['email'] == $userB->email) return $userB;
-              if (isset($user['email']) && $user['email'] == $userC->email) return $userC;
+            ->andReturnUsing(function ($user) use ($userB, $userC) {
+                if (isset($user['email']) && $user['email'] == $userB->email) {
+                    return $userB;
+                }
+                if (isset($user['email']) && $user['email'] == $userC->email) {
+                    return $userC;
+                }
             });
 
         $validator->shouldReceive('attachErrorMsg')

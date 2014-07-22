@@ -53,8 +53,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerRepository()
     {
-        $this->app->bind('confide.repository', function($app)
-        {
+        $this->app->bind('confide.repository', function ($app) {
             return new EloquentRepository($app);
         });
     }
@@ -67,8 +66,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerPasswordService()
     {
-        $this->app->bind('confide.password', function($app)
-        {
+        $this->app->bind('confide.password', function ($app) {
             return new EloquentPasswordService($app);
         });
     }
@@ -82,8 +80,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerLoginThrottleService()
     {
-        $this->app->bind('confide.throttle', function($app)
-        {
+        $this->app->bind('confide.throttle', function ($app) {
             return new CacheLoginThrottleService($app);
         });
     }
@@ -96,8 +93,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerUserValidator()
     {
-        $this->app->bind('confide.user_validator', function($app)
-        {
+        $this->app->bind('confide.user_validator', function ($app) {
             return new UserValidator();
         });
     }
@@ -109,8 +105,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerConfide()
     {
-        $this->app->bind('confide', function($app)
-        {
+        $this->app->bind('confide', function ($app) {
             return new Confide(
                 $app->make('confide.repository'),
                 $app->make('confide.password'),
@@ -127,18 +122,15 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerCommands()
     {
-        $this->app->bind('command.confide.controller', function($app)
-        {
+        $this->app->bind('command.confide.controller', function ($app) {
             return new ControllerCommand($app);
         });
 
-        $this->app->bind('command.confide.routes', function($app)
-        {
+        $this->app->bind('command.confide.routes', function ($app) {
             return new RoutesCommand($app);
         });
 
-        $this->app->bind('command.confide.migration', function($app)
-        {
+        $this->app->bind('command.confide.migration', function ($app) {
             return new MigrationCommand($app);
         });
 

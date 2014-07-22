@@ -128,13 +128,14 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         // Throw an exception instead of actually saving the object
         $user->shouldReceive('newQueryWithoutScopes')
             ->once()
-            ->andReturnUsing(function(){
+            ->andReturnUsing(function () {
                 throw new \Exception('Saved in database');
             });
 
         // Set the exception as expected ;)
         $this->setExpectedException(
-            'Exception', 'Saved in database'
+            'Exception',
+            'Saved in database'
         );
 
         /*
@@ -170,7 +171,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         // Throw an exception instead of actually saving the object
         $user->shouldReceive('newQueryWithDeleted')
             ->never()
-            ->andReturnUsing(function(){
+            ->andReturnUsing(function () {
                 throw new \Exception('Saved in database');
             });
 
@@ -336,6 +337,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
  *
  * @see \Zizaco\Confide\ConfideUser
  */
-class _ConfideUserStub extends Eloquent implements ConfideUserInterface{
+class _ConfideUserStub extends Eloquent implements ConfideUserInterface
+{
     use ConfideUser;
 }

@@ -102,7 +102,8 @@ Change your User model in `app/models/User.php` to:
     use Zizaco\Confide\ConfideUser;
     use Zizaco\Confide\ConfideUserInterface;
 
-    class User extends Eloquent implements ConfideUserInterface {
+    class User extends Eloquent implements ConfideUserInterface
+    {
         use ConfideUser;
     }
 
@@ -185,7 +186,8 @@ For example, create your custom validator class:
 
 
     // app/models/MyOwnValidator.php
-    class MyOwnValidator implements UserValidatorInterface {
+    class MyOwnValidator implements UserValidatorInterface
+    {
 
         public function validate(ConfideUserInterface $user)
         {
@@ -208,7 +210,7 @@ If you want to pass additional parameters to the forms being rendered, you can u
 
 Instead of using the make method:
 
-    Confide::makeResetPasswordForm( $token ):
+    Confide::makeResetPasswordForm($token):
 
 You would use:
 
@@ -241,8 +243,8 @@ When defining your filter you should use the Redirect::guest('users/login') with
 
     // filters.php
 
-    Route::filter('auth', function() {
-         // If the user is not logged in
+    Route::filter('auth', function () {
+        // If the user is not logged in
         if (Auth::guest()) {
             return Redirect::guest('users/login');
         }
@@ -256,9 +258,9 @@ or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
     // filters.php
 
-    Entrust::routeNeedsRole( 'admin*', 'Admin', function(){
-            return Redirect::guest('users/login');
-    } );
+    Entrust::routeNeedsRole('admin*', 'Admin', function () {
+        return Redirect::guest('users/login');
+    });
 
 Finally, it'll auto redirect if your controller's users/login function uses Redirect:intended('a/default/url/here') after a successful login.
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.

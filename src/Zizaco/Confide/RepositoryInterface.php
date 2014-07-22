@@ -20,6 +20,7 @@ interface RepositoryInterface
      * Find a user by one of the fields given as $identity.
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
+     *
      * @param  array $identity  An array of attributes and values to search for
      * @return ConfideUser      User object
      */
