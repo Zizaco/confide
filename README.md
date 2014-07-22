@@ -353,6 +353,18 @@ Locked to Ardent 1.1.x
 
 ### Version 1.1.0
 
+## Contributing
+
+Feel free to fork this project on [GitHub](https://github.com/Zizaco/confide)
+
+### Coding Standards
+When contibuting code to confide, you must follow its coding standards. Confide follows the standard defined in the [PSR-2](http://www.php-fig.org/psr/psr-2/) document.
+
+### Documentation
+* Add PHPDoc blocks for all classes, methods, and functions
+* Omit the `@return` tag if the method does not return anything
+* Add a blank line before `@param`, `@return` and `@throws`
+
 ## License
 
 Confide is free software distributed under the terms of the MIT license
