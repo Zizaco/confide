@@ -60,6 +60,12 @@ trait ConfideUser
         // class.
         $validator = App::make('confide.user_validator');
 
+        // If the model already exists in the database we call validate with
+        // the update ruleset
+        if ($this->exists) {
+            return $validator->validate($this, 'update');
+        }
+
         return $validator->validate($this);
     }
 
@@ -76,7 +82,7 @@ trait ConfideUser
         if ($this->isValid()) {
             return parent::save($options);
         }
-        
+
         return false;
     }
 

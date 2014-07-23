@@ -70,7 +70,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $user->forgotPassword();
     }
 
-    public function testIsValid()
+    public function testIsValidOnNew()
     {
         /*
         |------------------------------------------------------------
@@ -91,6 +91,38 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
 
         $validator->shouldReceive('validate')
             ->once()->with($user)
+            ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertTrue($user->isValid());
+    }
+
+    public function testIsValidOnExisting()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $user = new _ConfideUserStub;
+        $user->exists = true;
+        $validator = m::mock('Zizaco\Confide\Validator');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        App::shouldReceive('make')
+            ->once()->with('confide.user_validator')
+            ->andReturn($validator);
+
+        $validator->shouldReceive('validate')
+            ->once()->with($user, 'update')
             ->andReturn(true);
 
         /*
