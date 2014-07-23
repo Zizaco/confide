@@ -9,8 +9,6 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -137,4 +135,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
  *
  * @see \Zizaco\Confide\Support\GenerateCommand
  */
-class _GenerateCommandStub extends GenerateCommand {}
+class _GenerateCommandStub extends GenerateCommand
+{
+
+}

@@ -21,7 +21,6 @@ class EloquentPasswordService implements PasswordServiceInterface
      * Create a new PasswordService
      *
      * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
      */
     public function __construct($app = null)
     {
@@ -34,6 +33,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * user.
      *
      * @param  RemindableInterface $user     An existent user
+     *
      * @return string Password reset token
      */
     public function requestChangePassword(RemindableInterface $user)
@@ -60,7 +60,9 @@ class EloquentPasswordService implements PasswordServiceInterface
     /**
      * Returns the email associated with the given reset
      * password token
+     *
      * @param  string $token
+     *
      * @return string Email
      */
     public function getEmailByToken($token)
@@ -71,8 +73,8 @@ class EloquentPasswordService implements PasswordServiceInterface
             ->connection($connection)
             ->table('password_reminders')
             ->select('email')
-            ->where('token','=',$token)
-            ->where('created_at','>=',$this->getOldestValidDate())
+            ->where('token', '=', $token)
+            ->where('created_at', '>=', $this->getOldestValidDate())
             ->first();
 
         $email = $this->unwrapEmail($email);
@@ -84,6 +86,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      * Delete the record of the given token from database
      *
      * @param  string $token
+     *
      * @return boolean Success
      */
     public function destroyToken($token)
@@ -93,7 +96,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         $affected = $this->app['db']
             ->connection($connection)
             ->table('password_reminders')
-            ->where('token','=',$token)
+            ->where('token', '=', $token)
             ->delete();
 
         return $affected > 0;
@@ -124,17 +127,16 @@ class EloquentPasswordService implements PasswordServiceInterface
 
     /**
      * Extracts the email of the given object or array
+     *
      * @param  mixed $email An object, array or email string
+     *
      * @return string       The email address
      */
     protected function unwrapEmail($email)
     {
-        if ($email && is_object($email))
-        {
+        if ($email && is_object($email)) {
             $email = $email->email;
-        }
-        elseif ($email && is_array($email))
-        {
+        } elseif ($email && is_array($email)) {
             $email = $email['email'];
         }
 
@@ -147,18 +149,21 @@ class EloquentPasswordService implements PasswordServiceInterface
      *
      * @param  RemindableInterface $user  An existent user
      * @param  string $token  Password reset token
-     * @return void
      */
     protected function sendEmail($user, $token)
     {
         $config = $this->app['config'];
         $lang   = $this->app['translator'];
 
-        $this->app['mailer']->send($config->get('confide::email_reset_password'), compact('user', 'token'), function($message) use ($user, $token, $lang) {
-            $message
-                ->to($user->email, $user->username)
-                ->subject($lang->get('confide::confide.email.password_reset.subject'));
-        });
+        $this->app['mailer']->send(
+            $config->get('confide::email_reset_password'),
+            compact('user', 'token'),
+            function ($message) use ($user, $token, $lang) {
+                $message
+                    ->to($user->email, $user->username)
+                    ->subject($lang->get('confide::confide.email.password_reset.subject'));
+            }
+        );
     }
 
     /**

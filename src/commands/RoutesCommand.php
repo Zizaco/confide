@@ -42,8 +42,6 @@ class RoutesCommand extends GenerateCommand
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function fire()
     {
@@ -61,16 +59,15 @@ class RoutesCommand extends GenerateCommand
 
         // Prompt
         $this->line('');
-        $this->info( "Routes file: app/routes.php" );
+        $this->info("Routes file: app/routes.php");
 
         $message = $this->getFireMessage($restful);
 
         $this->comment($message);
         $this->line('');
 
-        if ( $this->confirm("Proceed with the append? [Yes|no]") )
-        {
-            $this->info( "Appending routes..." );
+        if ($this->confirm("Proceed with the append? [Yes|no]")) {
+            $this->info("Appending routes...");
             // Generate
             $filename = 'routes.php';
             $this->appendInFile($filename, 'generators.routes', $viewVars);
@@ -81,12 +78,14 @@ class RoutesCommand extends GenerateCommand
 
     /**
      * Returns a message that should explain what is about to be done.
-     * @param  boolean $restful If the restful option is being used
-     * @return string           The message
+     *
+     * @param boolean $restful If the restful option is being used
+     *
+     * @return string The message
      */
     protected function getFireMessage($restful = false)
     {
-        if(! $restful) {
+        if (! $restful) {
             return "The default Confide routes (to use with the Controller template)".
             " will be appended to your routes.php file.";
         } else {

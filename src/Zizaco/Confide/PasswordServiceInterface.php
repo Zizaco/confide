@@ -11,11 +11,11 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 interface PasswordServiceInterface
 {
     /**
-     * Generate a token for password change and saves it in
-     * the 'password_reminders' table with the email of the
-     * user.
+     * Generate a token for password change and saves it in the 
+     * 'password_reminders' table with the email of the user.
      *
-     * @param  RemindableInterface $user     An existent user
+     * @param RemindableInterface $user An existent user
+     *
      * @return string Password reset token
      */
     public function requestChangePassword(RemindableInterface $user);
@@ -24,7 +24,8 @@ interface PasswordServiceInterface
      * Returns the email associated with the given reset
      * password token
      *
-     * @param  string $token
+     * @param string $token
+     *
      * @return string Email
      */
     public function getEmailByToken($token);
@@ -32,7 +33,8 @@ interface PasswordServiceInterface
     /**
      * Delete the record of the given token from database
      *
-     * @param  string $token
+     * @param string $token
+     *
      * @return boolean Success
      */
     public function destroyToken($token);

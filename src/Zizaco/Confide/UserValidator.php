@@ -27,7 +27,8 @@ use Illuminate\Support\MessageBag;
  * @license MIT
  * @package  Zizaco\Confide
  */
-class UserValidator implements UserValidatorInterface {
+class UserValidator implements UserValidatorInterface
+{
 
     /**
      * Confide repository instance
@@ -56,8 +57,10 @@ class UserValidator implements UserValidatorInterface {
 
     /**
      * Validates the given user. Should check if all the fields are correctly
+     *
      * @param  ConfideUserInterface $user Instance to be tested
-     * @return boolean                    True if the $user is valid
+     *
+     * @return boolean True if the $user is valid
      */
     public function validate(ConfideUserInterface $user, $ruleset = 'create')
     {
@@ -75,14 +78,16 @@ class UserValidator implements UserValidatorInterface {
     /**
      * Validates the password and password_confirmation of the given
      * user
+     *
      * @param  ConfideUserInterface $user
+     *
      * @return boolean  True if password is valid
      */
     public function validatePassword(ConfideUserInterface $user)
     {
         $hash = App::make('hash');
 
-        if($user->getOriginal('password') != $user->password) {
+        if ($user->getOriginal('password') != $user->password) {
             if ($user->password === $user->password_confirmation) {
 
                 // Hashes password and unset password_confirmation field
@@ -107,7 +112,9 @@ class UserValidator implements UserValidatorInterface {
      * Validates if the given user is unique. If there is another
      * user with the same credentials but a different id, this
      * method will return false.
+     *
      * @param  ConfideUserInterface $user
+     *
      * @return boolean  True if user is unique
      */
     public function validateIsUnique(ConfideUserInterface $user)
@@ -117,32 +124,36 @@ class UserValidator implements UserValidatorInterface {
             'username' => $user->username,
         ];
 
-        foreach($identity as $attribute => $value) {
+        foreach ($identity as $attribute => $value) {
 
-          $similar = $this->repo->getUserByIdentity([$attribute => $value]);
+            $similar = $this->repo->getUserByIdentity([$attribute => $value]);
 
-          if (!$similar || $similar->getKey() == $user->getKey()) {
-              unset($identity[$attribute]);
-          } else {
-            $this->attachErrorMsg(
-                $user, 'confide::confide.alerts.duplicated_credentials', $attribute
-            );
-          }
+            if (!$similar || $similar->getKey() == $user->getKey()) {
+                unset($identity[$attribute]);
+            } else {
+                $this->attachErrorMsg(
+                    $user,
+                    'confide::confide.alerts.duplicated_credentials',
+                    $attribute
+                );
+            }
 
         }
 
-      if(!$identity) {
-        return true;
-      }
+        if (!$identity) {
+            return true;
+        }
 
-      return false;
+        return false;
     }
 
     /**
      * Uses Laravel Validator in order to check if the attributes of the
      * $user object are valid for the given $ruleset
+     *
      * @param  ConfideUserInterface $user
      * @param  string               $ruleset The name of the key in the UserValidator->$rules array
+     *
      * @return boolean  True if the attributes are valid
      */
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
@@ -155,7 +166,7 @@ class UserValidator implements UserValidatorInterface {
         $rules = $this->rules[$ruleset];
 
         $validator = App::make('validator')
-            ->make( $attributes, $rules );
+            ->make($attributes, $rules);
 
         // Validate and attach errors
         if ($validator->fails()) {
@@ -169,10 +180,10 @@ class UserValidator implements UserValidatorInterface {
     /**
      * Creates a \Illuminate\Support\MessageBag object, add the error message
      * to it and then set the errors attribute of the user with that bag
+     *
      * @param  ConfideUserInterface $user
      * @param  string  $errorMsg The error message
      * @param  string  $key The key if the error message
-     * @return void
      */
     public function attachErrorMsg(ConfideUserInterface $user, $errorMsg, $key = 'confide')
     {

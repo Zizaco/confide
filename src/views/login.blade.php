@@ -20,11 +20,11 @@
                 <input tabindex="4" type="checkbox" name="remember" id="remember" value="1">
             </label>
         </div>
-        @if ( Session::get('error') )
+        @if (Session::get('error'))
             <div class="alert alert-error">{{{ Session::get('error') }}}</div>
         @endif
 
-        @if ( Session::get('notice') )
+        @if (Session::get('notice'))
             <div class="alert">{{{ Session::get('notice') }}}</div>
         @endif
         <div class="form-group">

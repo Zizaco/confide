@@ -29,7 +29,6 @@ class EloquentRepository implements RepositoryInterface
      * Create a new ConfideRepository
      *
      * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
      */
     public function __construct($app = null)
     {
@@ -58,7 +57,9 @@ class EloquentRepository implements RepositoryInterface
      * Find a user by one of the fields given as $identity.
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
+     *
      * @param  array $identity  An array of attributes and values to search for
+     *
      * @return ConfideUser      User object
      */
     public function getUserByIdentity($identity)
@@ -86,6 +87,7 @@ class EloquentRepository implements RepositoryInterface
      * Find a user by the given email
      *
      * @param  string $email The email to be used in the query
+     *
      * @return ConfideUser   User object
      */
     public function getUserByEmail($email)
@@ -97,6 +99,7 @@ class EloquentRepository implements RepositoryInterface
      * Find a user by the given email or username
      *
      * @param  string $emailOrUsername Username of email to be used in the query
+     *
      * @return ConfideUser   User object
      */
     public function getUserByEmailOrUsername($emailOrUsername)
@@ -114,6 +117,7 @@ class EloquentRepository implements RepositoryInterface
      * is found with the given confirmation code.
      *
      * @param string $code
+     *
      * @return bool Success
      */
     public function confirmByCode($code)
@@ -132,7 +136,9 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Updated the given user in the database. Set the 'confirmed' attribute to
      * true.
+     *
      * @param  ConfideUser User object
+     *
      * @return bool  Success
      */
     protected function confirmUser($user)

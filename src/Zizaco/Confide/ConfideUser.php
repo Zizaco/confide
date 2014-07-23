@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\App as App;
  * @license MIT
  * @package  Zizaco\Confide
  */
-trait ConfideUser {
+trait ConfideUser
+{
 
     /**
      * A MessageBag object that store any error regarding
@@ -67,6 +68,7 @@ trait ConfideUser {
      * validation before actually saving the object.
      *
      * @param  array  $options
+     *
      * @return bool
      */
     public function save(array $options = array())
@@ -93,6 +95,7 @@ trait ConfideUser {
      * Get the unique identifier for the user.
      *
      * @see \Illuminate\Auth\UserInterface
+     *
      * @return mixed
      */
     public function getAuthIdentifier()
@@ -105,6 +108,7 @@ trait ConfideUser {
      * Get the password for the user.
      *
      * @see \Illuminate\Auth\UserInterface
+     *
      * @return string
      */
     public function getAuthPassword()
@@ -116,6 +120,7 @@ trait ConfideUser {
      * Get the token value for the "remember me" session.
      *
      * @see \Illuminate\Auth\UserInterface
+     *
      * @return string
      */
     public function getRememberToken()
@@ -127,8 +132,8 @@ trait ConfideUser {
      * Set the token value for the "remember me" session.
      *
      * @see \Illuminate\Auth\UserInterface
+     *
      * @param  string  $value
-     * @return void
      */
     public function setRememberToken($value)
     {
@@ -139,6 +144,7 @@ trait ConfideUser {
      * Get the column name for the "remember me" token.
      *
      * @see \Illuminate\Auth\UserInterface
+     *
      * @return string
      */
     public function getRememberTokenName()
@@ -150,6 +156,7 @@ trait ConfideUser {
      * Get the e-mail address where password reminders are sent.
      *
      * @see \Illuminate\Auth\Reminders\RemindableInterface
+     *
      * @return string
      */
     public function getReminderEmail()

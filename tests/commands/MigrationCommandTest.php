@@ -16,8 +16,6 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
 
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -71,7 +69,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldReceive('fire')
             ->passthru();
 
-        $command->shouldReceive('line','info','comment','confirm')
+        $command->shouldReceive('line', 'info', 'comment', 'confirm')
             ->andReturn(true);
 
         $command->shouldReceive('generateFile')

@@ -40,8 +40,6 @@ class MigrationCommand extends GenerateCommand
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
     public function fire()
     {
@@ -54,20 +52,21 @@ class MigrationCommand extends GenerateCommand
 
         // Prompt
         $this->line('');
-        $this->info( "Table name: $table" );
-        $this->comment("A migration that creates the $table table will".
-        " be created in app/database/migrations directory");
+        $this->info("Table name: $table");
+        $this->comment(
+            "A migration that creates the $table table will".
+            " be created in app/database/migrations directory"
+        );
         $this->line('');
 
-        if ( $this->confirm("Proceed with the migration creation? [Yes|no]") )
-        {
-            $this->info( "Creating migration..." );
+        if ($this->confirm("Proceed with the migration creation? [Yes|no]")) {
+            $this->info("Creating migration...");
             // Generate
             $filename = 'database/migrations/'.
                 date('Y_m_d_His')."_confide_setup_users_table.php";
             $this->generateFile($filename, 'generators.migration', $viewVars);
 
-            $this->info( "Migration successfully created!" );
+            $this->info("Migration successfully created!");
         }
     }
 }

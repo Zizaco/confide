@@ -16,8 +16,6 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -36,7 +34,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $generatedToken = '123456789';
 
         $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]',[]);
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]', []);
         $db = m::mock('connection');
 
         $passService->shouldAllowMockingProtectedMethods();
@@ -75,12 +73,12 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //         ));
         $db->shouldReceive('connection')
             ->once()->with('db_name')
-            ->andReturn( $db );
+            ->andReturn($db);
 
         $db->shouldReceive('table')
-            ->with( 'password_reminders' )
+            ->with('password_reminders')
             ->once()
-            ->andReturn( $db );
+            ->andReturn($db);
 
         $db->shouldReceive('insert')
             ->with([
@@ -145,26 +143,26 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //         ->first();
         $db->shouldReceive('connection')
             ->once()->with('db_name')
-            ->andReturn( $db );
+            ->andReturn($db);
 
         $db->shouldReceive('table')
             ->with('password_reminders')
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('select')
             ->with('email')
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('where')
             ->with('token', '=', $token)
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('where')
             ->with('created_at', '>=', $oldestValidDate)
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('first')
@@ -214,16 +212,16 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         //         ->delete();
         $db->shouldReceive('connection')
             ->once()->with('db_name')
-            ->andReturn( $db );
+            ->andReturn($db);
 
         $db->shouldReceive('table')
             ->with('password_reminders')
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('where')
             ->with('token', '=', $token)
-            ->andReturn( $db )
+            ->andReturn($db)
             ->once();
 
         $db->shouldReceive('delete')
@@ -372,7 +370,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 
         $mailer->shouldReceive('send')
             ->once()->with('view.name', ['user'=>$user, 'token'=>$token], m::any())
-            ->andReturnUsing(function($a,$b,$closure) use ($test, $user) {
+            ->andReturnUsing(function ($a, $b, $closure) use ($test, $user) {
                 $message = m::mock('Message');
 
                 $message->shouldReceive('to')

@@ -7,8 +7,6 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -73,7 +71,8 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
 
         // Set the exception as expected ;)
         $this->setExpectedException(
-            'Exception', 'Wrong model specified in config/auth.php'
+            'Exception',
+            'Wrong model specified in config/auth.php'
         );
 
         /*
@@ -97,7 +96,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         ];
         $model = m::mock('_mockedUser');
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]',[]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
 
         /*
         |------------------------------------------------------------
@@ -145,7 +144,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $email = 'someone@somewhere.com';
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]',[]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', []);
 
         /*
         |------------------------------------------------------------
@@ -175,7 +174,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $username = 'Someone';
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]',[]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', []);
 
         /*
         |------------------------------------------------------------
@@ -206,7 +205,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $confirmCode = 123123;
         $wrongConfirmCode = 'IdontExist';
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]',[]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]', []);
         $repo->shouldAllowMockingProtectedMethods();
 
         /*
@@ -248,7 +247,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[confirmUser]',[]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[confirmUser]', []);
 
         /*
         |------------------------------------------------------------

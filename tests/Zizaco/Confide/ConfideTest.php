@@ -7,8 +7,6 @@ class ConfideTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -923,7 +921,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->andReturn($view);
 
         $app['config']->shouldReceive('get')
-            ->times(4)->andReturnUsing(function($name){
+            ->times(4)->andReturnUsing(function ($name) {
                 return 'view.'.$name;
             });
 

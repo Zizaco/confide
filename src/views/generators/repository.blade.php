@@ -3,7 +3,9 @@
 <?php $nonNamespacedName = (strstr($model, '\\')) ? substr(strrchr($model, '\\'), 1) : $model ?>
 @if (strstr($model, '\\'))
 
-use App, Config, Confide;
+use App;
+use Config;
+use Confide;
 @endif
 
 /**
@@ -16,7 +18,9 @@ class UserRepository
 {
     /**
      * Signup a new account with the given parameters
+     *
      * @param  array $input Array containing 'username', 'email' and 'password'.
+     *
      * @return {{ $nonNamespacedName }} {{ $nonNamespacedName }} object that may or may not be saved successfully. Check the id to make sure.
      */
     public function signup($input)
@@ -30,7 +34,7 @@ class UserRepository
         // The password confirmation will be removed from model
         // before saving. This field will be used in Ardent's
         // auto validation.
-        $user->password_confirmation = array_get($input, 'password_confirmation' );
+        $user->password_confirmation = array_get($input, 'password_confirmation');
 
         // Generate a random confirmation code
         $user->confirmation_code     = md5($user->username.time('U'));
@@ -43,13 +47,16 @@ class UserRepository
 
     /**
      * Attempts to login with the given credentials.
+     *
      * @param  array $input Array containing the credentials (email/username and password)
+     *
      * @return boolean Success?
      */
     public function login($input)
     {
-        if(! isset($input['password']))
+        if (! isset($input['password'])) {
             $input['password'] = null;
+        }
 
         $identityColumns = ['email', 'username'];
 
@@ -61,6 +68,7 @@ class UserRepository
      * much failed login attempts
      *
      * @param array $credentials Array containing the credentials (email/username and password)
+     *
      * @return boolean Is throttled
      */
     public function isThrottled($input)
@@ -71,20 +79,25 @@ class UserRepository
     /**
      * Checks if the given credentials correponds to a user that exists but
      * is not confirmed
+     *
      * @param array $credentials Array containing the credentials (email/username and password)
+     *
      * @return boolean Exists and is not confirmed?
      */
     public function existsButNotConfirmed($input)
     {
         $user = Confide::getUserByEmailOrUsername($input);
 
-        if ($user)
+        if ($user) {
             return ! $user->confirmed;
+        }
     }
 
     /**
      * Resets a password of a user. The $input['token'] will tell which user.
-     * @param  array  $input Array containing 'token', 'password' and 'password_confirmation' keys.
+     *
+     * @param array $input Array containing 'token', 'password' and 'password_confirmation' keys.
+     *
      * @return boolean Success
      */
     public function resetPassword($input)
@@ -99,16 +112,19 @@ class UserRepository
         }
 
         // If result is positive, destroy token
-        if ($result)
+        if ($result) {
             Confide::destroyForgotPasswordToken($input['token']);
+        }
 
         return $result;
     }
 
     /**
      * Simply saves the given instance
+     *
      * @param  {{ $nonNamespacedName }} $instance
-     * @return boolean           Success
+     *
+     * @return boolean Success
      */
     public function save({{ $nonNamespacedName }} $instance)
     {

@@ -44,16 +44,14 @@ class Confide
      * @param  \Zizaco\Confide\RepositoryInterface           $repo
      * @param  \Zizaco\Confide\PasswordServiceInterface      $passService
      * @param  \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param  \Illuminate\Foundation\Application     $app Laravel application object
-     * @return void
+     * @param  \Illuminate\Foundation\Application            $app            Laravel application object
      */
     public function __construct(
         RepositoryInterface       $repo,
         PasswordServiceInterface  $passService,
         LoginThrottleServiceInterface $loginThrottler,
         $app = null
-    )
-    {
+    ) {
         $this->repo           = $repo;
         $this->passService    = $passService;
         $this->loginThrottler = $loginThrottler;
@@ -81,10 +79,10 @@ class Confide
     }
 
     /**
-     * Sets the 'confirmed' field of the user with the
-     * matching code to true.
+     * Sets the 'confirmed' field of the user with the matching code to true.
      *
      * @param string $code
+     *
      * @return bool Success
      */
     public function confirm($code)
@@ -97,22 +95,26 @@ class Confide
      * exists and retrieve it
      *
      * @param  array $identity Array containing at least 'username' or 'email'.
+     *
      * @return \Zizaco\Confide\ConfideUserInterface|null
      */
     public function getUserByEmailOrUsername($identity)
     {
-        if (is_array($identity))
+        if (is_array($identity)) {
             $identity = $this->extractIdentityFromArray($identity);
+        }
 
         return $this->repo->getUserByEmailOrUsername($identity);
     }
 
     /**
-     * Attempt to log a user into the application with
-     * password and identity field(s), usually email or username.
+     * Attempt to log a user into the application with password and 
+     * identity field(s), usually email or username.
      *
-     * @param  array $input Array containing at least 'username' or 'email' and 'password'. Optionally the 'remember' boolean.
-     * @param  bool $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
+     * @param  array $input           Array containing at least 'username' or 'email' and 'password'. 
+     *                                Optionally the 'remember' boolean.
+     * @param  bool  $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
+     *
      * @return boolean Success
      */
     public function logAttempt(array $input, $mustBeConfirmed = true)
@@ -120,22 +122,25 @@ class Confide
         $remember = $this->extractRememberFromArray($input);
         $emailOrUsername = $this->extractIdentityFromArray($input);
 
-        if (!$this->loginThrottling($emailOrUsername))
+        if (!$this->loginThrottling($emailOrUsername)) {
             return false;
+        }
 
         $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
 
         if ($user) {
-            if (! $user->confirmed && $mustBeConfirmed )
+            if (! $user->confirmed && $mustBeConfirmed) {
                 return false;
+            }
 
             $correctPassword = $this->app['hash']->check(
                 isset($input['password']) ? $input['password'] : false,
                 $user->password
             );
 
-            if (! $correctPassword)
+            if (! $correctPassword) {
                 return false;
+            }
 
             $this->app['auth']->login($user, $remember);
             return true;
@@ -145,9 +150,10 @@ class Confide
     }
 
     /**
-     * Extracts the value of the remember key of the given
-     * array
+     * Extracts the value of the remember key of the given array
+     *
      * @param  array $input An array containing the key 'remember'
+     *
      * @return boolean
      */
     protected function extractRememberFromArray(array $input)
@@ -160,9 +166,10 @@ class Confide
     }
 
     /**
-     * Extracts the email or the username key of the given
-     * array
+     * Extracts the email or the username key of the given array
+     *
      * @param  array $input An array containing the key 'email' or 'username'
+     *
      * @return mixed
      */
     protected function extractIdentityFromArray(array $input)
@@ -180,7 +187,9 @@ class Confide
      * Calls throttleIdentity of the loginThrottler and returns false
      * if the throttleCount is grater then the 'throttle_limit' config.
      * Also sleeps a little in order to avoid dicionary attacks.
+     *
      * @param  mixed $identity
+     *
      * @return boolean False if the identity has reached the 'throttle_limit'
      */
     protected function loginThrottling($identity)
@@ -188,13 +197,15 @@ class Confide
         $count = $this->loginThrottler
             ->throttleIdentity($identity);
 
-        if ($count >= $this->app['config']->get('confide::throttle_limit'))
+        if ($count >= $this->app['config']->get('confide::throttle_limit')) {
             return false;
+        }
 
         // Throttling delay!
         // See: http://www.codinghorror.com/blog/2009/01/dictionary-attacks-101.html
-        if($count > 2)
+        if ($count > 2) {
             usleep(($count-1) * 400000);
+        }
 
         return true;
     }
@@ -202,7 +213,9 @@ class Confide
     /**
      * Asks the loginThrottler service if the given identity has reached the
      * throttle_limit
+     *
      * @param  mixed $identity The login identity
+     *
      * @return boolean True if the identity has reached the throttle_limit
      */
     public function isThrottled($identity)
@@ -211,29 +224,30 @@ class Confide
     }
 
     /**
-     * If an user with the given email exists then generate
-     * a token for password change and saves it in the
-     * 'password_reminders' table with the email of the
-     * user.
+     * If an user with the given email exists then generate a token for password
+     * change and saves it in the 'password_reminders' table with the email 
+     * of the user.
      *
      * @param string  $email
+     *
      * @return string $token
      */
     public function forgotPassword($email)
     {
         $user = $this->repo->getUserByEmail($email);
 
-        if ($user)
+        if ($user) {
             return $this->passService->requestChangePassword($user);
+        }
 
         return false;
     }
 
     /**
-     * Delete the record of the given token from 'password_reminders'
-     * table.
+     * Delete the record of the given token from 'password_reminders' table.
      *
      * @param  string $token Token retrieved from a forgotPassword
+     *
      * @return boolean Success
      */
     public function destroyForgotPasswordToken($token)
@@ -242,10 +256,11 @@ class Confide
     }
 
     /**
-     * Returns a user that corresponds to the given reset
-     * password token or false if there is no user with the
-     * given token.
+     * Returns a user that corresponds to the given reset password token or 
+     * false if there is no user with the given token.
+     *
      * @param  string $token
+     *
      * @return ConfideUser
      */
     public function userByResetPasswordToken($token)
@@ -261,8 +276,6 @@ class Confide
 
     /**
      * Log the user out of the application.
-     *
-     * @return void
      */
     public function logout()
     {
@@ -313,7 +326,7 @@ class Confide
      *
      * @return \Illuminate\View\View
      */
-    public function makeResetPasswordForm( $token )
+    public function makeResetPasswordForm($token)
     {
         return $this->app['view']
             ->make(

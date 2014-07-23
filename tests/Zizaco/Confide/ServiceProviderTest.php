@@ -7,8 +7,6 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Calls Mockery::close
-     *
-     * @return void
      */
     public function tearDown()
     {
@@ -64,12 +62,14 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->shouldReceive(
-                'registerRepository','registerConfide',
-                'registerCommands','registerPasswordService',
-                'registerLoginThrottleService',
-                'registerUserValidator'
-            )
-            ->once();
+            'registerRepository',
+            'registerConfide',
+            'registerCommands',
+            'registerPasswordService',
+            'registerLoginThrottleService',
+            'registerUserValidator'
+        )
+        ->once();
 
         /*
         |------------------------------------------------------------
@@ -100,7 +100,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the name is 'confide.repository'
                 // and that the closure passed returns the correct
                 // kind of object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
                     $test->assertEquals('confide.repository', $name);
                     $test->assertInstanceOf(
                         'Zizaco\Confide\EloquentRepository',
@@ -138,7 +138,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the name is 'confide.password'
                 // and that the closure passed returns the correct
                 // kind of object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
                     $test->assertEquals('confide.password', $name);
                     $test->assertInstanceOf(
                         'Zizaco\Confide\EloquentPasswordService',
@@ -176,7 +176,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the name is 'confide.throttle'
                 // and that the closure passed returns the correct
                 // kind of object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
                     $test->assertEquals('confide.throttle', $name);
                     $test->assertInstanceOf(
                         'Zizaco\Confide\CacheLoginThrottleService',
@@ -214,7 +214,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the name is 'confide.user_validator'
                 // and that the closure passed returns the correct
                 // kind of object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
                     $test->assertEquals('confide.user_validator', $name);
                     $test->assertInstanceOf(
                         'Zizaco\Confide\UserValidator',
@@ -264,7 +264,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the name is 'confide'
                 // and that the closure passed returns the correct
                 // kind of object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
                     $test->assertEquals('confide', $name);
                     $test->assertInstanceOf(
                         'Zizaco\Confide\Confide',
@@ -302,7 +302,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
                 // Make sure that the commands are being registered
                 // with a closure that returns the correct
                 // object.
-                function($name, $closure) use ($test, $app) {
+                function ($name, $closure) use ($test, $app) {
 
                     $shouldBe = [
                         'command.confide.controller' => 'Zizaco\Confide\ControllerCommand',

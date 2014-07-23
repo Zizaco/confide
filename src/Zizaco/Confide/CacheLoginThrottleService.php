@@ -21,7 +21,6 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * Create a new PasswordService
      *
      * @param  \Illuminate\Foundation\Application $app Laravel application object
-     * @return void
      */
     public function __construct($app = null)
     {
@@ -33,6 +32,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * also returns the current value for that identity.
      *
      * @param  mixed $identity The login identity
+     *
      * @return integer How many times that same identity was used
      */
     public function throttleIdentity($identity)
@@ -45,7 +45,9 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
 
     /**
      * Tells if the given identity has reached the throttle_limit
+     *
      * @param  mixed $identity The login identity
+     *
      * @return boolean True if the identity has reached the throttle_limit
      */
     public function isThrottled($identity)
@@ -63,15 +65,16 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * the relevant fields. I.E: if the attacker tries to use a
      * bunch of different passwords, the identity will still be the
      * same.
-     * @param  $mixed $identity
+     *
+     * @param mixed $identity
+     *
      * @return string $identityString
      */
     protected function parseIdentity($identity)
     {
         // If is an array, remove password, remember and then
         // transforms it into a string.
-        if (is_array($identity))
-        {
+        if (is_array($identity)) {
             unset($identity['password']);
             unset($identity['remember']);
             $identity = serialize($identity);
@@ -85,8 +88,9 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * it into cache and returns the current value for that
      * identity.
      *
-     * @param  string $identityString
-     * @param  integer $increments Amount that is going to be added to the throttling attemps for the given identity
+     * @param string  $identityString
+     * @param integer $increments     Amount that is going to be added to the throttling attemps for the given identity
+     *
      * @return integer How many times that same string was used
      */
     protected function countThrottle($identityString, $increments = 1)
