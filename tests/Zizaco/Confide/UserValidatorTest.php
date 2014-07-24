@@ -109,7 +109,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
             ->atLeast(1)
             ->with(
                 m::any(),
-                'validation.confirmed::confide.alerts.wrong_confirmation',
+                'confide::confide.alerts.wrong_confirmation',
                 'password_confirmation'
             );
 
