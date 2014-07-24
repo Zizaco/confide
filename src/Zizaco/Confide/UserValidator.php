@@ -98,7 +98,7 @@ class UserValidator implements UserValidatorInterface
             } else {
                 $this->attachErrorMsg(
                     $user,
-                    'validation.confirmed::confide.alerts.wrong_confirmation',
+                    'confide::confide.alerts.wrong_confirmation',
                     'password_confirmation'
                 );
                 return false;
