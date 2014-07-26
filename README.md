@@ -171,37 +171,37 @@ To update an user already in the database you'll Need to make sure your ruleset 
     use Zizaco\Confide\ConfideUser;
 
     class User extends ConfideUser {
-    
+
     public static $rules = array(
         'username' => 'unique:users,username',
         'email' => 'email'
     );
-    
+
     ?>
 
-    <?php 
-    
+    <?php
+
     class UserController extends Controller {
-    
+
         public function postCreate() {
-    
+
             // In real usage you'll need to find the user that is being modified.
             // 1 is set just as an example.
             $user = User::find(1);
-        
+
             // Update a user attribute from a form.
             // Using email as an example.
-            $user->email = Input::get('email'); 
-        
+            $user->email = Input::get('email');
+
             // Save
             // This was previously update, but Ardent changed.
-            $user->updateUniques(); 
-      
+            $user->updateUniques();
+
         }
     }
-    
+
     ?>
-    
+
 This will allow you to update the current user.
 
 #### Validate model fields
@@ -231,17 +231,17 @@ Example: $user->terms = Input::get('terms');
 
 #### Passing additional information to the make methods
 
-If you want to pass additional parameters to the forms, you can use an alternate syntax to achieve this. 
+If you want to pass additional parameters to the forms, you can use an alternate syntax to achieve this.
 
 Instead of using the make method:
-    
+
     Confide::makeResetPasswordForm( $token ):
 
 You would use:
 
     View::make(Config::get('confide::reset_password_form'))
         ->with('token', $token);
-        
+
 It produces the same output, but you would be able to add more inputs using 'with' just like any other view.
 
 #### RESTful controller
@@ -255,7 +255,7 @@ Will result in a [RESTful controller](https://github.com/laravel/docs/blob/maste
 Then, when dumping the routes, you should use the --restful option to match the existing controller.
 
     $ php artisan confide:routes --restful
-    
+
 #### User roles and permissions
 
 In order not to bloat Confide with not related features, the role and permission was developed as another package: [Entrust](https://github.com/Zizaco/entrust). This package couples very well with Confide.
@@ -278,7 +278,7 @@ When defining your filter you should use the Redirect::guest('user/login') withi
 
     // Only authenticated users will be able to access routes that begins with
     // 'admin'. Ex: 'admin/posts', 'admin/categories'.
-    Route::when('admin*', 'auth'); 
+    Route::when('admin*', 'auth');
 
 or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
@@ -290,7 +290,7 @@ or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
 Finally, it'll auto redirect if your controller's user/login function uses Redirect:intended('a/default/url/here') after a successful login.
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
-    
+
 #### Validating a route
 
 If you want to validate whether a route exists, the `Confide::checkAction` function is what you are looking for.

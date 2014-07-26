@@ -54,16 +54,16 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
         $confide_user->shouldReceive('confirm') // Should receive confirm
             ->andReturn( true )
             ->once()
-            
+
             ->getMock()->shouldReceive('where') // Should query for the model
             ->with('confirmation_code', '=', '123123')
             ->andReturn( $confide_user )
             ->once()
-            
+
             ->getMock()->shouldReceive('get')
             ->andReturn( $confide_user )
             ->once()
-            
+
             ->getMock()->shouldReceive('first')
             ->andReturn( $confide_user )
             ->once();
@@ -83,11 +83,11 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('email', '=', 'lol@sample.com')
             ->andReturn( $confide_user )
             ->once()
-            
+
             ->getMock()->shouldReceive('get')
             ->andReturn( $confide_user )
             ->once()
-            
+
             ->getMock()->shouldReceive('first')
             ->andReturn( $confide_user )
             ->once();
@@ -121,11 +121,11 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('username', 'LoL')
             ->andReturn( $confide_user )
             ->once()
-            
+
             ->getMock()->shouldReceive('get')
             ->andReturn( $confide_user )
             ->atLeast(1)
-            
+
             ->getMock()->shouldReceive('first')
             ->andReturn( $confide_user )
             ->atLeast(1);
@@ -181,12 +181,12 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('password_reminders')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('where')
             ->with('token', '=', '456456')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('count')
             ->andReturn( 1 )
             ->once();
@@ -213,12 +213,12 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('email')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('where')
             ->with('token', '=', '456456')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('first')
             ->andReturn('lol@sample.com')
             ->once();
@@ -245,12 +245,12 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
             ->with('email')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('where')
             ->with('token', '=', '456456')
             ->andReturn( $database )
             ->once()
-            
+
             ->getMock()->shouldReceive('delete')
             ->once();
 
@@ -438,7 +438,7 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
     /**
      * Returns a mocked ConfideUser object for testing purposes
      * only
-     * 
+     *
      * @return Illuminate\Auth\UserInterface A mocked confide user
      */
     private function mockConfideUser()
@@ -456,7 +456,7 @@ class ConfideEloquentRepositoryTest extends PHPUnit_Framework_TestCase {
     /**
      * Mocks the application components that
      * are not Confide's responsibility
-     * 
+     *
      * @return object Mocked laravel application
      */
     private function mockApp()

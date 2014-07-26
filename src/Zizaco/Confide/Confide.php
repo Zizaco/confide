@@ -9,14 +9,14 @@ class Confide
 {
     /**
      * Laravel application
-     * 
+     *
      * @var Illuminate\Foundation\Application
      */
     public $app;
 
     /**
      * Confide repository instance
-     * 
+     *
      * @var Zizaco\Confide\ConfideRepository
      */
     public $repo;
@@ -35,7 +35,7 @@ class Confide
 
     /**
      * Returns the Laravel application
-     * 
+     *
      * @return Illuminate\Foundation\Application
      */
     public function app()
@@ -124,7 +124,7 @@ class Confide
     /**
      * Checks if the credentials has been throttled by too
      * much failed login attempts
-     * 
+     *
      * @param array $credentials
      * @return mixed Value.
      */
@@ -166,7 +166,7 @@ class Confide
 
     /**
      * Checks to see if the user has a valid token.
-     * 
+     *
      * @param $token
      * @return bool
      */
@@ -296,7 +296,7 @@ class Confide
     /**
      * Checks if the current IP / email has reached the throttle
      * limit
-     * 
+     *
      * @param array $credentials
      * @return bool Value.
      */
@@ -310,7 +310,7 @@ class Confide
 
     /**
      * Increment IP / email throttle count
-     * 
+     *
      * @param array $credentials
      * @return void
      */
