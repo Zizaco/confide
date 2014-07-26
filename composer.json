@@ -18,12 +18,12 @@
         "illuminate/support": "~4.2"
     },
     "require-dev": {
-        "illuminate/database": "~4.2",
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9",
         "illuminate/auth": "~4.2",
         "illuminate/console": "~4.2",
-        "phpunit/phpunit": "~4.0",
-        "satooshi/php-coveralls": "~0.7@dev",
-        "mockery/mockery": "~0.9"
+        "illuminate/database": "~4.2",
+        "satooshi/php-coveralls": "~0.6"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
