@@ -11,7 +11,7 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 interface PasswordServiceInterface
 {
     /**
-     * Generate a token for password change and saves it in the 
+     * Generate a token for password change and saves it in the
      * 'password_reminders' table with the email of the user.
      *
      * @param RemindableInterface $user An existent user
