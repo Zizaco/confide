@@ -32,7 +32,7 @@ class ConfideServiceProvider extends ServiceProvider {
 
         $this->registerConfide();
 
-        $this->registerCommands();   
+        $this->registerCommands();
     }
 
     /**

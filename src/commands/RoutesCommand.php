@@ -56,7 +56,7 @@ class RoutesCommand extends Command {
             " will be appended to your routes.php file. This may be used with a confide".
             " controller generated using [-r|--restful] option.";
         }
-        
+
 
         $this->comment( $message );
         $this->line('');
@@ -71,7 +71,7 @@ class RoutesCommand extends Command {
                 $this->info( "app/routes.php Patched successfully!" );
             }
             else{
-                $this->error( 
+                $this->error(
                     "Coudn't append content to app/routes.php\nCheck the".
                     " write permissions within the file."
                 );
@@ -106,7 +106,7 @@ class RoutesCommand extends Command {
     protected function prepareName( $name = '' )
     {
         $name = ( $name != '') ? ucfirst($name) : 'User';
-        
+
         if( substr($name,-10) == 'controller' )
         {
             $name = substr($name, 0, -10).'Controller';
@@ -126,7 +126,7 @@ class RoutesCommand extends Command {
      * @return bool
      */
     protected function appendRoutes( $name = '', $restful = false )
-    {        
+    {
         $app = app();
         $routes_file = $this->laravel->path.'/routes.php';
         $confide_routes = $app['view']->make('confide::generators.routes')

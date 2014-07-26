@@ -99,19 +99,19 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $this->confide->repo->shouldReceive('model')
             ->andReturn($confide_user);
 
-        $this->assertTrue( 
+        $this->assertTrue(
             $this->confide->logAttempt( $credentials )
         );
 
         // Should not login with unconfirmed user.
-        $this->assertFalse( 
+        $this->assertFalse(
             $this->confide->logAttempt( $credentials, true )
         );
 
         $confide_user->confirmed = 1;
 
         // Should login because now the user is confirmed
-        $this->assertTrue( 
+        $this->assertTrue(
             $this->confide->logAttempt( $credentials, true )
         );
     }
@@ -140,7 +140,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
 
             // Simulates cache values
             $this->useCacheForThrottling($i);
-        
+
             // Make shure the login is not happening anyway
             $this->assertFalse(
                 $this->confide->logAttempt( array('email'=>'wrong', 'username'=>'wrong', 'password'=>'wrong') )
@@ -374,7 +374,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase {
         $obj_provider->shouldReceive('getObject')
             ->with($class)
             ->andReturn( $obj );
-        
+
         $this->confide->objectRepository = $obj_provider;
     }
 }

@@ -61,7 +61,7 @@ class ControllerCommand extends Command {
                 $this->info( "$name.php Successfully created!" );
             }
             else{
-                $this->error( 
+                $this->error(
                     "Coudn't create app/controllers/$name.php.\nCheck the".
                     " write permissions within the controllers directory".
                     " or if $name.php already exists. (This command will".
@@ -99,7 +99,7 @@ class ControllerCommand extends Command {
     protected function prepareName($name = '')
     {
         $name = ( $name != '') ? ucfirst($name) : 'User';
-        
+
         if( substr($name,-10) == 'controller' )
         {
             $name = substr($name, 0, -10).'Controller';
