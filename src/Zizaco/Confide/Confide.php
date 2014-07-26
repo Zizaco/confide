@@ -108,10 +108,10 @@ class Confide
     }
 
     /**
-     * Attempt to log a user into the application with password and 
+     * Attempt to log a user into the application with password and
      * identity field(s), usually email or username.
      *
-     * @param  array $input           Array containing at least 'username' or 'email' and 'password'. 
+     * @param  array $input           Array containing at least 'username' or 'email' and 'password'.
      *                                Optionally the 'remember' boolean.
      * @param  bool  $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
      *
@@ -161,7 +161,7 @@ class Confide
         if (isset($input['remember'])) {
             return $input['remember'];
         }
-        
+
         return false;
     }
 
@@ -179,7 +179,7 @@ class Confide
         } elseif (isset($input['username'])) {
             return $input['username'];
         }
-        
+
         return false;
     }
 
@@ -225,7 +225,7 @@ class Confide
 
     /**
      * If an user with the given email exists then generate a token for password
-     * change and saves it in the 'password_reminders' table with the email 
+     * change and saves it in the 'password_reminders' table with the email
      * of the user.
      *
      * @param string  $email
@@ -256,7 +256,7 @@ class Confide
     }
 
     /**
-     * Returns a user that corresponds to the given reset password token or 
+     * Returns a user that corresponds to the given reset password token or
      * false if there is no user with the given token.
      *
      * @param  string $token
