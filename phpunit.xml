@@ -12,7 +12,7 @@
 >
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/Zizaco</directory>
+            <directory suffix=".php">./src/Confide</directory>
             <directory suffix=".php">./src/commands</directory>
         </whitelist>
     </filter>
