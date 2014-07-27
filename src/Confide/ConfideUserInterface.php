@@ -12,29 +12,28 @@ use Illuminate\Auth\Reminders\RemindableInterface;
  *
  * @see \Zizaco\Confide\ConfideUser
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 interface ConfideUserInterface extends UserInterface, RemindableInterface
 {
     /**
-     * Confirm the user (usually means that the user)
-     * email is valid.
+     * Confirm the user (usually means that the user) email is valid.
      *
      * @return bool
      */
     public function confirm();
 
     /**
-     * Send email with information about password reset
+     * Send email with information about password reset.
      *
      * @return string
      */
     public function forgotPassword();
 
     /**
-     * Checks if the current user is valid
+     * Checks if the current user is valid.
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid();
 }

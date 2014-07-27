@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Facade as IlluminateFacade;
 
 /**
  * @see \Zizaco\Confide\Facade
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 class Facade extends IlluminateFacade
 {

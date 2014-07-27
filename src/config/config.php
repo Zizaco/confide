@@ -11,7 +11,6 @@ return array(
     | the 'throttle_time_period', which is in minutes.
     |
     */
-
     'throttle_limit' => 9,
     'throttle_time_period' => 2,
 
@@ -69,7 +68,6 @@ return array(
     |
     |
     */
-
     'email_reset_password' =>       'confide::emails.passwordreset', // with $user and $token.
     'email_account_confirmation' => 'confide::emails.confirm', // with $user
 

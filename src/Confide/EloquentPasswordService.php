@@ -3,24 +3,24 @@
 use Illuminate\Auth\Reminders\RemindableInterface;
 
 /**
- * A service that abstracts all user password management related methods
+ * A service that abstracts all user password management related methods.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 class EloquentPasswordService implements PasswordServiceInterface
 {
     /**
-     * Laravel application
+     * Laravel application.
      *
      * @var \Illuminate\Foundation\Application
      */
     public $app;
 
     /**
-     * Create a new PasswordService
+     * Create a new PasswordService.
      *
-     * @param  \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Foundation\Application $app Laravel application object
      */
     public function __construct($app = null)
     {
@@ -32,9 +32,9 @@ class EloquentPasswordService implements PasswordServiceInterface
      * the 'password_reminders' table with the email of the
      * user.
      *
-     * @param  RemindableInterface $user     An existent user
+     * @param RemindableInterface $user An existent user.
      *
-     * @return string Password reset token
+     * @return string Password reset token.
      */
     public function requestChangePassword(RemindableInterface $user)
     {
@@ -59,11 +59,11 @@ class EloquentPasswordService implements PasswordServiceInterface
 
     /**
      * Returns the email associated with the given reset
-     * password token
+     * password token.
      *
-     * @param  string $token
+     * @param string $token
      *
-     * @return string Email
+     * @return string Email.
      */
     public function getEmailByToken($token)
     {
@@ -83,11 +83,11 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
-     * Delete the record of the given token from database
+     * Delete the record of the given token from database.
      *
-     * @param  string $token
+     * @param string $token
      *
-     * @return boolean Success
+     * @return boolean Success.
      */
     public function destroyToken($token)
     {
@@ -116,9 +116,9 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
-     * Generates a random password change token
+     * Generates a random password change token.
      *
-     * @return  string
+     * @return string
      */
     protected function generateToken()
     {
@@ -126,11 +126,11 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
-     * Extracts the email of the given object or array
+     * Extracts the email of the given object or array.
      *
-     * @param  mixed $email An object, array or email string
+     * @param mixed $email An object, array or email string.
      *
-     * @return string       The email address
+     * @return string The email address.
      */
     protected function unwrapEmail($email)
     {
@@ -145,10 +145,12 @@ class EloquentPasswordService implements PasswordServiceInterface
 
     /**
      * Sends an email containing the reset password link with the
-     * given token to the user
+     * given token to the user.
      *
-     * @param  RemindableInterface $user  An existent user
-     * @param  string $token  Password reset token
+     * @param RemindableInterface $user  An existent user.
+     * @param string              $token Password reset token.
+     *
+     * @return void
      */
     protected function sendEmail($user, $token)
     {
@@ -167,10 +169,9 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
-     * Returns a date to limit the acceptable password reset
-     * requests.
+     * Returns a date to limit the acceptable password reset requests.
      *
-     * @return string 'Y-m-d H:i:s' formated string
+     * @return string 'Y-m-d H:i:s' formated string.
      */
     protected function getOldestValidDate()
     {

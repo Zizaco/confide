@@ -6,21 +6,21 @@
  * order to avoid brute force attacks.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 class CacheLoginThrottleService implements LoginThrottleServiceInterface
 {
     /**
-     * Laravel application
+     * Laravel application.
      *
      * @var \Illuminate\Foundation\Application
      */
     public $app;
 
     /**
-     * Create a new PasswordService
+     * Create a new PasswordService.
      *
-     * @param  \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Foundation\Application $app Laravel application object.
      */
     public function __construct($app = null)
     {
@@ -31,9 +31,9 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * Increments the count for the given identity by one and
      * also returns the current value for that identity.
      *
-     * @param  mixed $identity The login identity
+     * @param mixed $identity The login identity.
      *
-     * @return integer How many times that same identity was used
+     * @return int How many times that same identity was used.
      */
     public function throttleIdentity($identity)
     {
@@ -44,11 +44,11 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
     }
 
     /**
-     * Tells if the given identity has reached the throttle_limit
+     * Tells if the given identity has reached the throttle_limit.
      *
-     * @param  mixed $identity The login identity
+     * @param mixed $identity The login identity.
      *
-     * @return boolean True if the identity has reached the throttle_limit
+     * @return bool True if the identity has reached the throttle_limit.
      */
     public function isThrottled($identity)
     {
@@ -68,7 +68,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      *
      * @param mixed $identity
      *
-     * @return string $identityString
+     * @return string $identityString.
      */
     protected function parseIdentity($identity)
     {
@@ -88,10 +88,10 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      * it into cache and returns the current value for that
      * identity.
      *
-     * @param string  $identityString
-     * @param integer $increments     Amount that is going to be added to the throttling attemps for the given identity
+     * @param string $identityString
+     * @param int    $increments     Amount that is going to be added to the throttling attemps for the given identity.
      *
-     * @return integer How many times that same string was used
+     * @return int How many times that same string was used.
      */
     protected function countThrottle($identityString, $increments = 1)
     {

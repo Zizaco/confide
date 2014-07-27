@@ -19,7 +19,7 @@ class UserRepository
     /**
      * Signup a new account with the given parameters
      *
-     * @param  array $input Array containing 'username', 'email' and 'password'.
+     * @param array $input Array containing 'username', 'email' and 'password'.
      *
      * @return {{ $nonNamespacedName }} {{ $nonNamespacedName }} object that may or may not be saved successfully. Check the id to make sure.
      */
@@ -48,7 +48,7 @@ class UserRepository
     /**
      * Attempts to login with the given credentials.
      *
-     * @param  array $input Array containing the credentials (email/username and password)
+     * @param array $input Array containing the credentials (email/username and password)
      *
      * @return boolean Success?
      */
@@ -125,7 +125,7 @@ class UserRepository
     /**
      * Simply saves the given instance
      *
-     * @param  {{ $nonNamespacedName }} $instance
+     * @param {{ $nonNamespacedName }} $instance
      *
      * @return boolean Success
      */

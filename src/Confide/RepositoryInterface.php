@@ -1,18 +1,17 @@
 <?php namespace Zizaco\Confide;
 
 /**
- * A service that abstracts all the interactions with persistent
- * storage for confide
+ * A service that abstracts all the interactions with persistent storage for confide.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 interface RepositoryInterface
 {
     /**
-     * Returns the model set in auth config
+     * Returns the model set in auth config.
      *
-     * @return mixed Instantiated object of the 'auth.model' class
+     * @return mixed Instantiated object of the 'auth.model' class.
      */
     public function model();
 
@@ -21,27 +20,27 @@ interface RepositoryInterface
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
      *
-     * @param  array $identity  An array of attributes and values to search for
+     * @param array $identity An array of attributes and values to search for.
      *
-     * @return ConfideUser      User object
+     * @return ConfideUser User object.
      */
     public function getUserByIdentity($identity);
 
     /**
-     * Find a user by the given email
+     * Find a user by the given email.
      *
-     * @param  string $email The email to be used in the query
+     * @param string $email The email to be used in the query.
      *
-     * @return ConfideUser   User object
+     * @return ConfideUser User object.
      */
     public function getUserByEmail($email);
 
     /**
-     * Find a user by the given email or username
+     * Find a user by the given email or username.
      *
-     * @param  string $emailOrUsername Username of email to be used in the query
+     * @param string $emailOrUsername Username of email to be used in the query.
      *
-     * @return ConfideUser   User object
+     * @return ConfideUser User object.
      */
     public function getUserByEmailOrUsername($emailOrUsername);
 
@@ -51,7 +50,7 @@ interface RepositoryInterface
      *
      * @param string $code
      *
-     * @return bool Success
+     * @return bool Success.
      */
     public function confirmByCode($code);
 }
