@@ -58,9 +58,7 @@ class UserRepository
             $input['password'] = null;
         }
 
-        $identityColumns = ['email', 'username'];
-
-        return Confide::logAttempt($input, Config::get('confide::signup_confirm'), $identityColumns);
+        return Confide::logAttempt($input, Config::get('confide::signup_confirm'));
     }
 
     /**
