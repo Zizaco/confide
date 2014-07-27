@@ -87,7 +87,12 @@ class UserRepository
         $user = Confide::getUserByEmailOrUsername($input);
 
         if ($user) {
-            return ! $user->confirmed;
+            $correctPassword = Hash::check(
+                isset($input['password']) ? $input['password'] : false,
+                $user->password
+            );
+
+            return (! $user->confirmed && $correctPassword);
         }
     }
 
