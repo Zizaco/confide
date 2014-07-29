@@ -6,7 +6,7 @@
  * order to avoid brute force attacks.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 interface LoginThrottleServiceInterface
 {
@@ -14,18 +14,18 @@ interface LoginThrottleServiceInterface
      * Increments the count for the given identity by one and
      * also returns the current value for that identity.
      *
-     * @param  mixed $identity The login identity
+     * @param mixed $identity The login identity.
      *
-     * @return integer How many times that same identity was used
+     * @return int How many times that same identity was used.
      */
     public function throttleIdentity($identity);
 
     /**
-     * Tells if the given identity has reached the throttle_limit
+     * Tells if the given identity has reached the throttle_limit.
      *
-     * @param  mixed $identity The login identity
+     * @param mixed $identity The login identity.
      *
-     * @return boolean True if the identity has reached the throttle_limit
+     * @return bool True if the identity has reached the throttle_limit.
      */
     public function isThrottled($identity);
 }

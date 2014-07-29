@@ -2,15 +2,15 @@
 
 /**
  * A service that abstracts all database interactions that happens
- * in Confide using Eloquent
+ * in Confide using Eloquent.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 class EloquentRepository implements RepositoryInterface
 {
     /**
-     * Laravel application
+     * Laravel application.
      *
      * @var \Illuminate\Foundation\Application
      */
@@ -28,7 +28,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Create a new ConfideRepository
      *
-     * @param  \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Foundation\Application $app Laravel application object
      */
     public function __construct($app = null)
     {
@@ -58,9 +58,9 @@ class EloquentRepository implements RepositoryInterface
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
      *
-     * @param  array $identity  An array of attributes and values to search for
+     * @param array $identity An array of attributes and values to search for
      *
-     * @return ConfideUser      User object
+     * @return ConfideUser User object
      */
     public function getUserByIdentity($identity)
     {
@@ -86,9 +86,9 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Find a user by the given email
      *
-     * @param  string $email The email to be used in the query
+     * @param string $email The email to be used in the query
      *
-     * @return ConfideUser   User object
+     * @return ConfideUser User object
      */
     public function getUserByEmail($email)
     {
@@ -98,9 +98,9 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Find a user by the given email or username
      *
-     * @param  string $emailOrUsername Username of email to be used in the query
+     * @param string $emailOrUsername Username of email to be used in the query
      *
-     * @return ConfideUser   User object
+     * @return ConfideUser User object
      */
     public function getUserByEmailOrUsername($emailOrUsername)
     {
@@ -139,7 +139,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @param  ConfideUser User object
      *
-     * @return bool  Success
+     * @return bool Success
      */
     protected function confirmUser($user)
     {

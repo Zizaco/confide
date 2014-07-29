@@ -20,7 +20,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $sp = m::mock('Zizaco\Confide\ServiceProvider[package]', ['something']);
+        $sp = m::mock('Zizaco\Confide\ServiceProvider[package,commands]', ['something']);
 
         /*
         |------------------------------------------------------------
@@ -29,6 +29,9 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $sp->shouldReceive('package')
             ->with('zizaco/confide')
+            ->once();
+        $sp->shouldReceive('commands')
+            ->with('command.confide.controller','command.confide.routes','command.confide.migration')
             ->once();
 
         /*

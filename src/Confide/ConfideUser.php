@@ -9,14 +9,12 @@ use Illuminate\Support\Facades\App as App;
  *
  * @see \Zizaco\Confide\ConfideUserInterface
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 trait ConfideUser
 {
-
     /**
-     * A MessageBag object that store any error regarding
-     * the confide User.
+     * A MessageBag object that store any error regarding the confide User.
      *
      * @var \Illuminate\Support\MessageBag
      */
@@ -27,7 +25,7 @@ trait ConfideUser
      * email is valid. Sets the confirmed attribute of
      * the user to true and also update the database.
      *
-     * @return bool Success
+     * @return bool Success.
      */
     public function confirm()
     {
@@ -49,9 +47,9 @@ trait ConfideUser
     }
 
     /**
-     * Checks if the current user is valid using the ConfideUserValidator
+     * Checks if the current user is valid using the ConfideUserValidator.
      *
-     * @return boolean
+     * @return bool
      */
     public function isValid()
     {
@@ -73,7 +71,7 @@ trait ConfideUser
      * Overwrites the original save method in order to perform
      * validation before actually saving the object.
      *
-     * @param  array  $options
+     * @param array $options
      *
      * @return bool
      */
@@ -88,7 +86,7 @@ trait ConfideUser
 
     /**
      * Returns a MessageBag object that store any error
-     * regarding the user validation
+     * regarding the user validation.
      *
      * @return \Illuminate\Support\MessageBag
      */
@@ -139,7 +137,7 @@ trait ConfideUser
      *
      * @see \Illuminate\Auth\UserInterface
      *
-     * @param  string  $value
+     * @param string $value
      */
     public function setRememberToken($value)
     {

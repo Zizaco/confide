@@ -85,9 +85,9 @@ class ControllerCommand extends GenerateCommand
      * Returns the name of the controller class that will handle a
      * resource with the given name.
      *
-     * @param string $name Resource name
+     * @param string $name Resource name.
      *
-     * @return string Controller class name
+     * @return string Controller class name.
      */
     protected function getControllerName($name)
     {
@@ -108,11 +108,11 @@ class ControllerCommand extends GenerateCommand
     }
 
     /**
-     * Returns the namespace of the given class name
+     * Returns the namespace of the given class name.
      *
-     * @param string $name Class name
+     * @param string $name Class name.
      *
-     * @return string Namespace
+     * @return string Namespace.
      */
     protected function getNamespace($name)
     {

@@ -6,45 +6,47 @@
  * application will interact directly with.
  *
  * @license MIT
- * @package  Zizaco\Confide
+ * @package Zizaco\Confide
  */
 class Confide
 {
     /**
-     * Laravel application
+     * Laravel application.
      *
      * @var \Illuminate\Foundation\Application
      */
     public $app;
 
     /**
-     * Confide repository instance
+     * Confide repository instance.
      *
      * @var \Zizaco\Confide\RepositoryInterface
      */
     public $repo;
 
     /**
-     * Confide password service instance
+     * Confide password service instance.
      *
      * @var \Zizaco\Confide\PasswordServiceInterface
      */
     public $passService;
 
     /**
-     * Confide login throttling service instance
+     * Confide login throttling service instance.
      *
      * @var \Zizaco\Confide\LoginThrottleServiceInterface
      */
     public $loginThrottler;
 
     /**
-     * Create a new Confide class
+     * Create a new Confide class.
      *
-     * @param  \Zizaco\Confide\RepositoryInterface           $repo
-     * @param  \Zizaco\Confide\PasswordServiceInterface      $passService
-     * @param  \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param  \Illuminate\Foundation\Application            $app            Laravel application object
+     * @param \Zizaco\Confide\RepositoryInterface           $repo
+     * @param \Zizaco\Confide\PasswordServiceInterface      $passService
+     * @param \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
+     * @param \Illuminate\Foundation\Application            $app            Laravel application object
+     *
+     * @return void
      */
     public function __construct(
         RepositoryInterface       $repo,
@@ -59,7 +61,7 @@ class Confide
     }
 
     /**
-     * Returns an object of the model set in auth config
+     * Returns an object of the model set in auth config.
      *
      * @return mixed
      */
@@ -92,9 +94,9 @@ class Confide
 
     /**
      * Checks if a user with the given identity (email or username) already
-     * exists and retrieve it
+     * exists and retrieve it.
      *
-     * @param  array $identity Array containing at least 'username' or 'email'.
+     * @param array $identity Array containing at least 'username' or 'email'.
      *
      * @return \Zizaco\Confide\ConfideUserInterface|null
      */
@@ -111,11 +113,11 @@ class Confide
      * Attempt to log a user into the application with password and
      * identity field(s), usually email or username.
      *
-     * @param  array $input           Array containing at least 'username' or 'email' and 'password'.
-     *                                Optionally the 'remember' boolean.
-     * @param  bool  $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
+     * @param array $input           Array containing at least 'username' or 'email' and 'password'.
+     *                               Optionally the 'remember' boolean.
+     * @param bool  $mustBeConfirmed If true, the user must have confirmed his email account in order to log-in.
      *
-     * @return boolean Success
+     * @return bool Success.
      */
     public function logAttempt(array $input, $mustBeConfirmed = true)
     {
@@ -150,11 +152,11 @@ class Confide
     }
 
     /**
-     * Extracts the value of the remember key of the given array
+     * Extracts the value of the remember key of the given array.
      *
-     * @param  array $input An array containing the key 'remember'
+     * @param array $input An array containing the key 'remember'.
      *
-     * @return boolean
+     * @return bool
      */
     protected function extractRememberFromArray(array $input)
     {
@@ -166,9 +168,9 @@ class Confide
     }
 
     /**
-     * Extracts the email or the username key of the given array
+     * Extracts the email or the username key of the given array.
      *
-     * @param  array $input An array containing the key 'email' or 'username'
+     * @param array $input An array containing the key 'email' or 'username'.
      *
      * @return mixed
      */
@@ -188,9 +190,9 @@ class Confide
      * if the throttleCount is grater then the 'throttle_limit' config.
      * Also sleeps a little in order to avoid dicionary attacks.
      *
-     * @param  mixed $identity
+     * @param mixed $identity.
      *
-     * @return boolean False if the identity has reached the 'throttle_limit'
+     * @return boolean False if the identity has reached the 'throttle_limit'.
      */
     protected function loginThrottling($identity)
     {
@@ -211,12 +213,11 @@ class Confide
     }
 
     /**
-     * Asks the loginThrottler service if the given identity has reached the
-     * throttle_limit
+     * Asks the loginThrottler service if the given identity has reached the throttle_limit.
      *
-     * @param  mixed $identity The login identity
+     * @param mixed $identity The login identity.
      *
-     * @return boolean True if the identity has reached the throttle_limit
+     * @return boolean True if the identity has reached the throttle_limit.
      */
     public function isThrottled($identity)
     {
@@ -228,7 +229,7 @@ class Confide
      * change and saves it in the 'password_reminders' table with the email
      * of the user.
      *
-     * @param string  $email
+     * @param string $email
      *
      * @return string $token
      */
@@ -246,9 +247,9 @@ class Confide
     /**
      * Delete the record of the given token from 'password_reminders' table.
      *
-     * @param  string $token Token retrieved from a forgotPassword
+     * @param string $token Token retrieved from a forgotPassword.
      *
-     * @return boolean Success
+     * @return boolean Success.
      */
     public function destroyForgotPasswordToken($token)
     {
@@ -259,7 +260,7 @@ class Confide
      * Returns a user that corresponds to the given reset password token or
      * false if there is no user with the given token.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return ConfideUser
      */
@@ -283,16 +284,13 @@ class Confide
     }
 
     /**
-     * Display the default login view
+     * Display the default login view.
      *
      * @return \Illuminate\View\View
      */
     public function makeLoginForm()
     {
-        return $this->app['view']
-            ->make(
-                $this->app['config']->get('confide::login_form')
-            );
+        return $this->app['view']->make($this->app['config']->get('confide::login_form'));
     }
 
     /**
@@ -302,23 +300,17 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->app['view']
-            ->make(
-                $this->app['config']->get('confide::signup_form')
-            );
+        return $this->app['view']->make($this->app['config']->get('confide::signup_form'));
     }
 
     /**
-     * Display the forget password view
+     * Display the forget password view.
      *
      * @return \Illuminate\View\View
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app['view']
-            ->make(
-                $this->app['config']->get('confide::forgot_password_form')
-            );
+        return $this->app['view']->make($this->app['config']->get('confide::forgot_password_form'));
     }
 
     /**
@@ -328,10 +320,9 @@ class Confide
      */
     public function makeResetPasswordForm($token)
     {
-        return $this->app['view']
-            ->make(
-                $this->app['config']->get('confide::reset_password_form'),
-                array('token'=>$token)
-            );
+        return $this->app['view']->make(
+            $this->app['config']->get('confide::reset_password_form'),
+            array('token' => $token)
+        );
     }
 }

@@ -21,6 +21,12 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->package('zizaco/confide');
+
+        $this->commands(
+            'command.confide.controller',
+            'command.confide.routes',
+            'command.confide.migration'
+        );
     }
 
     /**
@@ -117,8 +123,21 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->bind('command.confide.migration', function ($app) {
             return new MigrationCommand($app);
         });
+    }
 
-        $this->commands(
+    /**
+     * Get the services provided.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array(
+            'confide',
+            'confide.repository',
+            'confide.password',
+            'confide.throttle',
+            'confide.user_validator',
             'command.confide.controller',
             'command.confide.routes',
             'command.confide.migration'
