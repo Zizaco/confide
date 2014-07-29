@@ -20,7 +20,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        $this->package('zizaco/confide', 'confide', __DIR__.'../');
+        $this->package('zizaco/confide', 'confide', __DIR__.'/../');
 
         $this->commands(
             'command.confide.controller',
