@@ -28,7 +28,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->shouldReceive('package')
-            ->with('zizaco/confide')
+            ->with('zizaco/confide', 'confide', '/home/travis/build/Zizaco/confide/src/Confide/../')
             ->once();
         $sp->shouldReceive('commands')
             ->with('command.confide.controller','command.confide.routes','command.confide.migration')
