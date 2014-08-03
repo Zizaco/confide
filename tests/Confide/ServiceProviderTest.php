@@ -36,7 +36,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
             });
 
         $sp->shouldReceive('commands')
-            ->with('command.confide.controller','command.confide.routes','command.confide.migration')
+            ->with('command.confide.controller', 'command.confide.routes', 'command.confide.migration')
             ->once();
 
         /*
@@ -289,7 +289,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->registerConfide();
     }
 
-    public function testSHouldRegisterCommands()
+    public function testShouldRegisterCommands()
     {
         /*
         |------------------------------------------------------------
@@ -338,5 +338,45 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->registerCommands();
+    }
+
+    public function testShouldProvide()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $app = m::mock('LaravelApp');
+        $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $shouldProvide = [
+            'confide',
+            'confide.repository',
+            'confide.password',
+            'confide.throttle',
+            'confide.user_validator',
+            'command.confide.controller',
+            'command.confide.routes',
+            'command.confide.migration'
+        ];
+
+        $sp->shouldReceive('provides')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            $shouldProvide,
+            $sp->provides()
+        );
     }
 }
