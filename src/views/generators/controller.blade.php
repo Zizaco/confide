@@ -53,12 +53,12 @@ class {{ $class }} extends Controller
                 }
             );
 
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->with('notice', Lang::get('confide::confide.alerts.account_created'));
         } else {
             $error = $user->errors()->all(':message');
 
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@create')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@create' : '@getCreate' }}')
                 ->withInput(Input::except('password'))
                 ->with('error', $error);
         }
@@ -99,7 +99,7 @@ class {{ $class }} extends Controller
                 $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
             }
 
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->withInput(Input::except('password'))
                 ->with('error', $err_msg);
         }
@@ -116,11 +116,11 @@ class {{ $class }} extends Controller
     {
         if (Confide::confirm($code)) {
             $notice_msg = Lang::get('confide::confide.alerts.confirmation');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_confirmation');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->with('error', $error_msg);
         }
     }
@@ -144,7 +144,7 @@ class {{ $class }} extends Controller
     {
         if (Confide::forgotPassword(Input::get('email'))) {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_forgot');
@@ -184,7 +184,7 @@ class {{ $class }} extends Controller
         // By passing an array with the token, password and confirmation
         if ($repo->resetPassword($input)) {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@login')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@postLogin' }}')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
