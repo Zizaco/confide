@@ -21,6 +21,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp = m::mock('Zizaco\Confide\ServiceProvider[package,commands]', ['something']);
+        $test = $this;
 
         /*
         |------------------------------------------------------------
@@ -28,8 +29,12 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->shouldReceive('package')
-            ->with('zizaco/confide', 'confide', '/home/travis/build/Zizaco/confide/src/Confide/../')
-            ->once();
+            ->with('zizaco/confide', 'confide', m::any())
+            ->once()
+            ->andReturnUsing(function ($a, $b, $c) use ($test) {
+                $test->assertContains('confide/src/Confide/../', $c);
+            });
+
         $sp->shouldReceive('commands')
             ->with('command.confide.controller','command.confide.routes','command.confide.migration')
             ->once();
