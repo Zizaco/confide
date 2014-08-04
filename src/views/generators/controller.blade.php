@@ -43,7 +43,7 @@ class {{ $class }} extends Controller
         $user = $repo->signup(Input::all());
 
         if ($user->id) {
-            Mail::send(
+            Mail::queue(
                 Config::get('confide::email_account_confirmation'),
                 compact('user'),
                 function ($message) use ($user) {
