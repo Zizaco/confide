@@ -108,4 +108,15 @@ return array(
     'signup_email'      => true,
     'signup_confirm'    => true,
 
+    /*
+    |--------------------------------------------------------------------------
+    | E-Mail queue
+    |--------------------------------------------------------------------------
+    |
+    | Modify the line below to change which queue driver Confide uses to send
+    | e-mails.
+    |
+    */
+    'email_queue'      => 'sync',
+
 );

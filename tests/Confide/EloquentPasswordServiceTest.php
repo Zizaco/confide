@@ -368,9 +368,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('sendEmail')
             ->passthru();
 
-        $mailer->shouldReceive('queue')
-            ->once()->with('view.name', ['user'=>$user, 'token'=>$token], m::any())
-            ->andReturnUsing(function ($a, $b, $closure) use ($test, $user) {
+        $mailer->shouldReceive('queueOn')
+            ->once()->with('sync', 'view.name', ['user'=>$user, 'token'=>$token], m::any())
+            ->andReturnUsing(function ($q, $a, $b, $closure) use ($test, $user) {
                 $message = m::mock('Message');
 
                 $message->shouldReceive('to')
@@ -391,6 +391,10 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $config->shouldReceive('get')
             ->once()->with('confide::email_reset_password')
             ->andReturn('view.name');
+
+        $config->shouldReceive('get')
+            ->once()->with('confide::email_queue')
+            ->andReturn('sync');
 
         /*
         |------------------------------------------------------------
