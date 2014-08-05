@@ -160,6 +160,29 @@ First, publish the config files:
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
+#### Seeding
+
+To seed your users table you should fill also the `password_confirmation` and `confirmation_code` fields:
+
+    class UsersTableSeeder extends Seeder {
+
+      public function run()
+      {
+        $user = new User;
+        $user->username = 'johndoe;
+        $user->email = 'johndoe@site.dev';
+        $user->password = 'foo_bar_1234';
+        $user->password_confirmation = 'foo_bar_1234';
+        $user->confirmation_code = md5($user->username.time('U'));
+
+        if(! $user->save()) {
+          Log::info('Unable to create user '.$user->username, (array)$user->errors());
+        } else {
+          Log::info('Created user "'.$user->username.'" <'.$user->email.'>');
+        }
+      } 
+    }
+
 #### Update an User
 
 To update an user already in the database you'll want to either pass in an different rule set or use the amend function.
