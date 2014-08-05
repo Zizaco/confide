@@ -37,7 +37,7 @@ class UserRepository
         $user->password_confirmation = array_get($input, 'password_confirmation');
 
         // Generate a random confirmation code
-        $user->confirmation_code = md5(uniqid(mt_rand(), true));
+        $user->confirmation_code     = md5(uniqid(mt_rand(), true));
 
         // Save if valid. Password field will be hashed before save
         $this->save($user);
