@@ -318,6 +318,12 @@ For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0
 
 ## Release Notes
 
+### Version 4.0.0 RC
+* General Bugfixes.
+* Improved README.md.
+* Confide can use queues for sending email.
+* Account confirmation tokens are not time-based anymore.
+
 ### [Version 4.0.0 Beta 3](https://github.com/Zizaco/confide/pull/209)
 * Now you can customize how long will take for a password reset request to expire (default to 7 hours).
 * Reordered validations
