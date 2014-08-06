@@ -149,7 +149,7 @@ class {{ $class }} extends Controller
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_forgot');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}@forgot_password')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@doForgotPassword' : '@postForgot' }}')
                 ->withInput()
                 ->with('error', $error_msg);
         }
