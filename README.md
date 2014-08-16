@@ -187,7 +187,7 @@ To seed your users table you should fill also the `password_confirmation` and `c
       public function run()
       {
         $user = new User;
-        $user->username = 'johndoe;
+        $user->username = 'johndoe';
         $user->email = 'johndoe@site.dev';
         $user->password = 'foo_bar_1234';
         $user->password_confirmation = 'foo_bar_1234';
