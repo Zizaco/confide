@@ -12,7 +12,7 @@
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e/small.png)](https://insight.sensiolabs.com/projects/ec420846-0af4-4df4-b424-be90d9c3f98e)
 
-Confide is an authentication solution for **Laravel4** made to cut repetitive work involving the management of users: Account creation, login, logout, confirmation by e-mail, password reset, etc.
+Confide is an authentication solution for **Laravel** made to cut repetitive work involving the management of users. A [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself) approach on features like account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
 
