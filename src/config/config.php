@@ -118,7 +118,7 @@ return array(
     | See: http://laravel.com/docs/queues#running-the-queue-listener
     | Confide will use the default queue driver (app/config/queue.php)
     |
-    | Warning: This is not the driver that will be used, but to which queue
+    | Warning: This is not the driver that will be used, but to which queue/tube
     | inside the queue driver the job will be placed. For example:
     | By using 'email_queue' => 'emails', with the driver 'beanstalkd' in the
     | You will have to run `php artisan queue:listen --queue=emails`
