@@ -105,18 +105,25 @@ return array(
     | table, otherwise they will not be able to login after the payment.
     |
     */
-    'signup_email'      => true,
-    'signup_confirm'    => true,
+    'signup_email'   => true,
+    'signup_confirm' => true,
 
     /*
     |--------------------------------------------------------------------------
     | E-Mail queue
     |--------------------------------------------------------------------------
     |
-    | Modify the line below to change which queue driver Confide uses to send
-    | e-mails.
+    | Modify the line below to change to which queue Confide will push the
+    | email send job.
+    | See: http://laravel.com/docs/queues#running-the-queue-listener
+    | Confide will use the default queue driver (app/config/queue.php)
+    |
+    | Warning: This is not the driver that will be used, but to which queue
+    | inside the queue driver the job will be placed. For example:
+    | By using 'email_queue' => 'emails', with the driver 'beanstalkd' in the
+    | You will have to run `php artisan queue:listen --queue=emails`
     |
     */
-    'email_queue'      => 'sync',
+    'email_queue' => 'default',
 
 );
