@@ -72,14 +72,42 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      */
     protected function parseIdentity($identity)
     {
-        // If is an array, remove password, remember and then
-        // transforms it into a string.
+        // If is an array, try to pick up the login throttle field. Othewise, transforms it into a string.
         if (is_array($identity)) {
-            unset($identity['password']);
-            unset($identity['remember']);
-            $identity = serialize($identity);
+
+            $fields = $this->app['config']->get('confide::login_throttle_field');
+
+            if( !$fields )
+                return $this->serializeIdentity($identity);
+
+            $fields = array_flip((array)$fields);
+
+            $matches = array_intersect_key($fields, $identity);
+
+            if ( $matches ) {
+                $identity = $identity[key($matches)];
+            } else {
+                return $this->serializeIdentity($identity);
+            }
+
         }
 
+        return $identity;
+    }
+
+
+    /**
+     * remove password, remember, _token and then transform identity into a string.
+     *
+     *
+     * @param array $identity
+     *
+     * @return string $identityString.
+     */
+    protected function serializeIdentity(array $identity)
+    {
+        unset($identity['password'],$identity['remember'],$identity['_token']);
+        $identity = serialize($identity);
         return $identity;
     }
 

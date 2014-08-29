@@ -25,7 +25,7 @@ return array(
     | Default: email
     |
     */
-    'login_cache_field' => 'email',
+    'login_throttle_field' => 'email',
 
     /*
     |--------------------------------------------------------------------------
