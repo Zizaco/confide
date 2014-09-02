@@ -29,7 +29,8 @@ return array(
     ),
 
     'alerts' => array(
-        'account_created'        => 'Su cuenta ha sido creada satisfactoriamente. Por favor, compruebe su e-mail para obtener las instrucciones sobre como confirmar su cuenta.',
+        'account_created'        => 'Su cuenta ha sido creada satisfactoriamente.',
+        'instructions_sent'      => 'Por favor, compruebe su e-mail para obtener las instrucciones sobre como confirmar su cuenta.',
         'too_many_attempts'      => 'Demasiados intentos. Inténtelo de nuevo en unos minutos.',
         'wrong_credentials'      => 'Usuario, e-mail o contraseña incorrectos.',
         'not_confirmed'          => 'Su cuenta puede no estar confirmada. Compruebe su e-mail para acceder al enlace de activación.',
