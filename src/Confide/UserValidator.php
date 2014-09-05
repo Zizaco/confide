@@ -90,9 +90,6 @@ class UserValidator implements UserValidatorInterface
 
                 // Hashes password and unset password_confirmation field
                 $user->password = $hash->make($user->password);
-                unset($user->password_confirmation);
-
-                return true;
             } else {
                 $this->attachErrorMsg(
                     $user,
@@ -102,6 +99,8 @@ class UserValidator implements UserValidatorInterface
                 return false;
             }
         }
+        
+        unset($user->password_confirmation);
 
         return true;
     }
