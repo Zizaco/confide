@@ -1,6 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Support\Facades\Config;
 
 /**
  * A service that abstracts all user password management related methods.
@@ -47,9 +48,11 @@ class EloquentPasswordService implements PasswordServiceInterface
             'created_at'=> new \DateTime
         );
 
+        $table = $this->getTable();
+
         $this->app['db']
             ->connection($user->getConnectionName())
-            ->table('password_reminders')
+            ->table($table)
             ->insert($values);
 
         $this->sendEmail($user, $token);
@@ -68,10 +71,11 @@ class EloquentPasswordService implements PasswordServiceInterface
     public function getEmailByToken($token)
     {
         $connection = $this->getConnection();
+        $table = $this->getTable();
 
         $email = $this->app['db']
             ->connection($connection)
-            ->table('password_reminders')
+            ->table($table)
             ->select('email')
             ->where('token', '=', $token)
             ->where('created_at', '>=', $this->getOldestValidDate())
@@ -92,10 +96,11 @@ class EloquentPasswordService implements PasswordServiceInterface
     public function destroyToken($token)
     {
         $connection = $this->getConnection();
+        $table = $this->getTable();
 
         $affected = $this->app['db']
             ->connection($connection)
-            ->table('password_reminders')
+            ->table($table)
             ->where('token', '=', $token)
             ->delete();
 
@@ -113,6 +118,16 @@ class EloquentPasswordService implements PasswordServiceInterface
     {
         return $this->app['confide.repository']
             ->model()->getConnectionName();
+    }
+
+    /**
+     * Returns the configured password reminders table.
+     *
+     * @return string Table name.
+     */
+    protected function getTable()
+    {
+        return $this->app['config']->get('auth.reminder.table');
     }
 
     /**
