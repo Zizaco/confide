@@ -1,7 +1,6 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\Reminders\RemindableInterface;
-use Illuminate\Support\Facades\Config;
 
 /**
  * A service that abstracts all user password management related methods.

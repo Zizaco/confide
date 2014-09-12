@@ -2,7 +2,6 @@
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Illuminate\Auth\Reminders\RemindableInterface;
 
 class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 {
