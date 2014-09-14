@@ -21,7 +21,7 @@
             </label>
         </div>
         @if (Session::get('error'))
-            <div class="alert alert-error">{{{ Session::get('error') }}}</div>
+            <div class="alert alert-error alert-danger">{{{ Session::get('error') }}}</div>
         @endif
 
         @if (Session::get('notice'))
