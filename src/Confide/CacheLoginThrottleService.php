@@ -77,6 +77,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
         if (is_array($identity)) {
             unset($identity['password']);
             unset($identity['remember']);
+            //_token will always be random so it'll cause the identity always be unique too. 
             unset($identity['_token']);
             $identity = serialize($identity);
         }
