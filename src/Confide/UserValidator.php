@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
+use Illuminate\Support\Facades\Config as Config;
 use Illuminate\Support\MessageBag;
 
 /**
@@ -169,13 +170,12 @@ class UserValidator implements UserValidatorInterface
      */
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
     {
-        $type = Config::get('confide::username_type');
         $attributes = $user->toArray();
 
         // Force getting password since it may be hidden from array form
         $attributes['password'] = $user->getAuthPassword();
 
-        $rules = $this->rules[$type][$ruleset];
+        $rules = $this->rules[Config::get('confide::username_type')][$ruleset];
 
         $validator = App::make('validator')
             ->make($attributes, $rules);
