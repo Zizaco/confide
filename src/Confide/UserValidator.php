@@ -42,15 +42,29 @@ class UserValidator implements UserValidatorInterface
      * @var array
      */
     public $rules = [
-        'create' => [
-            'username' => 'required|alpha_dash',
-            'email'    => 'required|email',
-            'password' => 'required|min:4',
+        'alpha' => [
+            'create' => [
+                'username' => 'required|alpha_dash',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ],
+            'update' => [
+                'username' => 'required|alpha_dash',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ]
         ],
-        'update' => [
-            'username' => 'required|alpha_dash',
-            'email'    => 'required|email',
-            'password' => 'required|min:4',
+        'email' => [
+            'create' => [
+                'username' => 'required|email|same:email',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ],
+            'update' => [
+                'username' => 'required|email|same:email',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ]
         ]
     ];
 
@@ -155,12 +169,13 @@ class UserValidator implements UserValidatorInterface
      */
     public function validateAttributes(ConfideUserInterface $user, $ruleset = 'create')
     {
+        $type = Config::get('confide::username_type');
         $attributes = $user->toArray();
 
         // Force getting password since it may be hidden from array form
         $attributes['password'] = $user->getAuthPassword();
 
-        $rules = $this->rules[$ruleset];
+        $rules = $this->rules[$type][$ruleset];
 
         $validator = App::make('validator')
             ->make($attributes, $rules);
