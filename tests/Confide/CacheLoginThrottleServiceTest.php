@@ -133,7 +133,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', []);
         $throttleService->shouldAllowMockingProtectedMethods();
-        $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
+        $identity = ['email'=>'someone@somewhere.com','password'=>'123','_token'=>'somethingusual','remember'=>true];
 
         /*
         |------------------------------------------------------------
