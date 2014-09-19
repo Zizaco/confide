@@ -2,7 +2,6 @@
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Illuminate\Auth\Reminders\RemindableInterface;
 
 class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 {
@@ -34,7 +33,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $generatedToken = '123456789';
 
         $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail]', []);
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail,getTable]', []);
         $db = m::mock('connection');
 
         $passService->shouldAllowMockingProtectedMethods();
@@ -60,6 +59,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('generateToken')
             ->andReturn($generatedToken);
 
+        $passService->shouldReceive('getTable')
+            ->andReturn('tbl_name');
+
         // The email containing the reset link should be sent
         $passService->shouldReceive('sendEmail')
             ->once()->with($user, $generatedToken);
@@ -76,7 +78,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn($db);
 
         $db->shouldReceive('table')
-            ->with('password_reminders')
+            ->with('tbl_name')
             ->once()
             ->andReturn($db);
 
@@ -128,6 +130,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('getConnection')
             ->once()->andReturn('db_name');
 
+        $passService->shouldReceive('getTable')
+            ->andReturn('tbl_name');
+
         $passService->shouldReceive('getOldestValidDate')
             ->once()->andReturn($oldestValidDate);
 
@@ -146,7 +151,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn($db);
 
         $db->shouldReceive('table')
-            ->with('password_reminders')
+            ->with('tbl_name')
             ->andReturn($db)
             ->once();
 
@@ -205,6 +210,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('getConnection')
             ->once()->andReturn('db_name');
 
+        $passService->shouldReceive('getTable')
+            ->andReturn('tbl_name');
+
         // Mocks DB in order to check for the following query:
         //     DB::connection('db_name')
         //         ->table('password_reminders')
@@ -215,7 +223,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn($db);
 
         $db->shouldReceive('table')
-            ->with('password_reminders')
+            ->with('tbl_name')
             ->andReturn($db)
             ->once();
 
@@ -274,6 +282,49 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             'db_name',
             $passService->getConnection()
+        );
+    }
+
+    public function testShouldGetTable()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $config = m::mock('Config');
+
+        $passService->shouldAllowMockingProtectedMethods();
+        $passService->app['config'] = $config;
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $passService->shouldReceive('getTable')
+            ->passthru();
+
+        $config->shouldReceive('get')
+            ->with('auth.reminder.table')
+            ->times(3)->andReturnValues(['password_reminders', 'the_table', null]);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            'password_reminders',
+            $passService->getTable()
+        );
+        $this->assertEquals(
+            'the_table',
+            $passService->getTable()
+        );
+        $this->assertNull(
+            $passService->getTable()
         );
     }
 
