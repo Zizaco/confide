@@ -72,14 +72,18 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      */
     protected function parseIdentity($identity)
     {
-        // If is an array, remove password, remember, token and then
-        // transforms it into a string.
+        // The fields that are relevant for login throttling.
+        $relevantFields = ['email'];
+
         if (is_array($identity)) {
-            unset($identity['password']);
-            unset($identity['remember']);
-            //_token will always be random so it'll cause the identity always be unique too. 
-            unset($identity['_token']);
-            $identity = serialize($identity);
+            // If is an array, remove all non important fields and
+            // transforms it into a string.
+            $cleanedIdentity = array_intersect_key(
+                $identity,
+                array_flip($relevantFields)
+            );
+
+            $identity = serialize($cleanedIdentity);
         }
 
         return $identity;
