@@ -94,8 +94,6 @@ class {{ $class }} extends Controller
         if ($repo->login($input)) {
             return Redirect::intended('/');
         } else {
-            //please use array_get($input,'username or email') 
-            //or you'll find out the login throttling might not be working
             if ($repo->isThrottled($input)) {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');
             } elseif ($repo->existsButNotConfirmed($input)) {
