@@ -67,10 +67,10 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $throttleService->shouldReceive('parseIdentity')
             ->once()->with($identity)
-            ->andReturn(serialize(['email'=>'someone@somewhere.com']));
+            ->andReturn('someone@somewhere.com');
 
         $throttleService->shouldReceive('countThrottle')
-            ->once()->with(serialize(['email'=>'someone@somewhere.com']), 0)
+            ->once()->with('someone@somewhere.com', 0)
             ->andReturn(10); // More than the limit specified bellow
 
         $config->shouldReceive('get')
@@ -106,10 +106,10 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $throttleService->shouldReceive('parseIdentity')
             ->once()->with($identity)
-            ->andReturn(serialize(['email'=>'someone@somewhere.com']));
+            ->andReturn('someone@somewhere.com');
 
         $throttleService->shouldReceive('countThrottle')
-            ->once()->with(serialize(['email'=>'someone@somewhere.com']), 0)
+            ->once()->with('someone@somewhere.com', 0)
             ->andReturn(5); // Less than the limit specified bellow
 
         $config->shouldReceive('get')
@@ -149,7 +149,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $this->assertEquals(
-            serialize(['email'=>'someone@somewhere.com']),
+            'someone@somewhere.com',
             $throttleService->parseIdentity($identity)
         );
     }
