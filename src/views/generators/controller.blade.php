@@ -191,7 +191,7 @@ class {{ $class }} extends Controller
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@resetPassword' : '@getReset' }}, array('token'=>$input['token']))
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@resetPassword' : '@getReset' }}', array('token'=>$input['token']))
                 ->withInput()
                 ->with('error', $error_msg);
         }
