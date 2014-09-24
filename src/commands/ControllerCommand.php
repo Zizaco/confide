@@ -36,7 +36,8 @@ class ControllerCommand extends GenerateCommand
     {
         return array(
             array('name', null, InputOption::VALUE_OPTIONAL, 'Name of the controller.', 'Users'),
-            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.')
+            array('--restful', '-r', InputOption::VALUE_NONE, 'Generate RESTful controller.'),
+            array('username', null, InputOption::VALUE_NONE, 'Includes username as a required parameter.'),
         );
     }
 
@@ -50,12 +51,14 @@ class ControllerCommand extends GenerateCommand
         $namespace = $this->getNamespace($this->option('name'));
         $model = $this->app['config']->get('auth.model');
         $restful = $this->option('restful');
+        $includeUsername = $this->option('username');
 
         $viewVars = compact(
             'class',
             'namespace',
             'model',
-            'restful'
+            'restful',
+            'includeUsername'
         );
 
         // Prompt
