@@ -39,7 +39,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.0-dev"
+            "dev-master": "4.0-dev",
+            "dev-username-optional": "4.1-dev"
         }
     }
 }
