@@ -48,7 +48,7 @@ to be confirmed to be able to login to the website._
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "~4.0@dev"
+    "zizaco/confide": "~4.1@dev"
 
 Run the Composer update comand
 
@@ -187,16 +187,15 @@ To seed your users table you should fill also the `password_confirmation` and `c
       public function run()
       {
         $user = new User;
-        $user->username = 'johndoe';
         $user->email = 'johndoe@site.dev';
         $user->password = 'foo_bar_1234';
         $user->password_confirmation = 'foo_bar_1234';
         $user->confirmation_code = md5(uniqid(mt_rand(), true));
 
         if(! $user->save()) {
-          Log::info('Unable to create user '.$user->username, (array)$user->errors());
+          Log::info('Unable to create user '.$user->email, (array)$user->errors());
         } else {
-          Log::info('Created user "'.$user->username.'" <'.$user->email.'>');
+          Log::info('Created user "'.$user->email.'" <'.$user->email.'>');
         }
       }
     }
@@ -294,6 +293,16 @@ __[2014-07-18 01:13:15] production.ERROR: exception 'Illuminate\Database\QueryEx
 
 The `password_confirmation` attribute should be removed from the object before being sent to the database. Make sure your user model implement the `ConfideUserInterface` and that it use the `ConfideUser` trait [as described above](#user-model). Otherwise if you are using a custom validator, you will have to unset `password_confirmation` before saving the user.
 
+__I need my users to have an *"username"*__
+
+Use the `--username` option when generating the confide migration and the controller.
+
+    $ php artisan confide:migration --username
+    ...
+    $ php artisan confide:controller --username
+
+If you want to make the username a required field you will have to [extend the `UserValidator`](#custom-user-validation) and overwrite the `$rules` attribute making the _"username"_ `required`.
+
 __I receive a "Your account may not be confirmed" when trying to login__
 
 You need to confirm a newly created user _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_. You can easly confirm an user manually using Laravel's `artisan tinker` tool.
@@ -317,6 +326,10 @@ If you have a legacy project that uses an older version of Confide, don't worry.
 For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0 but will be able to download bugfixes of version 3.2.
 
 ## Release Notes
+
+### Version 4.1.0
+* General Bugfixes.
+* Username is now an optional field. Use `--username` when generating the migrations and the controllers.
 
 ### Version 4.0.0 RC
 * General Bugfixes.
