@@ -148,7 +148,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         $userC = m::mock('Zizaco\Confide\ConfideUserInterface');
         $userC->id = '3';
         $userC->email = 'something@somewhere.com';
-        $userC->username = 'something';
+        $userC->username = '';
 
         $userD = m::mock('Zizaco\Confide\ConfideUserInterface');
         $userD->id = ''; // No id

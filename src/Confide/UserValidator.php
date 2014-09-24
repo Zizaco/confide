@@ -43,12 +43,12 @@ class UserValidator implements UserValidatorInterface
      */
     public $rules = [
         'create' => [
-            'username' => 'required|alpha_dash',
+            'username' => 'alpha_dash',
             'email'    => 'required|email',
             'password' => 'required|min:4',
         ],
         'update' => [
-            'username' => 'required|alpha_dash',
+            'username' => 'alpha_dash',
             'email'    => 'required|email',
             'password' => 'required|min:4',
         ]
@@ -99,7 +99,7 @@ class UserValidator implements UserValidatorInterface
                 return false;
             }
         }
-        
+
         unset($user->password_confirmation);
 
         return true;
