@@ -35,6 +35,7 @@ class MigrationCommand extends GenerateCommand
     {
         return array(
             array('table', null, InputOption::VALUE_OPTIONAL, 'Table name.', 'users'),
+            array('username', null, InputOption::VALUE_NONE, 'Includes an unique username column.'),
         );
     }
 
@@ -45,9 +46,11 @@ class MigrationCommand extends GenerateCommand
     {
         // Prepare variables
         $table = lcfirst($this->option('table'));
+        $includeUsername = $this->option('username');
 
         $viewVars = compact(
-            'table'
+            'table',
+            'includeUsername'
         );
 
         // Prompt
@@ -57,6 +60,11 @@ class MigrationCommand extends GenerateCommand
             "A migration that creates the $table table will".
             " be created in app/database/migrations directory"
         );
+        if ($includeUsername) {
+            $this->comment(
+                "An 'username' column will be included in the table."
+            );
+        }
         $this->line('');
 
         if ($this->confirm("Proceed with the migration creation? [Yes|no]")) {
