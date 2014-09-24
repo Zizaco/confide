@@ -1,7 +1,9 @@
 <form method="POST" action="{{{ URL::to('users') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
-        @if (Schema::hasColumn(Config::get('auth.table'), 'username'))
+        @if (Cache::remember('username_in_confide', 5, function() {
+            return Schema::hasColumn(Config::get('auth.table'), 'username');
+        }))
             <div class="form-group">
                 <label for="username">{{{ Lang::get('confide::confide.username') }}}</label>
                 <input class="form-control" placeholder="{{{ Lang::get('confide::confide.username') }}}" type="text" name="username" id="username" value="{{{ Input::old('username') }}}">
