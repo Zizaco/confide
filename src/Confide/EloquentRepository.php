@@ -69,6 +69,8 @@ class EloquentRepository implements RepositoryInterface
         $firstWhere = true;
         foreach ($identity as $attribute => $value) {
 
+            if (!$value) continue;
+
             if ($firstWhere) {
                 $user = $user->where($attribute, '=', $value);
             } else {

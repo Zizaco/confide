@@ -135,6 +135,67 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($user, $repo->getUserByIdentity($identity));
     }
 
+    public function testShouldGetUserByIdentityWhenSomevalueisEmpty()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'something' => ''
+        ];
+        $model = m::mock('_mockedUser');
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Repo model method should return the model instance
+        $repo->shouldReceive('model')
+            ->andReturn($model);
+
+        // Should query for the user using each credential
+        $firstWhere = true;
+        foreach ($identity as $attribute => $value) {
+            if ($value) {
+                $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+                    ->with($attribute, '=', $value)
+                    ->once()
+                    ->andReturn($model);
+
+                $firstWhere = false;
+            } else {
+
+                $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+                    ->with($attribute, '=', $value)
+                    ->never()
+                    ->andReturn($model);
+
+            }
+        }
+
+        $model->shouldReceive('get')
+            ->once()
+            ->andReturn($model);
+
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByIdentity($identity));
+    }
+
     public function testShouldGetUserByEmail()
     {
         /*
