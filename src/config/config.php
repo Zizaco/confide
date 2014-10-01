@@ -138,4 +138,39 @@ return array(
     */
     'email_queue' => 'default',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Validation Rules
+    |--------------------------------------------------------------------------
+    |
+    | Modify the lines below to customize your own User Model Validation with
+    | no needs to extend or overwrite the UserInterface of Confide
+    |
+    */
+    'rules' => [
+        'alpha' => [
+            'create' => [
+                'username' => 'required|alpha_dash',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ],
+            'update' => [
+                'username' => 'required|alpha_dash',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ]
+        ],
+        'email' => [
+            'create' => [
+                'username' => 'required|email|same:email',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ],
+            'update' => [
+                'username' => 'required|email|same:email',
+                'email'    => 'required|email',
+                'password' => 'required|min:4',
+            ]
+        ]
+    ],
 );

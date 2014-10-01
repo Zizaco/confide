@@ -42,32 +42,13 @@ class UserValidator implements UserValidatorInterface
      *
      * @var array
      */
-    public $rules = [
-        'alpha' => [
-            'create' => [
-                'username' => 'required|alpha_dash',
-                'email'    => 'required|email',
-                'password' => 'required|min:4',
-            ],
-            'update' => [
-                'username' => 'required|alpha_dash',
-                'email'    => 'required|email',
-                'password' => 'required|min:4',
-            ]
-        ],
-        'email' => [
-            'create' => [
-                'username' => 'required|email|same:email',
-                'email'    => 'required|email',
-                'password' => 'required|min:4',
-            ],
-            'update' => [
-                'username' => 'required|email|same:email',
-                'email'    => 'required|email',
-                'password' => 'required|min:4',
-            ]
-        ]
-    ];
+    public $rules = array();
+
+    public function __construct()
+    {
+        //This provides you configure you validation rules directly in Config file
+        $this->rules = Config::get('confide::rules');
+    }
 
     /**
      * Validates the given user. Should check if all the fields are correctly.
