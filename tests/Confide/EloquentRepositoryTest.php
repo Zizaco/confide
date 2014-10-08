@@ -96,7 +96,10 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         ];
         $model = m::mock('_mockedUser');
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', [$app]);
 
         /*
         |------------------------------------------------------------
@@ -126,6 +129,11 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn($user);
 
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
+                ->once()
+                ->andReturn(true);
+
         /*
         |------------------------------------------------------------
         | Assertion
@@ -135,7 +143,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($user, $repo->getUserByIdentity($identity));
     }
 
-    public function testShouldGetUserByIdentityWhenSomevalueisEmpty()
+    public function testNotIncludeUsername()
     {
         /*
         |------------------------------------------------------------
@@ -144,56 +152,79 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $identity = [
             'email' => 'someone@somewhere.com',
-            'something' => ''
+            'username' => 'blahblah'
         ];
-        $model = m::mock('_mockedUser');
-        $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
 
         /*
         |------------------------------------------------------------
         | Expectation
         |------------------------------------------------------------
         */
-        // Repo model method should return the model instance
-        $repo->shouldReceive('model')
-            ->andReturn($model);
 
-        // Should query for the user using each credential
-        $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
-            if ($value) {
-                $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
-                    ->with($attribute, '=', $value)
-                    ->once()
-                    ->andReturn($model);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[shouldIncludeUsername]', [$app]);
+        $repo->shouldAllowMockingProtectedMethods();
 
-                $firstWhere = false;
-            } else {
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
+                ->once()
+                ->andReturn(true);
 
-                $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
-                    ->with($attribute, '=', $value)
-                    ->never()
-                    ->andReturn($model);
-
-            }
-        }
-
-        $model->shouldReceive('get')
-            ->once()
-            ->andReturn($model);
-
-        $model->shouldReceive('first')
-            ->once()
-            ->andReturn($user);
+        $repo->shouldReceive('shouldIncludeUsername')->passthru();
 
         /*
         |------------------------------------------------------------
         | Assertion
         |------------------------------------------------------------
         */
+        $identity = $repo->shouldIncludeUsername($identity);
         // Should return the user
-        $this->assertEquals($user, $repo->getUserByIdentity($identity));
+        $this->assertTrue(!isset($identity['username']));
+    }
+
+    public function testIncludeUsername()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'blahblah'
+        ];
+
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[shouldIncludeUsername]', [$app]);
+        $repo->shouldAllowMockingProtectedMethods();
+
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
+                ->once()
+                ->andReturn(false);
+
+        $repo->shouldReceive('shouldIncludeUsername')->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $identity = $repo->shouldIncludeUsername($identity);
+        // Should return the user
+        $this->assertTrue(isset($identity['username']));
     }
 
     public function testShouldGetUserByEmail()

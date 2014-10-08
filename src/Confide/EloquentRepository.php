@@ -67,9 +67,10 @@ class EloquentRepository implements RepositoryInterface
         $user = $this->model();
 
         $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
 
-            if (!$value) continue;
+        $identity = $this->shouldIncludeUsername($identity);
+
+        foreach ($identity as $attribute => $value) {
 
             if ($firstWhere) {
                 $user = $user->where($attribute, '=', $value);
@@ -83,6 +84,22 @@ class EloquentRepository implements RepositoryInterface
         $user = $user->get()->first();
 
         return $user;
+    }
+
+    /**
+     * Unset username field if optional username is on
+     * @param  mixed $identity
+     * @return mixed
+     */
+    protected function shouldIncludeUsername($identity)
+    {
+        if (!is_array($identity))
+            return $identity;
+
+        if (true === $this->app['config']->get('confide::optional_username'))
+            unset($identity['username']);
+
+        return $identity;
     }
 
     /**

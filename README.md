@@ -303,6 +303,8 @@ Use the `--username` option when generating the confide migration and the contro
 
 If you want to make the username a required field you will have to [extend the `UserValidator`](#custom-user-validation) and overwrite the `$rules` attribute making the _"username"_ `required`.
 
+Also, don't forget to publish the config file and change `optional_username` to `false`
+
 __I receive a "Your account may not be confirmed" when trying to login__
 
 You need to confirm a newly created user _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_. You can easly confirm an user manually using Laravel's `artisan tinker` tool.
