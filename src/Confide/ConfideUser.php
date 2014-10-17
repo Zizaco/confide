@@ -47,6 +47,27 @@ trait ConfideUser
     }
 
     /**
+     * Checks if the current user is valid using the ConfideUserValidator.
+     *
+     * @return bool
+     */
+    public function isValid()
+    {
+        // Instantiate the Zizaco\Confide\UserValidator and calls the
+        // validate method. Feel free to use your own validation
+        // class.
+        $validator = App::make('confide.user_validator');
+
+        // If the model already exists in the database we call validate with
+        // the update ruleset
+        if ($this->exists) {
+            return $validator->validate($this, 'update');
+        }
+
+        return $validator->validate($this);
+    }
+
+    /**
      * Overwrites the original save method in order to perform
      * validation before actually saving the object.
      *
@@ -56,7 +77,11 @@ trait ConfideUser
      */
     public function save(array $options = array())
     {
-        return parent::save($options);
+        if ($this->isValid()) {
+            return parent::save($options);
+        }
+
+        return false;
     }
 
     /**
