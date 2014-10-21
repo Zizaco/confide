@@ -124,7 +124,7 @@ class Confide
         $remember = $this->extractRememberFromArray($input);
         $emailOrUsername = $this->extractIdentityFromArray($input);
 
-        if (!$this->loginThrottling($emailOrUsername)) {
+        if (!$this->loginThrottling($input)) {
             return false;
         }
 
