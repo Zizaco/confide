@@ -62,40 +62,48 @@ class EloquentRepository implements RepositoryInterface
      *
      * @return ConfideUser User object
      */
-    public function getUserByIdentity($identity)
+    public function getUserByIdentity(array $identity)
+    {
+
+        $identity = $this->shouldIncludeUsername($identity);
+
+        $user = $this->getConstraintModelWithIdentity($identity);
+
+        return $user->first();
+
+    }
+
+    protected function getConstraintModelWithIdentity(array $identity)
     {
         $user = $this->model();
 
         $firstWhere = true;
 
-        $identity = $this->shouldIncludeUsername($identity);
+        $user = $user->whereNested(function($query) use ($identity, $firstWhere) {
 
-        foreach ($identity as $attribute => $value) {
+            foreach ($identity as $attribute => $value) {
 
-            if ($firstWhere) {
-                $user = $user->where($attribute, '=', $value);
-            } else {
-                $user = $user->orWhere($attribute, '=', $value);
+                if ($firstWhere) {
+                    $query = $query->where($attribute, '=', $value);
+                } else {
+                    $query = $query->orWhere($attribute, '=', $value);
+                }
+
+                $firstWhere = false;
             }
 
-            $firstWhere = false;
-        }
-
-        $user = $user->get()->first();
+        });
 
         return $user;
     }
 
     /**
      * Unset username field if optional username is on
-     * @param  mixed $identity
+     * @param  array $identity
      * @return mixed
      */
-    protected function shouldIncludeUsername($identity)
+    protected function shouldIncludeUsername(array $identity)
     {
-        if (!is_array($identity))
-            return $identity;
-
         if (true === $this->app['config']->get('confide::optional_username'))
             unset($identity['username']);
 

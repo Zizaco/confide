@@ -24,7 +24,7 @@ interface RepositoryInterface
      *
      * @return ConfideUser User object.
      */
-    public function getUserByIdentity($identity);
+    public function getUserByIdentity(array $identity);
 
     /**
      * Find a user by the given email.

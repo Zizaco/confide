@@ -90,38 +90,25 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
+        $user = $model = m::mock('_mockedUser');
+
         $identity = [
             'email' => 'someone@somewhere.com',
             'something' => 'somevalue'
         ];
-        $model = m::mock('_mockedUser');
-        $user = m::mock('_mockedUser');
+
         $config = m::mock('Illuminate\Config\Repository');
 
         $app = compact('config');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', [$app]);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getConstraintModelWithIdentity]', [$app])->shouldAllowMockingProtectedMethods();
 
         /*
         |------------------------------------------------------------
         | Expectation
         |------------------------------------------------------------
         */
-        // Repo model method should return the model instance
-        $repo->shouldReceive('model')
-            ->andReturn($model);
 
-        // Should query for the user using each credential
-        $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
-            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
-                ->with($attribute, '=', $value)
-                ->once()
-                ->andReturn($model);
-
-            $firstWhere = false;
-        }
-
-        $model->shouldReceive('get')
+        $repo->shouldReceive('getConstraintModelWithIdentity')
             ->once()
             ->andReturn($model);
 
