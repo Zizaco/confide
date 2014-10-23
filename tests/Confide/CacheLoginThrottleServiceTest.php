@@ -135,6 +135,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = [
             'email'=>'someone@somewhere.com',
+            'username' => 'someone',
             'password'=>'123',
             '_token'=>'somethingusual',
             'remember'=>true
@@ -155,6 +156,69 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $this->assertEquals(
             'someone@somewhere.com',
+            $throttleService->parseIdentity($identity)
+        );
+    }
+
+    public function testShouldParseIdentityAndReturnSerialize()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', []);
+        $throttleService->shouldAllowMockingProtectedMethods();
+        $identity = [
+            'something'=>'what',
+            'someone'=>'who'
+        ];
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $throttleService->shouldReceive('parseIdentity')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            serialize($identity),
+            $throttleService->parseIdentity($identity)
+        );
+    }
+
+    public function testShouldParseIdentityWithString()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', []);
+        $throttleService->shouldAllowMockingProtectedMethods();
+        $identity = 'I am string';
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        $throttleService->shouldReceive('parseIdentity')
+            ->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $this->assertEquals(
+            'I am string',
             $throttleService->parseIdentity($identity)
         );
     }
