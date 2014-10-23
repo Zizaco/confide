@@ -130,6 +130,53 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($user, $repo->getUserByIdentity($identity));
     }
 
+    public function testShouldGetConstraintModelWithIdentity()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'something' => 'somevalue'
+        ];
+        $model = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model,getConstraintModelWithIdentity]', []);
+        $repo->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        // Repo model method should return the model instance
+        $repo->shouldReceive('model')
+            ->andReturn($model);
+
+        // Should query for the user using each credential
+        $model->shouldReceive('whereNested')->with(m::on(function($callback) use ($model)
+        {
+            $model->shouldReceive('where')->with('email', '=', 'someone@somewhere.com')->once()->andReturn($model);
+
+            $model->shouldReceive('orWhere')->with('something', '=', 'somevalue')->once()->andReturn($model);
+
+            $callback($model);
+
+            return true;
+        }))->once()->andReturn($model);
+
+        $repo->shouldReceive('getConstraintModelWithIdentity')->passthru();
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $rtn = $repo->getConstraintModelWithIdentity($identity);
+
+        $this->assertEquals($model, $rtn);
+    }
+
     public function testNotIncludeUsername()
     {
         /*
