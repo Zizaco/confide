@@ -90,13 +90,60 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
+        $user = $model = m::mock('_mockedUser');
+
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'something' => 'somevalue'
+        ];
+
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[getConstraintModelWithIdentity]', [$app])->shouldAllowMockingProtectedMethods();
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $repo->shouldReceive('getConstraintModelWithIdentity')
+            ->once()
+            ->andReturn($model);
+
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn($user);
+
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
+                ->once()
+                ->andReturn(true);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByIdentity($identity));
+    }
+
+    public function testShouldGetConstraintModelWithIdentity()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
         $identity = [
             'email' => 'someone@somewhere.com',
             'something' => 'somevalue'
         ];
         $model = m::mock('_mockedUser');
-        $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model,getConstraintModelWithIdentity]', []);
+        $repo->shouldAllowMockingProtectedMethods();
 
         /*
         |------------------------------------------------------------
@@ -108,31 +155,110 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
             ->andReturn($model);
 
         // Should query for the user using each credential
-        $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
-            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
-                ->with($attribute, '=', $value)
+        $model->shouldReceive('whereNested')->with(m::on(function($callback) use ($model)
+        {
+            $model->shouldReceive('where')->with('email', '=', 'someone@somewhere.com')->once()->andReturn($model);
+
+            $model->shouldReceive('orWhere')->with('something', '=', 'somevalue')->once()->andReturn($model);
+
+            $callback($model);
+
+            return true;
+        }))->once()->andReturn($model);
+
+        $repo->shouldReceive('getConstraintModelWithIdentity')->passthru();
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $rtn = $repo->getConstraintModelWithIdentity($identity);
+
+        $this->assertEquals($model, $rtn);
+    }
+
+    public function testNotIncludeUsername()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'blahblah'
+        ];
+
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[shouldIncludeUsername]', [$app]);
+        $repo->shouldAllowMockingProtectedMethods();
+
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
                 ->once()
-                ->andReturn($model);
+                ->andReturn(true);
 
-            $firstWhere = false;
-        }
-
-        $model->shouldReceive('get')
-            ->once()
-            ->andReturn($model);
-
-        $model->shouldReceive('first')
-            ->once()
-            ->andReturn($user);
+        $repo->shouldReceive('shouldIncludeUsername')->passthru();
 
         /*
         |------------------------------------------------------------
         | Assertion
         |------------------------------------------------------------
         */
+        $identity = $repo->shouldIncludeUsername($identity);
         // Should return the user
-        $this->assertEquals($user, $repo->getUserByIdentity($identity));
+        $this->assertTrue(!isset($identity['username']));
+    }
+
+    public function testIncludeUsername()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'blahblah'
+        ];
+
+        $config = m::mock('Illuminate\Config\Repository');
+
+        $app = compact('config');
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[shouldIncludeUsername]', [$app]);
+        $repo->shouldAllowMockingProtectedMethods();
+
+        $config->shouldReceive('get')
+                ->with('confide::optional_username')
+                ->once()
+                ->andReturn(false);
+
+        $repo->shouldReceive('shouldIncludeUsername')->passthru();
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        $identity = $repo->shouldIncludeUsername($identity);
+        // Should return the user
+        $this->assertTrue(isset($identity['username']));
     }
 
     public function testShouldGetUserByEmail()

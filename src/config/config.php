@@ -2,6 +2,15 @@
 
 return array(
 
+    /**
+     * Optional Username
+     *
+     * Please set it to false if you want to make username required.
+     * For more info, please refer to document.
+     */
+
+    'optional_username' => true,
+
     /*
     |--------------------------------------------------------------------------
     | Login Throttle
