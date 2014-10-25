@@ -35,6 +35,7 @@ return array(
         'wrong_credentials' => 'Incorrect username, email or password.',
         'not_confirmed' => 'Your account may not be confirmed. Check your email for the confirmation link',
         'confirmation' => 'Your account has been confirmed! You may now login.',
+        'password_confirmation' => 'The passwords did not match.', 
         'wrong_confirmation' => 'Wrong confirmation code.',
         'password_forgot' => 'The information regarding password reset was sent to your email.',
         'wrong_password_forgot' => 'User not found.',
