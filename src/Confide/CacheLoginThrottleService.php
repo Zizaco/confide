@@ -81,6 +81,8 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
                 return serialize($identity);
             }
         }
+
+        return $identity;
     }
 
     /**
