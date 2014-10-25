@@ -29,18 +29,19 @@ return array(
     ),
 
     'alerts' => array(
-        'account_created' => 'Votre compte a été crée avec succes. Veuillez vérifier votre boite email pour les instructions sur la confirmation de votre compte.',
+        'account_created' => 'Votre compte a été crée avec succès.',
+        'instructions_sent'  => 'Veuillez vérifier votre boite email pour les instructions sur la confirmation de votre compte.',
         'too_many_attempts' => 'Trop de tentatives. Veuillez réessayer dans quelques minutes.',
         'wrong_credentials' => 'Utilisateur, email ou mot de passe incorrect.',
         'not_confirmed' => "Votre compte n'est pas confirmé. Veuillez vérifier vos emails pour le lien de confirmation.",
-        'confirmation' => "Votre compte a été confirmé avec succes. Vous pouvez désormais vous connecter.",
+        'confirmation' => "Votre compte a été confirmé avec succès. Vous pouvez désormais vous connecter.",
         'wrong_confirmation' => 'Code de confirmation incorrect',
-        'password_forgot' => 'Les informations de réinitialisation vous ont été envoyé par email.',
+        'password_forgot' => 'Les informations de réinitialisation vous ont été envoyés par email.',
         'wrong_password_forgot' => 'Utilisateur inconnu.',
-        'password_reset' => 'Votre mot de passe a été modifié avec succes.',
-        'wrong_password_reset' => 'Mot de passe incorrect. Veuillez réessayer',
-        'wrong_token' => 'Le token de réinitialisation du mot de passe est incorrect.',
-        'duplicated_credentials' => "Les identifiants donnés sont déja utilisés. Veuillez réessayer avec d'autres identifiants.",
+        'password_reset' => 'Votre mot de passe a été modifié avec succès.',
+        'wrong_password_reset' => 'Mot de passe incorrect. Veuillez réessayer.',
+        'wrong_token' => 'Le jeton de réinitialisation du mot de passe est incorrect.',
+        'duplicated_credentials' => "Les identifiants spécifiés sont déja utilisés. Veuillez réessayer avec d'autres identifiants.",
     ),
 
     'email' => array(
