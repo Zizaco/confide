@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
+<form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <div class="form-group">
@@ -8,16 +8,16 @@
         <div class="form-group">
         <label for="password">
             {{{ Lang::get('confide::confide.password') }}}
-            <small>
-                <a href="{{{ URL::to('/users/forgot_password') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
-            </small>
         </label>
         <input class="form-control" tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+        <p class="help-block">
+            <a href="{{{ URL::to('/users/forgot_password') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
+        </p>
         </div>
-        <div class="form-group">
-            <label for="remember" class="checkbox">{{{ Lang::get('confide::confide.login.remember') }}}
+        <div class="checkbox">
+            <label for="remember">
                 <input type="hidden" name="remember" value="0">
-                <input tabindex="4" type="checkbox" name="remember" id="remember" value="1">
+                <input tabindex="4" type="checkbox" name="remember" id="remember" value="1"> {{{ Lang::get('confide::confide.login.remember') }}}
             </label>
         </div>
         @if (Session::get('error'))
