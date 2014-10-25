@@ -15,7 +15,7 @@ use Illuminate\Support\MessageBag;
  *
  * In order to use a custom validator:
  *     // MyOwnValidator.php
- *     class MyOwnValidator implements UserValidatorInterface {
+ *     class MyOwnValidator implements Zizaco\Confide\UserValidatorInterface {
  *         ...
  *     }
  *
