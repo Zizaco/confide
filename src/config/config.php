@@ -91,7 +91,7 @@ return array(
     | By default a signup e-mail will be send by the system, however if you
     | do not want this to happen, change the line below in false and handle
     | the confirmation using another technique, for example by using the IPN
-    | from a payment-processor. Very usefull for websites offering products.
+    | from a payment-processor. Very useful for websites offering products.
     |
     | signup_email:
     | is for the transport of the email, true or false
