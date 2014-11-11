@@ -117,8 +117,7 @@ class UserValidator implements UserValidatorInterface
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [
-            'email'    => $user->email,
-            'username' => $user->username,
+            'email'    => $user->email
         ];
 
         foreach ($identity as $attribute => $value) {
