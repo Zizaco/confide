@@ -35,6 +35,7 @@ return array(
         'wrong_credentials'      => 'Usuario, e-mail o contraseña incorrectos.',
         'not_confirmed'          => 'Su cuenta puede no estar confirmada. Compruebe su e-mail para acceder al enlace de activación.',
         'confirmation'           => '¡Su cuenta ha sido confirmada! Puede acceder ahora.',
+        'password_confirmation'  => 'Las contraseñas no coinciden.',
         'wrong_confirmation'     => 'Código de confirmación incorrecto.',
         'password_forgot'        => 'La información sobre el reinicio de su contraseña le ha sido enviada por e-mail.',
         'wrong_password_forgot'  => 'Usuario no encontrado.',
