@@ -96,6 +96,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         ];
         $model = m::mock('_mockedUser');
         $user = m::mock('_mockedUser');
+        $nestedModel = m::mock('_mockedUser');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
 
         /*
@@ -107,16 +108,23 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $repo->shouldReceive('model')
             ->andReturn($model);
 
-        // Should query for the user using each credential
-        $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
-            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+        // Should query for the user using each credential inside closure
+        foreach($identity as $attribute => $value) {
+            $nestedModel->shouldReceive('orWhere')
                 ->with($attribute, '=', $value)
                 ->once()
-                ->andReturn($model);
-
-            $firstWhere = false;
+                ->andReturn($nestedModel);
         }
+
+        // Should call with nested closure containing the above orWhere calls.
+        $model->shouldReceive('where')
+            ->with(m::on(function($arg) use ($nestedModel) {
+                if (!is_callable($arg)) return false;
+                $arg($nestedModel);
+                return true;
+            }))
+            ->once()
+            ->andReturn($model);
 
         $model->shouldReceive('get')
             ->once()
