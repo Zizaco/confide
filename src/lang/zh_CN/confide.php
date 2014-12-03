@@ -30,10 +30,12 @@ return array(
 
     'alerts' => array(
         'account_created' => '注册成功。请查阅您的电子邮箱，根据说明进行账户验证。',
+        'instructions_sent' => '请查阅您的电子邮件，根据说明进行账户确认。',
         'too_many_attempts' => '尝试次数过多，请稍后再试。',
         'wrong_credentials' => '用户名、电子邮箱或者密码错误。',
         'not_confirmed' => '您的账户尚未验证，请查阅您的电子邮箱。',
         'confirmation' => '您的账户已验证！您现在可以登录了。',
+        'password_confirmation' => '密码不匹配。',
         'wrong_confirmation' => '验证码错误！',
         'password_forgot' => '关于密码重置的信息已经发送到您的电子邮件',
         'wrong_password_forgot' => '用户不存在。',
