@@ -151,7 +151,7 @@ class {{ $class }} extends Controller
                 ->with('notice', $notice_msg);
         } else {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
-            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@doForgotPassword' : '@postForgot' }}')
+            return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@getLogin' }}')
                 ->with('notice', $notice_msg);
         }
     }
