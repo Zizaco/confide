@@ -1,34 +1,53 @@
-<form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
-    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
-    <fieldset>
-        <div class="form-group">
-            <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
-            <input class="form-control" tabindex="1" placeholder="{{{ Lang::get('confide::confide.username_e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
-        </div>
-        <div class="form-group">
-        <label for="password">
-            {{{ Lang::get('confide::confide.password') }}}
-        </label>
-        <input class="form-control" tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
-        <p class="help-block">
-            <a href="{{{ URL::to('/users/forgot_password') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
-        </p>
-        </div>
-        <div class="checkbox">
-            <label for="remember">
-                <input type="hidden" name="remember" value="0">
-                <input tabindex="4" type="checkbox" name="remember" id="remember" value="1"> {{{ Lang::get('confide::confide.login.remember') }}}
-            </label>
-        </div>
-        @if (Session::get('error'))
-            <div class="alert alert-error alert-danger">{{{ Session::get('error') }}}</div>
-        @endif
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-        @if (Session::get('notice'))
-            <div class="alert">{{{ Session::get('notice') }}}</div>
-        @endif
-        <div class="form-group">
-            <button tabindex="3" type="submit" class="btn btn-default">{{{ Lang::get('confide::confide.login.submit') }}}</button>
+            @if(Session::get('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
+
+            @if(Session::get('notice'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('notice') }}
+                </div>
+            @endif
+            
+            {{ Form::open(array('url' => 'users/login', 'class' => 'form-horizontal')) }}
+
+                <div class="form-group">
+                    {{ Form::label('email', Lang::get('confide::confide.username_e_mail'), array('class' => 'col-sm-2 control-label')) }}
+                    <div class="col-sm-10">
+                        {{ Form::text('email', null, array('class' => 'form-control', 'placeholder' => Lang::get('confide::confide.username_e_mail'))) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ Form::label('password', Lang::get('confide::confide.password'), array('class' => 'col-sm-2 control-label')) }}
+                    <div class="col-sm-10">
+                        {{ Form::password('password', array('class' => 'form-control', 'placeholder' => Lang::get('confide::confide.password'))) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2 text-right">
+                        <div class="checkbox checkbox-inline">
+                            {{ Form::hidden('remember', '0') }}
+                            <label>{{ Form::checkbox('remember', '1') }} Lang::get('confide::confide.login.remember')</label>
+                        </div>
+                        <div class="text-right checkbox-inline">
+                            {{ Form::submit(Lang::get('confide::confide.login.submit'), array('class' => 'btn btn-success')) }}
+                        </div>
+                    </div>
+                </div>
+                
+            {{ Form::close() }}
+
+            <br>
+
+            <small><a href="{{{ URL::to('users/forgot_password') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a></small>
+
         </div>
-    </fieldset>
-</form>
+    </div>
+</div>

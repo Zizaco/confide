@@ -1,21 +1,35 @@
-<form method="POST" action="{{ URL::to('/users/forgot_password') }}" accept-charset="UTF-8">
-    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-    <div class="form-group">
-        <label for="email">{{{ Lang::get('confide::confide.e_mail') }}}</label>
-        <div class="input-append input-group">
-            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
-            <span class="input-group-btn">
-                <input class="btn btn-default" type="submit" value="{{{ Lang::get('confide::confide.forgot.submit') }}}">
-            </span>
+            @if(Session::get('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ Session::get('error') }}
+                </div>
+            @endif
+
+            @if(Session::get('notice'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('notice') }}
+                </div>
+            @endif
+
+            {{ Form::open(array('url' => 'users/forgot_password', 'class' => 'form-horizontal')) }}
+
+                <div class="form-group">
+                    {{ Form::label('email', Lang::get('confide::confide.e_mail'), array('class' => 'col-sm-2 control-label')) }}
+                    <div class="col-sm-10">
+                        <div class="input-append input-group">
+                            {{ Form::text('email', null, array('placeholder' => Lang::get('confide::confide.e_mail'), 'class' => 'form-control')) }}
+                            <span class="input-group-btn">
+                                {{ Form::submit(Lang::get('confide::confide.forgot.submit'), array('class' => 'btn btn-default')) }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            {{ Form::close() }}
+
         </div>
     </div>
-
-    @if (Session::get('error'))
-        <div class="alert alert-error alert-danger">{{{ Session::get('error') }}}</div>
-    @endif
-
-    @if (Session::get('notice'))
-        <div class="alert">{{{ Session::get('notice') }}}</div>
-    @endif
-</form>
+</div>
