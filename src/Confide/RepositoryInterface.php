@@ -36,15 +36,6 @@ interface RepositoryInterface
     public function getUserByEmail($email);
 
     /**
-     * Find a user by the given email or username.
-     *
-     * @param string $emailOrUsername Username of email to be used in the query.
-     *
-     * @return ConfideUser User object.
-     */
-    public function getUserByEmailOrUsername($emailOrUsername);
-
-    /**
      * Update the confirmation status of a user to true if a user
      * is found with the given confirmation code.
      *

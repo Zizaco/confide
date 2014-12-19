@@ -73,13 +73,13 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
     protected function parseIdentity($identity)
     {
         if (is_array($identity)) {
-            if (isset($identity['email'])) {
-                return $identity['email'];
-            } elseif (isset($identity['username'])) {
-                return $identity['username'];
-            } else {
-                return serialize($identity);
+            $identities = $this->app['config']->get('confide::identities');
+            foreach ($identities as $value) {
+                if (isset($identity[$value])) {
+                    return $identity[$value];
+                }
             }
+            return serialize($identity);
         }
 
         return $identity;

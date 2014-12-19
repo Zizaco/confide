@@ -165,36 +165,6 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($user, $repo->getUserByEmail($email));
     }
 
-    public function testShouldGetUserByEmailOrUsername()
-    {
-        /*
-        |------------------------------------------------------------
-        | Set
-        |------------------------------------------------------------
-        */
-        $username = 'Someone';
-        $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', []);
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-        // Repo model method should return the model instance
-        $repo->shouldReceive('getUserByIdentity')
-            ->with(['email'=>$username, 'username'=>$username])
-            ->andReturn($user);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
-        // Should return the user
-        $this->assertEquals($user, $repo->getUserByEmailOrUsername($username));
-    }
-
     public function testShouldConfirmByCode()
     {
         /*

@@ -116,10 +116,12 @@ class UserValidator implements UserValidatorInterface
      */
     public function validateIsUnique(ConfideUserInterface $user)
     {
-        $identity = [
-            'email'    => $user->email,
-            'username' => $user->username,
-        ];
+        $identity = [];
+        $identities = $this->app['config']->get('confide::identities');
+        foreach ($identities as $value) {
+            $identity[$value] = $user->$value;
+        }
+
 
         foreach ($identity as $attribute => $value) {
 
