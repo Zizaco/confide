@@ -45,10 +45,10 @@ class MigrationCommand extends GenerateCommand
     {
         // Prepare variables
         $table = lcfirst($this->option('table'));
-
+        $timestamp = date('YmdHis');
         $viewVars = compact(
             'table',
-            'timestamp' => date('YmdHis')
+            'timestamp'
         );
 
         // Prompt
