@@ -13,9 +13,13 @@
             "homepage": "http://www.andrewelkins.com"
         }
     ],
+    "replace": {
+        "zizaco/confide": "~4.0@dev"
+    },
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "~4.2|~5.0"
+        "illuminate/support": "~4.2|~5.0",
+        "mitchellvanw/laravel-doctrine": "0.4.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
@@ -23,8 +27,7 @@
         "illuminate/auth": "~4.2",
         "illuminate/console": "~4.2",
         "illuminate/database": "~4.2",
-        "satooshi/php-coveralls": "~0.6",
-        "mitchellvanw/laravel-doctrine": "0.4.*"
+        "satooshi/php-coveralls": "~0.6"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
