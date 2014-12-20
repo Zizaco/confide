@@ -7,6 +7,7 @@ use App;
 use Config;
 use Confide;
 @endif
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Class UserRepository
@@ -14,7 +15,7 @@ use Confide;
  * This service abstracts some interactions that occurs between Confide and
  * the Database.
  */
-class UserRepository
+class UserRepository extends EntityRepository
 {
     /**
      * Signup a new account with the given parameters
