@@ -131,13 +131,13 @@ class Confide
         $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
 
         if ($user) {
-            if (! $user->confirmed && $mustBeConfirmed) {
+            if (! $user->getConfirmed() && $mustBeConfirmed) {
                 return false;
             }
 
             $correctPassword = $this->app['hash']->check(
                 isset($input['password']) ? $input['password'] : false,
-                $user->password
+                $user->getPassword()
             );
 
             if (! $correctPassword) {

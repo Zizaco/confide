@@ -162,7 +162,7 @@ class EloquentPasswordService implements PasswordServiceInterface
             compact('user', 'token'),
             function ($message) use ($user, $token, $lang) {
                 $message
-                    ->to($user->email, $user->username)
+                    ->to($user->getEmail(), $user->getUsername())
                     ->subject($lang->get('confide::confide.email.password_reset.subject'));
             }
         );

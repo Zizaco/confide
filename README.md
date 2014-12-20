@@ -194,9 +194,9 @@ To seed your users table you should fill also the `password_confirmation` and `c
         $user->confirmation_code = md5(uniqid(mt_rand(), true));
 
         if(! $user->save()) {
-          Log::info('Unable to create user '.$user->username, (array)$user->errors());
+          Log::info('Unable to create user '.$user->getUsername(), (array)$user->errors());
         } else {
-          Log::info('Created user "'.$user->username.'" <'.$user->email.'>');
+          Log::info('Created user "'.$user->getUsername().'" <'.$user->getEmail().'>');
         }
       }
     }
@@ -214,7 +214,7 @@ For example, create your custom validator class:
 
         public function validate(ConfideUserInterface $user)
         {
-            unset($user->password_confirmation);
+            unset($user->getPasswordConfirmation());
             return true; // If the user valid
         }
     }

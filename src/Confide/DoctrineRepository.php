@@ -13,6 +13,20 @@ use Doctrine\ORM\EntityRepository;
 class DoctrineRepository extends EntityRepository implements RepositoryInterface
 {
     /**
+     * Create a new ConfideRepository
+     *
+     * @param \Illuminate\Foundation\Application $app Laravel application object
+     */
+    public function __construct($app = null)
+    {
+        $app = $app ?: app();
+
+        $em = $app['Doctrine\ORM\EntityManager'];
+
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata('User'));
+    }
+
+    /**
      * Find a user by one of the fields given as $identity.
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
@@ -106,7 +120,7 @@ class DoctrineRepository extends EntityRepository implements RepositoryInterface
      */
     protected function confirmUser($user)
     {
-        $user->confirmed = true;
+        $user->setConfirmed(true);
 
         $this->_em->persist($user);
         $this->_em->flush();
