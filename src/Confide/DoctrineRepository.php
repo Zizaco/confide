@@ -21,9 +21,9 @@ class DoctrineRepository extends EntityRepository implements RepositoryInterface
      *
      * @return ConfideUser User object
      */
-    public function getUserByIdentity(array $identity)
+    public function getUserByIdentity($identity)
     {
-        if (empty($identity)) {
+        if (!is_array($identity) || empty($identity)) {
             throw new \Exception('Invalid identity param');
         }
 

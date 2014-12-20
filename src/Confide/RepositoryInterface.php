@@ -9,13 +9,6 @@
 interface RepositoryInterface
 {
     /**
-     * Returns the model set in auth config.
-     *
-     * @return mixed Instantiated object of the 'auth.model' class.
-     */
-    public function model();
-
-    /**
      * Find a user by one of the fields given as $identity.
      * If one of the fields in the $identity array matches the user
      * will be retrieved.
