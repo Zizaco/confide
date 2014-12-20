@@ -30,17 +30,17 @@ class UserRepository extends EntityRepository
     {
         $user = new {{ $nonNamespacedName }};
 
-        $user->username = array_get($input, 'username');
-        $user->email    = array_get($input, 'email');
-        $user->password = array_get($input, 'password');
+        $user->setUsername(array_get($input, 'username'));
+        $user->setEmail(array_get($input, 'email'));
+        $user->setPassword(array_get($input, 'password'));
 
         // The password confirmation will be removed from model
         // before saving. This field will be used in Ardent's
         // auto validation.
-        $user->password_confirmation = array_get($input, 'password_confirmation');
+        $user->setPasswordConfirmation(array_get($input, 'password_confirmation'));
 
         // Generate a random confirmation code
-        $user->confirmation_code     = md5(uniqid(mt_rand(), true));
+        $user->setConfirmationCode(md5(uniqid(mt_rand(), true)));
 
         // Save if valid. Password field will be hashed before save
         $this->save($user);
@@ -92,10 +92,10 @@ class UserRepository extends EntityRepository
         if ($user) {
             $correctPassword = Hash::check(
                 isset($input['password']) ? $input['password'] : false,
-                $user->password
+                $user->getPassword()
             );
 
-            return (! $user->confirmed && $correctPassword);
+            return (! $user->getConfirmed() && $correctPassword);
         }
     }
 
@@ -112,8 +112,8 @@ class UserRepository extends EntityRepository
         $user   = Confide::userByResetPasswordToken($input['token']);
 
         if ($user) {
-            $user->password              = $input['password'];
-            $user->password_confirmation = $input['password_confirmation'];
+            $user->setPassword($input['password']);
+            $user->setPasswordConfirmation($input['password_confirmation']);
             $result = $this->save($user);
         }
 
