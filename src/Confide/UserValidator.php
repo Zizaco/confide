@@ -85,22 +85,19 @@ class UserValidator implements UserValidatorInterface
     {
         $hash = App::make('hash');
 
-        if ($user->getOriginal('password') != $user->password) {
-            if ($user->password === $user->password_confirmation) {
-
-                // Hashes password and unset password_confirmation field
-                $user->password = $hash->make($user->password);
-            } else {
-                $this->attachErrorMsg(
-                    $user,
-                    'confide::confide.alerts.password_confirmation',
-                    'password_confirmation'
-                );
-                return false;
-            }
+        if ($user->getPassword() === $user->getPasswordConfirmation()) {
+            // Hashes password and unset password_confirmation field
+            $user->setPassword($hash->make($user->getPassword()));
+        } else {
+            $this->attachErrorMsg(
+                $user,
+                'confide::confide.alerts.password_confirmation',
+                'password_confirmation'
+            );
+            return false;
         }
-        
-        unset($user->password_confirmation);
+
+        $user->setPasswordConfirmation(null);
 
         return true;
     }
@@ -117,8 +114,8 @@ class UserValidator implements UserValidatorInterface
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [
-            'email'    => $user->email,
-            'username' => $user->username,
+            'email'    => $user->getEmail(),
+            'username' => $user->getUsername(),
         ];
 
         foreach ($identity as $attribute => $value) {
@@ -143,7 +140,6 @@ class UserValidator implements UserValidatorInterface
 
         return false;
     }
-
     /**
      * Uses Laravel Validator in order to check if the attributes of the
      * $user object are valid for the given $ruleset.

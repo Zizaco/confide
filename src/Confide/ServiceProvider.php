@@ -54,7 +54,7 @@ class ServiceProvider extends IlluminateServiceProvider
     protected function registerRepository()
     {
         $this->app->bind('confide.repository', function ($app) {
-            return new EloquentRepository($app);
+            return new DoctrineRepository($app);
         });
     }
 
