@@ -1,13 +1,15 @@
 <?php echo "<?php\n"; ?>{{ strstr($model, '\\') ? ' namespace '.substr($model, 0, -strlen(strrchr($model, '\\'))).';' : '' }}
 
 <?php $nonNamespacedName = (strstr($model, '\\')) ? substr(strrchr($model, '\\'), 1) : $model ?>
-@if (strstr($model, '\\'))
 
+use Doctrine\ORM\EntityRepository;
+use Mitch\LaravelDoctrine\EntityManagerFacade;
+@if (strstr($model, '\\'))
 use App;
 use Config;
 use Confide;
 @endif
-use Doctrine\ORM\EntityRepository;
+
 
 /**
  * Class UserRepository
@@ -132,6 +134,12 @@ class UserRepository extends EntityRepository
      */
     public function save({{ $nonNamespacedName }} $instance)
     {
-        return $instance->save();
+        if (!$instance->isValid()) {
+            return false;
+        }
+
+        $em = $this->getEntityManager();
+        $em->persist($instance);
+        $em->flush();
     }
 }

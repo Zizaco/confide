@@ -22,7 +22,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $repo = m::mock('Zizaco\Confide\EloquentRepository');
+        $repo = m::mock('Zizaco\Confide\DoctrineRepository');
 
         App::shouldReceive('make')
             ->with('confide.repository')
@@ -130,7 +130,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $repo = m::mock('Zizaco\Confide\EloquentRepository');
+        $repo = m::mock('Zizaco\Confide\DoctrineRepository');
 
         $validator = m::mock('Zizaco\Confide\UserValidator[attachErrorMsg]');
         $validator->repo = $repo;

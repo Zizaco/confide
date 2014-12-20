@@ -96,7 +96,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         ];
         $model = m::mock('_mockedUser');
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+        $repo = m::mock('Zizaco\Confide\DoctrineRepository[model]', []);
 
         /*
         |------------------------------------------------------------
@@ -144,7 +144,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $email = 'someone@somewhere.com';
         $user = m::mock('_mockedUser');
-        $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', []);
+        $repo = m::mock('Zizaco\Confide\DoctrineRepository[getUserByIdentity]', []);
 
         /*
         |------------------------------------------------------------

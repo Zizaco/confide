@@ -50,7 +50,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         $table = $this->getTable();
 
         $this->app['db']
-            ->connection($user->getConnectionName())
+            ->connection()
             ->table($table)
             ->insert($values);
 
@@ -69,11 +69,10 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function getEmailByToken($token)
     {
-        $connection = $this->getConnection();
         $table = $this->getTable();
 
         $email = $this->app['db']
-            ->connection($connection)
+            ->connection()
             ->table($table)
             ->select('email')
             ->where('token', '=', $token)
@@ -94,29 +93,15 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function destroyToken($token)
     {
-        $connection = $this->getConnection();
         $table = $this->getTable();
 
         $affected = $this->app['db']
-            ->connection($connection)
+            ->connection()
             ->table($table)
             ->where('token', '=', $token)
             ->delete();
 
         return $affected > 0;
-    }
-
-    /**
-     * Returns a possible custom connection that may has being used
-     * for the user model. If null is returned by this method than
-     * the default connection is going to be used.
-     *
-     * @return string Original $connection value of the user model.
-     */
-    protected function getConnection()
-    {
-        return $this->app['confide.repository']
-            ->model()->getConnectionName();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use Zizaco\Confide\Facade as ConfideFacade;
 use Illuminate\Support\Facades\App as App;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * This is a trait containing a initial implementation of the
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\App as App;
  * @see \Zizaco\Confide\ConfideUserInterface
  * @license MIT
  * @package Zizaco\Confide
+ */
+/**
+ * @ORM\Entity(repositoryClass="Zizaco\Confide\DoctrineRepository")
  */
 trait ConfideUser
 {
@@ -60,28 +64,11 @@ trait ConfideUser
 
         // If the model already exists in the database we call validate with
         // the update ruleset
-        if ($this->exists) {
+        if ($this->getId() > 0) {
             return $validator->validate($this, 'update');
         }
 
         return $validator->validate($this);
-    }
-
-    /**
-     * Overwrites the original save method in order to perform
-     * validation before actually saving the object.
-     *
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function save(array $options = array())
-    {
-        if ($this->isValid()) {
-            return parent::save($options);
-        }
-
-        return false;
     }
 
     /**
