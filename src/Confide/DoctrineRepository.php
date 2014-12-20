@@ -38,7 +38,7 @@ class DoctrineRepository extends EntityRepository implements RepositoryInterface
             } else {
                 $qb->orWhere($qb->expr()->eq('e.' . $attribute, ':' . $attribute));
             }
-            ->setParameter($attribute, $value);
+            $qb->setParameter($attribute, $value);
 
             $firstWhere = false;
         }
