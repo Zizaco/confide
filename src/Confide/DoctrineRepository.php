@@ -57,7 +57,14 @@ class DoctrineRepository extends EntityRepository implements RepositoryInterface
             $firstWhere = false;
         }
 
-        return $qb->getQuery()->getSingleResult();
+        $result = null;
+        try {
+            $result = $qb->getQuery()->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException) {
+            //Ignore
+        }
+
+        return $result;
     }
 
     /**
