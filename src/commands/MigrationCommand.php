@@ -47,7 +47,8 @@ class MigrationCommand extends GenerateCommand
         $table = lcfirst($this->option('table'));
 
         $viewVars = compact(
-            'table'
+            'table',
+            'timestamp' => date('YmdHis')
         );
 
         // Prompt
@@ -62,8 +63,8 @@ class MigrationCommand extends GenerateCommand
         if ($this->confirm("Proceed with the migration creation? [Yes|no]")) {
             $this->info("Creating migration...");
             // Generate
-            $filename = 'database/migrations/'.
-                date('Y_m_d_His')."_confide_setup_users_table.php";
+            $filename = 'database/doctrine-migrations/'.
+               'Version' . $timestamp . '.php';
             $this->generateFile($filename, 'generators.migration', $viewVars);
 
             $this->info("Migration successfully created!");
