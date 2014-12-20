@@ -1,6 +1,6 @@
 {
-    "name": "zizaco/confide",
-    "description": "Confide is an authentication solution for Laravel 4",
+    "name": "kiwing-it/confide-doctrine",
+    "description": "Confide is an authentication solution for Laravel 4. This fork implements confide for doctrine",
     "keywords": ["laravel","illuminate","auth"],
     "license": "MIT",
     "authors": [
@@ -23,7 +23,8 @@
         "illuminate/auth": "~4.2",
         "illuminate/console": "~4.2",
         "illuminate/database": "~4.2",
-        "satooshi/php-coveralls": "~0.6"
+        "satooshi/php-coveralls": "~0.6",
+        "mitchellvanw/laravel-doctrine": "0.4.*"
     },
     "suggest": {
         "zizaco/entrust":"add Role-based Permissions to Laravel 4"
