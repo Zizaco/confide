@@ -20,6 +20,20 @@ use Confide;
 class UserRepository extends EntityRepository
 {
     /**
+     * Create a new ConfideRepository
+     *
+     * @param \Illuminate\Foundation\Application $app Laravel application object
+     */
+    public function __construct($app = null)
+    {
+        $app = $app ?: app();
+
+        $em = $app['Doctrine\ORM\EntityManager'];
+
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata('User'));
+    }
+
+    /**
      * Signup a new account with the given parameters
      *
      * @param array $input Array containing 'username', 'email' and 'password'.

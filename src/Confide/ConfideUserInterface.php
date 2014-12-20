@@ -36,4 +36,11 @@ interface ConfideUserInterface extends UserInterface, RemindableInterface
      * @return bool
      */
     public function isValid();
+
+    /**
+     * Convert data to array.
+     *
+     * @return array
+     */
+    public function toArray();
 }
