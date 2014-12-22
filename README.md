@@ -1,3 +1,5 @@
+### WORK IN PROGRESS. DO NOT USE!
+
 # Confide _(A Laravel4 Package)_
 
 ![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
