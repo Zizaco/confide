@@ -111,7 +111,7 @@ class Confide
             return false;
         }
 
-        $user = $this->repo->getUserByIdentity($someUserIdentityValueFromInput);
+        $user = $this->repo->getUserByIdentityValue($someUserIdentityValueFromInput);
 
         if ($user) {
             if (! $user->confirmed && $mustBeConfirmed) {

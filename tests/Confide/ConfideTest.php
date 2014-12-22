@@ -155,7 +155,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByIdentity')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -279,7 +279,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByIdentity')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn(false);
 
@@ -339,7 +339,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByIdentity')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -399,7 +399,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByIdentity')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -463,7 +463,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByIdentity')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
