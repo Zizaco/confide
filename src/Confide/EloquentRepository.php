@@ -1,5 +1,7 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Support\Facades\Config as Config;
+
 /**
  * A service that abstracts all database interactions that happens
  * in Confide using Eloquent.
@@ -51,6 +53,37 @@ class EloquentRepository implements RepositoryInterface
         }
 
         throw new \Exception("Wrong model specified in config/auth.php", 639);
+    }
+
+    public function filterIdentitiesAndGetUserByIt($input)
+    {
+        $identities = [];
+        foreach(Config::get('confide::identities') as $column) {
+            if (isset($input[$column])) {
+                $identities[$column] = $input[$column];
+            }
+        }
+
+        return $this->getUserByIdentity($identities);
+    }
+
+    /**
+     * Find a user by some value $value.
+     * If one of the columns in the Config::get('confide::identities') array matches the user
+     * will be retrieved.
+     *
+     * @param string $value Values to search for
+     *
+     * @return ConfideUser User object
+     */
+    public function getUserByIdentityValue($value)
+    {
+        $identities = [];
+        foreach(Config::get('confide::identities') as $column) {
+            $identities[$column] = $value;
+        }
+
+        return $this->getUserByIdentity($identities);
     }
 
     /**

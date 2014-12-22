@@ -536,7 +536,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $config = m::mock('Config');
-        $app = ['config'=>$config];
+        $app = ['config' => $config];
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');

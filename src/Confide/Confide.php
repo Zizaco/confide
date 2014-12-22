@@ -105,15 +105,13 @@ class Confide
     public function logAttempt(array $input, $mustBeConfirmed = true)
     {
         $remember = $this->extractRememberFromArray($input);
-        $someUserIdentityFromInput = $this->extractIdentityFromArray($input);
-//        $emailOrUsername = $this->extractIdentityFromArray($input);
+        $someUserIdentityValueFromInput = $this->extractIdentityFromArray($input);
 
-        if (!$this->loginThrottling($someUserIdentityFromInput)) {
+        if (!$this->loginThrottling($someUserIdentityValueFromInput)) {
             return false;
         }
 
-        $user = $this->repo->getUserByIdentity($someUserIdentityFromInput);
-//        $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
+        $user = $this->repo->getUserByIdentity($someUserIdentityValueFromInput);
 
         if ($user) {
             if (! $user->confirmed && $mustBeConfirmed) {

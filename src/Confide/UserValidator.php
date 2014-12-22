@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Config as Config;
 
 /**
  * This is the default validator used by ConfideUser. You may overwrite this
@@ -117,7 +118,7 @@ class UserValidator implements UserValidatorInterface
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [];
-        $identities = $this->app['config']->get('confide::identities');
+        $identities = Config::get('confide::identities');
         foreach ($identities as $value) {
             $identity[$value] = $user->$value;
         }

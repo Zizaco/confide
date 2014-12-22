@@ -4,6 +4,7 @@ use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
+use Illuminate\Support\Facades\Config as Config;
 
 class UserValidatorTest extends PHPUnit_Framework_TestCase
 {
@@ -160,6 +161,11 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+
+        Config::shouldReceive('get')
+            ->times(4)->with('confide::identities')
+            ->andReturn(['email', 'username']);
+
         $userA->shouldReceive('getKey')
             ->andReturn($userA->id);
 

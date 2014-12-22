@@ -84,7 +84,8 @@ class UserRepository
      */
     public function existsButNotConfirmed($input)
     {
-        $user = Confide::getUserByEmailOrUsername($input);
+        $repo = App::make('confide.repository');
+        $user = $repo->filterIdentitiesAndGetUserByIt($input);
 
         if ($user) {
             $correctPassword = Hash::check(

@@ -2,6 +2,7 @@
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
+use Illuminate\Support\Facades\Config as Config;
 
 class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
 {
@@ -81,6 +82,125 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $repo->model();
+    }
+
+    public function testFilterIdentitiesAndGetUserByIt()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'someone@somewhere.com',
+            'foo' => 'bar',
+            'bar' => 'foo'
+        ];
+        $filteredIdentity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'someone@somewhere.com',
+        ];
+        $model = m::mock('_mockedUser');
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        Config::shouldReceive('get')
+            ->once()->with('confide::identities')
+            ->andReturn(['email', 'username']);
+
+        // Repo model method should return the model instance
+        $repo->shouldReceive('model')
+            ->andReturn($model);
+
+        // Should query for the user using each credential
+        $firstWhere = true;
+        foreach ($filteredIdentity as $attribute => $value) {
+            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+                ->with($attribute, '=', $value)
+                ->once()
+                ->andReturn($model);
+
+            $firstWhere = false;
+        }
+
+        $model->shouldReceive('get')
+            ->once()
+            ->andReturn($model);
+
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->filterIdentitiesAndGetUserByIt($identity));
+    }
+
+    public function testShouldGetUserByIdentityValue()
+    {
+        /*
+        |------------------------------------------------------------
+        | Set
+        |------------------------------------------------------------
+        */
+        $value = 'someone@somewhere.com';
+        $identity = [
+            'email' => 'someone@somewhere.com',
+            'username' => 'someone@somewhere.com'
+        ];
+        $model = m::mock('_mockedUser');
+        $user = m::mock('_mockedUser');
+        $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', []);
+
+        /*
+        |------------------------------------------------------------
+        | Expectation
+        |------------------------------------------------------------
+        */
+        Config::shouldReceive('get')
+            ->once()->with('confide::identities')
+            ->andReturn(['email', 'username']);
+
+        // Repo model method should return the model instance
+        $repo->shouldReceive('model')
+            ->andReturn($model);
+
+        // Should query for the user using each credential
+        $firstWhere = true;
+        foreach ($identity as $attribute => $value) {
+            $model->shouldReceive(($firstWhere) ? 'where' : 'orWhere')
+                ->with($attribute, '=', $value)
+                ->once()
+                ->andReturn($model);
+
+            $firstWhere = false;
+        }
+
+        $model->shouldReceive('get')
+            ->once()
+            ->andReturn($model);
+
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn($user);
+
+        /*
+        |------------------------------------------------------------
+        | Assertion
+        |------------------------------------------------------------
+        */
+        // Should return the user
+        $this->assertEquals($user, $repo->getUserByIdentityValue($value));
     }
 
     public function testShouldGetUserByIdentity()
