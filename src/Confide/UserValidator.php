@@ -130,21 +130,21 @@ class UserValidator implements UserValidatorInterface
 
             if (!$similar || $similar->getKey() == $user->getKey()) {
                 unset($identity[$attribute]);
-            } else {
-                $this->attachErrorMsg(
-                    $user,
-                    'confide::confide.alerts.duplicated_credentials',
-                    $attribute
-                );
             }
 
         }
 
         if (!$identity) {
             return true;
-        }
+        } else {
+            $this->attachErrorMsg(
+                $user,
+                'confide::confide.alerts.duplicated_credentials',
+                $attribute
+            );
 
-        return false;
+            return false;
+        }
     }
 
     /**
