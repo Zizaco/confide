@@ -190,7 +190,7 @@ class UserValidatorTest extends PHPUnit_Framework_TestCase
 
         $validator->shouldReceive('attachErrorMsg')
             ->atLeast(1)
-            ->with(m::any(), 'confide::confide.alerts.duplicated_credentials', 'email');
+            ->with(m::any(), 'confide::confide.alerts.duplicated_credentials', 'username');
 
         /*
         |------------------------------------------------------------
