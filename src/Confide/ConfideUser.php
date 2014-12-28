@@ -167,4 +167,11 @@ trait ConfideUser
     {
         return $this->email;
     }
+
+    /**
+     * Return user fullname.
+     *
+     * @return string
+     */
+    abstract public function getFullname();
 }
