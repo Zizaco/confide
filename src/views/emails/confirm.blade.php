@@ -3,7 +3,7 @@
 <p>{{ Lang::get('confide::confide.email.account_confirmation.greetings', array('name' => $user['username'])) }},</p>
 
 <p>{{ Lang::get('confide::confide.email.account_confirmation.body') }}</p>
-<a href='{{{ URL::to("users/confirm/{$user['confirmation_code']}") }}}'>
+<a href='{{{ URL::action('UsersController@confirm', {$user['confirmation_code']} ) }}}'>
     {{{ URL::to("users/confirm/{$user['confirmation_code']}") }}}
 </a>
 
