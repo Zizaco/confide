@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
+use Illuminate\Support\Facades\Config as Config;
 use Illuminate\Support\MessageBag;
 
 /**
@@ -41,18 +42,13 @@ class UserValidator implements UserValidatorInterface
      *
      * @var array
      */
-    public $rules = [
-        'create' => [
-            'username' => 'required|alpha_dash',
-            'email'    => 'required|email',
-            'password' => 'required|min:4',
-        ],
-        'update' => [
-            'username' => 'required|alpha_dash',
-            'email'    => 'required|email',
-            'password' => 'required|min:4',
-        ]
-    ];
+    public $rules = array();
+
+    public function __construct()
+    {
+        //This provides you configure you validation rules directly in Config file
+        $this->rules = Config::get('confide::rules');
+    }
 
     /**
      * Validates the given user. Should check if all the fields are correctly.
@@ -160,7 +156,7 @@ class UserValidator implements UserValidatorInterface
         // Force getting password since it may be hidden from array form
         $attributes['password'] = $user->getAuthPassword();
 
-        $rules = $this->rules[$ruleset];
+        $rules = $this->rules[Config::get('confide::username_type')][$ruleset];
 
         $validator = App::make('validator')
             ->make($attributes, $rules);

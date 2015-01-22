@@ -112,7 +112,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @param string $code
      *
-     * @return bool Success
+     * @return bool Success or Null for nothing affected
      */
     public function confirmByCode($code)
     {
@@ -120,8 +120,10 @@ class EloquentRepository implements RepositoryInterface
 
         $user = $this->getUserByIdentity($identity);
 
-        if ($user) {
+        if ($user->confirmed == null) {
             return $this->confirmUser($user);
+        } else if ($user) {
+            return null;
         } else {
             return false;
         }
@@ -137,7 +139,10 @@ class EloquentRepository implements RepositoryInterface
      */
     protected function confirmUser($user)
     {
-        $user->confirmed = true;
+        $date = new \DateTime();
+        $date->setTimezone(new \DateTimeZone('UTC'));
+
+        $user->confirmed = $date->format('Y-m-d H:i:s');
 
         return $user->save();
     }
