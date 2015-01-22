@@ -93,23 +93,6 @@ class Confide
     }
 
     /**
-     * Checks if a user with the given identity (email or username) already
-     * exists and retrieve it.
-     *
-     * @param array $identity Array containing at least 'username' or 'email'.
-     *
-     * @return \Zizaco\Confide\ConfideUserInterface|null
-     */
-    public function getUserByEmailOrUsername($identity)
-    {
-        if (is_array($identity)) {
-            $identity = $this->extractIdentityFromArray($identity);
-        }
-
-        return $this->repo->getUserByEmailOrUsername($identity);
-    }
-
-    /**
      * Attempt to log a user into the application with password and
      * identity field(s), usually email or username.
      *
@@ -122,13 +105,13 @@ class Confide
     public function logAttempt(array $input, $mustBeConfirmed = true)
     {
         $remember = $this->extractRememberFromArray($input);
-        $emailOrUsername = $this->extractIdentityFromArray($input);
+        $someUserIdentityValueFromInput = $this->extractIdentityFromArray($input);
 
-        if (!$this->loginThrottling($emailOrUsername)) {
+        if (!$this->loginThrottling($someUserIdentityValueFromInput)) {
             return false;
         }
 
-        $user = $this->repo->getUserByEmailOrUsername($emailOrUsername);
+        $user = $this->repo->getUserByIdentityValue($someUserIdentityValueFromInput);
 
         if ($user) {
             if (! $user->confirmed && $mustBeConfirmed) {
@@ -176,10 +159,11 @@ class Confide
      */
     protected function extractIdentityFromArray(array $input)
     {
-        if (isset($input['email'])) {
-            return $input['email'];
-        } elseif (isset($input['username'])) {
-            return $input['username'];
+        $identities = $this->app['config']->get('confide::identities');
+        foreach ($identities as $identity) {
+            if (isset($input[$identity])) {
+                return $input[$identity];
+            }
         }
 
         return false;

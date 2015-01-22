@@ -1,5 +1,6 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Support\Facades\App;
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 
@@ -106,51 +107,6 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($confide->confirm($code));
     }
 
-    public function testShouldGetUserByEmailOrUsername()
-    {
-        /*
-        |------------------------------------------------------------
-        | Set
-        |------------------------------------------------------------
-        */
-        $app = [];
-        $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
-        $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
-        $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
-        $confide = m::mock(
-            'Zizaco\Confide\Confide'.
-            '[extractIdentityFromArray]',
-            [$repo, $passService, $loginThrottler, $app]
-        );
-        $confide->shouldAllowMockingProtectedMethods();
-
-        $identity = ['email'=>'johndoe@example.com'];
-        $user     = m::mock('_mockedUser');
-
-        /*
-        |------------------------------------------------------------
-        | Expectation
-        |------------------------------------------------------------
-        */
-        $confide->shouldReceive('extractIdentityFromArray')
-            ->once()->with($identity)
-            ->andReturn($identity['email']);
-
-        $repo->shouldReceive('getUserByEmailOrUsername')
-            ->once()->with('johndoe@example.com')
-            ->andReturn($user);
-
-        /*
-        |------------------------------------------------------------
-        | Assertion
-        |------------------------------------------------------------
-        */
-        $this->assertEquals(
-            $user,
-            $confide->getUserByEmailOrUsername($identity)
-        );
-    }
-
     public function testShouldDoLogAttempt()
     {
         /*
@@ -199,7 +155,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByEmailOrUsername')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -323,7 +279,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByEmailOrUsername')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn(false);
 
@@ -383,7 +339,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByEmailOrUsername')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -443,7 +399,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByEmailOrUsername')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -507,7 +463,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->once()->with($user->email)
             ->andReturn(true);
 
-        $repo->shouldReceive('getUserByEmailOrUsername')
+        $repo->shouldReceive('getUserByIdentityValue')
             ->once()->with('someone@somewhere.com')
             ->andReturn($user);
 
@@ -579,7 +535,8 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = [];
+        $config = m::mock('Config');
+        $app = ['config' => $config];
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -603,6 +560,10 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         */
         $confide->shouldReceive('extractIdentityFromArray')
             ->passthru();
+
+        $config->shouldReceive('get')
+               ->times(4)->with('confide::identities')
+               ->andReturn(['email', 'username']);
 
         /*
         |------------------------------------------------------------

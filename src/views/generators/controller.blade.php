@@ -41,13 +41,14 @@ class {{ $class }} extends Controller
     {
         $repo = App::make('{{ $repositoryClass }}');
         $user = $repo->signup(Input::all());
+        $fullname = $user->getFullname();
 
         if ($user->id) {
             if (Config::get('confide::signup_email')) {
                 Mail::queueOn(
                     Config::get('confide::email_queue'),
                     Config::get('confide::email_account_confirmation'),
-                    compact('user'),
+                    compact('user', 'fullname'),
                     function ($message) use ($user) {
                         $message
                             ->to($user->email, $user->username)

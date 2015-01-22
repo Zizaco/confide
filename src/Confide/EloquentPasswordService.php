@@ -170,14 +170,15 @@ class EloquentPasswordService implements PasswordServiceInterface
     {
         $config = $this->app['config'];
         $lang   = $this->app['translator'];
+        $fullname = $user->getFullName();
 
         $this->app['mailer']->queueOn(
             $config->get('confide::email_queue'),
             $config->get('confide::email_reset_password'),
-            compact('user', 'token'),
+            compact('user', 'token', 'fullname'),
             function ($message) use ($user, $token, $lang) {
                 $message
-                    ->to($user->email, $user->username)
+                    ->to($user->email, $user->getFullName())
                     ->subject($lang->get('confide::confide.email.password_reset.subject'));
             }
         );

@@ -370,4 +370,9 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
 class _ConfideUserStub extends Eloquent implements ConfideUserInterface
 {
     use ConfideUser;
+
+    public function getFullname()
+    {
+        return 'fullname';
+    }
 }

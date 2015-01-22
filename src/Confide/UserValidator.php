@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Config as Config;
 
 /**
  * This is the default validator used by ConfideUser. You may overwrite this
@@ -116,10 +117,12 @@ class UserValidator implements UserValidatorInterface
      */
     public function validateIsUnique(ConfideUserInterface $user)
     {
-        $identity = [
-            'email'    => $user->email,
-            'username' => $user->username,
-        ];
+        $identity = [];
+        $identities = Config::get('confide::identities');
+        foreach ($identities as $value) {
+            $identity[$value] = $user->$value;
+        }
+
 
         foreach ($identity as $attribute => $value) {
 
@@ -127,21 +130,21 @@ class UserValidator implements UserValidatorInterface
 
             if (!$similar || $similar->getKey() == $user->getKey()) {
                 unset($identity[$attribute]);
-            } else {
-                $this->attachErrorMsg(
-                    $user,
-                    'confide::confide.alerts.duplicated_credentials',
-                    $attribute
-                );
             }
 
         }
 
         if (!$identity) {
             return true;
-        }
+        } else {
+            $this->attachErrorMsg(
+                $user,
+                'confide::confide.alerts.duplicated_credentials',
+                $attribute
+            );
 
-        return false;
+            return false;
+        }
     }
 
     /**

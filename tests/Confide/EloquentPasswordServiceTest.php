@@ -419,13 +419,15 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $passService->shouldReceive('sendEmail')
             ->passthru();
 
+        $user->shouldReceive('getFullName')->andReturn('Someone');
+
         $mailer->shouldReceive('queueOn')
-            ->once()->with('sync', 'view.name', ['user'=>$user, 'token'=>$token], m::any())
+            ->once()->with('sync', 'view.name', ['user'=>$user, 'token'=>$token, 'fullname' => $user->getFullName()], m::any())
             ->andReturnUsing(function ($q, $a, $b, $closure) use ($test, $user) {
                 $message = m::mock('Message');
 
                 $message->shouldReceive('to')
-                    ->once()->with($user->email, $user->username)
+                    ->once()->with($user->email, $user->getFullName())
                     ->andReturn($message);
 
                 $message->shouldReceive('subject')

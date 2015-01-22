@@ -126,4 +126,14 @@ return array(
     */
     'email_queue' => 'default',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Identities. Confide will search user by this columns.
+    |--------------------------------------------------------------------------
+     */
+    'identities' => [
+        'email',
+        'username'
+    ]
+
 );
