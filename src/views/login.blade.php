@@ -16,7 +16,6 @@
         </div>
         <div class="checkbox">
             <label for="remember">
-                <input type="hidden" name="remember" value="0">
                 <input tabindex="4" type="checkbox" name="remember" id="remember" value="1"> {{{ Lang::get('confide::confide.login.remember') }}}
             </label>
         </div>
