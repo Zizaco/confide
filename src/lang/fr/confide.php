@@ -30,10 +30,12 @@ return array(
 
     'alerts' => array(
         'account_created' => 'Votre compte a été crée avec succes. Veuillez vérifier votre boite email pour les instructions sur la confirmation de votre compte.',
+        'instruction_sent' => 'Merci de consulter votre boîte email et de suivre les instructions sur la confirmation de votre compte.',
         'too_many_attempts' => 'Trop de tentatives. Veuillez réessayer dans quelques minutes.',
         'wrong_credentials' => 'Utilisateur, email ou mot de passe incorrect.',
         'not_confirmed' => "Votre compte n'est pas confirmé. Veuillez vérifier vos emails pour le lien de confirmation.",
         'confirmation' => "Votre compte a été confirmé avec succes. Vous pouvez désormais vous connecter.",
+        'password_confirmation' => "La confirmation du mot de passe ne correspond pas.",
         'wrong_confirmation' => 'Code de confirmation incorrect',
         'password_forgot' => 'Les informations de réinitialisation vous ont été envoyé par email.',
         'wrong_password_forgot' => 'Utilisateur inconnu.',
