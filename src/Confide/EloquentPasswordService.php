@@ -170,6 +170,8 @@ class EloquentPasswordService implements PasswordServiceInterface
     {
         $config = $this->app['config'];
         $lang   = $this->app['translator'];
+        
+        $user = (object)$user->toArray();
 
         $this->app['mailer']->queueOn(
             $config->get('confide::email_queue'),
