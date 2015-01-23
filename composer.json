@@ -16,6 +16,8 @@
     "replace": {
         "zizaco/confide": "~4.0@dev"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "~4.2|~5.0",
