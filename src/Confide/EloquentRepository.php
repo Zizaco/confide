@@ -66,17 +66,11 @@ class EloquentRepository implements RepositoryInterface
     {
         $user = $this->model();
 
-        $firstWhere = true;
-        foreach ($identity as $attribute => $value) {
-
-            if ($firstWhere) {
-                $user = $user->where($attribute, '=', $value);
-            } else {
+        $user = $user->where(function($user) use ($identity) {
+            foreach ($identity as $attribute => $value) {
                 $user = $user->orWhere($attribute, '=', $value);
             }
-
-            $firstWhere = false;
-        }
+        });
 
         $user = $user->get()->first();
 

@@ -48,33 +48,41 @@ to be confirmed to be able to login to the website._
 
 In the `require` key of `composer.json` file add the following
 
-    "zizaco/confide": "~4.1@dev"
+```json
+"zizaco/confide": "~4.1@dev"
+```
 
 Run the Composer update comand
 
-    $ composer update
+```bash
+$ composer update
+```
 
 In your `config/app.php` add `'Zizaco\Confide\ServiceProvider'` to the end of the `providers` array
 
-    'providers' => array(
+```php
+'providers' => array(
 
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-        'Illuminate\Auth\AuthServiceProvider',
-        ...
-        'Zizaco\Confide\ServiceProvider',
+    'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+    'Illuminate\Auth\AuthServiceProvider',
+    ...
+    'Zizaco\Confide\ServiceProvider',
 
-    ),
+),
+```
 
 At the end of `config/app.php` add `'Confide' => 'Zizaco\Confide\Facade'` to the `aliases` array
 
-    'aliases' => array(
+```php
+'aliases' => array(
 
-        'App'        => 'Illuminate\Support\Facades\App',
-        'Artisan'    => 'Illuminate\Support\Facades\Artisan',
-        ...
-        'Confide'    => 'Zizaco\Confide\Facade',
+    'App'        => 'Illuminate\Support\Facades\App',
+    'Artisan'    => 'Illuminate\Support\Facades\Artisan',
+    ...
+    'Confide'    => 'Zizaco\Confide\Facade',
 
-    ),
+),
+```
 
 ### Configuration
 
@@ -87,25 +95,31 @@ Set the `address` and `name` from the `from` array in `config/mail.php`. Those w
 
 Now generate the Confide migration and the reminder password table migration:
 
-    $ php artisan confide:migration
+```bash
+$ php artisan confide:migration
+```
 
 It will generate the `<timestamp>_confide_setup_users_table.php` migration. You may now run it with the artisan migrate command:
 
-    $ php artisan migrate
+```bash
+$ php artisan migrate
+```
 
 It will setup a table containing `email`, `password`, `remember_token`, `confirmation_code` and `confirmed` columns, which are the default fields needed for Confide use. Feel free to add more columns to the table later.
 
 Change your User model in `app/models/User.php` to:
 
-    <?php
+```php
+<?php
 
-    use Zizaco\Confide\ConfideUser;
-    use Zizaco\Confide\ConfideUserInterface;
+use Zizaco\Confide\ConfideUser;
+use Zizaco\Confide\ConfideUserInterface;
 
-    class User extends Eloquent implements ConfideUserInterface
-    {
-        use ConfideUser;
-    }
+class User extends Eloquent implements ConfideUserInterface
+{
+    use ConfideUser;
+}
+```
 
 `ConfideUser` trait will take care of some behaviors of the user model.
 
@@ -113,12 +127,16 @@ Change your User model in `app/models/User.php` to:
 
 Lastly, you can dump a default controller, repository and the default routes for Confide.
 
-    $ php artisan confide:controller
-    $ php artisan confide:routes
+```bash
+$ php artisan confide:controller
+$ php artisan confide:routes
+```
 
 Don't forget to dump composer autoload
 
-    $ composer dump-autoload
+```bash
+$ composer dump-autoload
+```
 
 **And you are ready to go.** Access `http://yourapp/users/create` to create your first user. Check the `app/routes.php` to see the available routes. **You may need to confirm a newly created user** _(by "reaching" its `confirm()` method)_, otherwise you can disable the confirmation as a requirement to login in in the config file _(see bellow)_.
 
@@ -156,17 +174,23 @@ Confide uses the values present in that configuration file.
 
 To change the controller name when dumping the default controller template you can use the --name option.
 
-    $ php artisan confide:controller --name=Employee
+```bash
+$ php artisan confide:controller --name=Employee
+```
 
 Will result in `EmployeeController`
 
 Then, when dumping the routes, you should use the --controller option to match the existing controller.
 
-    $ php artisan confide:routes --controller=Employee
+```bash
+$ php artisan confide:routes --controller=Employee
+```
 
 You can also generate controllers with namespace
 
-    $ php artisan confide:controller --name=MyProject\\Auth\\User
+```bash
+$ php artisan confide:controller --name=MyProject\\Auth\\User
+```
 
 **Warning:** In bash, you will need to use double '\\\\' backslashes. This will result in `MyProject\Auth\UserController`. Also the generated file will be inside a directory equivalent to the namespace. _(wink)_
 
@@ -174,7 +198,9 @@ You can also generate controllers with namespace
 
 First, publish the config files:
 
-    $ php artisan config:publish zizaco/confide
+```bash
+$ php artisan config:publish zizaco/confide
+```
 
 Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
@@ -182,23 +208,26 @@ Then edit the view names in `app/config/packages/zizaco/confide/config.php`.
 
 To seed your users table you should fill also the `password_confirmation` and `confirmation_code` fields. For example:
 
-    class UsersTableSeeder extends Seeder {
+```php
+class UsersTableSeeder extends Seeder {
 
-      public function run()
-      {
+    public function run()
+    {
         $user = new User;
         $user->email = 'johndoe@site.dev';
         $user->password = 'foo_bar_1234';
         $user->password_confirmation = 'foo_bar_1234';
         $user->confirmation_code = md5(uniqid(mt_rand(), true));
+        $user->confirmed = 1;
 
         if(! $user->save()) {
-          Log::info('Unable to create user '.$user->email, (array)$user->errors());
+            Log::info('Unable to create user '.$user->email, (array)$user->errors());
         } else {
-          Log::info('Created user "'.$user->email.'" <'.$user->email.'>');
+            Log::info('Created user '.$user->email);
         }
-      }
     }
+}
+```
 
 #### Custom user validation
 
@@ -206,23 +235,26 @@ You can implement your own validator by creating a class that implements the `Us
 
 For example, create your custom validator class:
 
+```php
+// app/models/MyOwnValidator.php
+class MyOwnValidator implements UserValidatorInterface
+{
 
-    // app/models/MyOwnValidator.php
-    class MyOwnValidator implements UserValidatorInterface
+    public function validate(ConfideUserInterface $user)
     {
-
-        public function validate(ConfideUserInterface $user)
-        {
-            unset($user->password_confirmation);
-            return true; // If the user valid
-        }
+        unset($user->password_confirmation);
+        return true; // If the user valid
     }
+}
+```
 
 Then register it in IoC container as *"confide.user_validator"*
 
-    // app/start/global.php
-    ...
-    App::bind('confide.user_validator', 'MyOwnValidator');
+```php
+// app/start/global.php
+//...
+App::bind('confide.user_validator', 'MyOwnValidator');
+```
 
 Also, don't forget that your validator should unset the 'password_confirmation' attribute of the user before saving it.
 
@@ -232,12 +264,16 @@ If you want to pass additional parameters to the forms being rendered, you can u
 
 Instead of using the make method:
 
-    Confide::makeResetPasswordForm($token):
+```php
+Confide::makeResetPasswordForm($token):
+```
 
 You would use:
 
-    View::make(Config::get('confide::reset_password_form'))
-        ->with('token', $token);
+```php
+View::make(Config::get('confide::reset_password_form'))
+    ->with('token', $token);
+```
 
 It produces the same output, but you would be able to add more inputs using 'with' just like any other view.
 
@@ -245,13 +281,17 @@ It produces the same output, but you would be able to add more inputs using 'wit
 
 If you want to generate a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers) you can use the aditional `--restful` or `-r` option.
 
-    $ php artisan confide:controller --restful
+```bash
+$ php artisan confide:controller --restful
+```
 
 Will result in a [RESTful controller](https://github.com/laravel/docs/blob/master/controllers.md#restful-controllers)
 
 Then, when dumping the routes, you should use the --restful option to match the existing controller.
 
-    $ php artisan confide:routes --restful
+```bash
+$ php artisan confide:routes --restful
+```
 
 #### User roles and permissions
 
@@ -263,26 +303,30 @@ See [Entrust](https://github.com/Zizaco/entrust)
 
 When defining your filter you should use the Redirect::guest('users/login') within your auth filter. For example:
 
-    // filters.php
+```php
+// filters.php
 
-    Route::filter('auth', function () {
-        // If the user is not logged in
-        if (Auth::guest()) {
-            return Redirect::guest('users/login');
-        }
-    });
+Route::filter('auth', function () {
+    // If the user is not logged in
+    if (Auth::guest()) {
+        return Redirect::guest('users/login');
+    }
+});
 
-    // Only authenticated users will be able to access routes that begins with
-    // 'admin'. Ex: 'admin/posts', 'admin/categories'.
-    Route::when('admin*', 'auth');
+// Only authenticated users will be able to access routes that begins with
+// 'admin'. Ex: 'admin/posts', 'admin/categories'.
+Route::when('admin*', 'auth');
+```
 
 or, if you are using [Entrust](https://github.com/Zizaco/entrust) ;)
 
-    // filters.php
+```php
+// filters.php
 
-    Entrust::routeNeedsRole('admin*', 'Admin', function () {
-        return Redirect::guest('users/login');
-    });
+Entrust::routeNeedsRole('admin*', 'Admin', function () {
+    return Redirect::guest('users/login');
+});
+```
 
 Finally, it'll auto redirect if your controller's users/login function uses Redirect:intended('a/default/url/here') after a successful login.
 The [generated controller](https://github.com/Zizaco/confide/blob/master/src/views/generators/controller.blade.php) does exactly this.
