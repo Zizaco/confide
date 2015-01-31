@@ -371,9 +371,14 @@ For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0
 
 ## Release Notes
 
-### Version 4.1.0
+### Version 4.3.0 Beta 1
+* **Username is now an optional field.** Use `--username` when generating the migrations and the controllers.
 * General Bugfixes.
-* Username is now an optional field. Use `--username` when generating the migrations and the controllers.
+
+### Version 4.2.0
+* General Bugfixes.
+* Improved README.md.
+* Improved existing translations and added new ones.
 
 ### Version 4.0.0 RC
 * General Bugfixes.
