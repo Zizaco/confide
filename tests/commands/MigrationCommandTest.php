@@ -33,6 +33,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         $command = m::mock('Zizaco\Confide\MigrationCommand', [$app]);
         $options = [
             ['table', null, InputOption::VALUE_OPTIONAL, 'Table name.', 'users'],
+            ['username', null, InputOption::VALUE_NONE, 'Includes an unique username column.']
         ];
 
         /*
@@ -55,6 +56,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldAllowMockingProtectedMethods();
         $viewVars = [
             'table' => "users",
+            'includeUsername' => true
         ];
 
         /*
@@ -65,6 +67,10 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         $command->shouldReceive('option')
             ->once()->with('table')
             ->andReturn('users');
+
+        $command->shouldReceive('option')
+            ->once()->with('username')
+            ->andReturn(true);
 
         $command->shouldReceive('fire')
             ->passthru();

@@ -15,7 +15,7 @@ use Illuminate\Support\MessageBag;
  *
  * In order to use a custom validator:
  *     // MyOwnValidator.php
- *     class MyOwnValidator implements UserValidatorInterface {
+ *     class MyOwnValidator implements Zizaco\Confide\UserValidatorInterface {
  *         ...
  *     }
  *
@@ -43,12 +43,12 @@ class UserValidator implements UserValidatorInterface
      */
     public $rules = [
         'create' => [
-            'username' => 'required|alpha_dash',
+            'username' => 'alpha_dash',
             'email'    => 'required|email',
             'password' => 'required|min:4',
         ],
         'update' => [
-            'username' => 'required|alpha_dash',
+            'username' => 'alpha_dash',
             'email'    => 'required|email',
             'password' => 'required|min:4',
         ]
@@ -99,7 +99,7 @@ class UserValidator implements UserValidatorInterface
                 return false;
             }
         }
-        
+
         unset($user->password_confirmation);
 
         return true;
@@ -117,9 +117,11 @@ class UserValidator implements UserValidatorInterface
     public function validateIsUnique(ConfideUserInterface $user)
     {
         $identity = [
-            'email'    => $user->email,
+            'email' => $user->email,
             'username' => $user->username,
         ];
+
+        $identity = array_filter($identity);
 
         foreach ($identity as $attribute => $value) {
 
@@ -137,7 +139,7 @@ class UserValidator implements UserValidatorInterface
 
         }
 
-        if (!$identity) {
+        if (empty($identity)) {
             return true;
         }
 

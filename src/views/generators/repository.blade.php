@@ -19,7 +19,7 @@ class UserRepository
     /**
      * Signup a new account with the given parameters
      *
-     * @param array $input Array containing 'username', 'email' and 'password'.
+     * @param array $input Array containing {{ ($includeUsername) ? "'username', " : '' }}'email' and 'password'.
      *
      * @return {{ $nonNamespacedName }} {{ $nonNamespacedName }} object that may or may not be saved successfully. Check the id to make sure.
      */
@@ -27,7 +27,9 @@ class UserRepository
     {
         $user = new {{ $nonNamespacedName }};
 
+@if ($includeUsername)
         $user->username = array_get($input, 'username');
+@endif
         $user->email    = array_get($input, 'email');
         $user->password = array_get($input, 'password');
 
@@ -48,7 +50,7 @@ class UserRepository
     /**
      * Attempts to login with the given credentials.
      *
-     * @param array $input Array containing the credentials (email/username and password)
+     * @param array $input Array containing the credentials (email{{ ($includeUsername) ? "/username" : '' }} and password)
      *
      * @return boolean Success?
      */
@@ -65,7 +67,7 @@ class UserRepository
      * Checks if the credentials has been throttled by too
      * much failed login attempts
      *
-     * @param array $credentials Array containing the credentials (email/username and password)
+     * @param array $credentials Array containing the credentials (email{{ ($includeUsername) ? "/username" : '' }} and password)
      *
      * @return boolean Is throttled
      */
@@ -78,7 +80,7 @@ class UserRepository
      * Checks if the given credentials correponds to a user that exists but
      * is not confirmed
      *
-     * @param array $credentials Array containing the credentials (email/username and password)
+     * @param array $credentials Array containing the credentials (email{{ ($includeUsername) ? "/username" : '' }} and password)
      *
      * @return boolean Exists and is not confirmed?
      */
