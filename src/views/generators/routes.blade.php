@@ -17,6 +17,6 @@ Route::get('{{ $url }}/logout', '{{ $controllerName }}@logout');
 // Confide RESTful route
 Route::get('{{ $url }}/confirm/{code}', '{{ $controllerName }}@getConfirm');
 Route::get('{{ $url }}/reset_password/{token}', '{{ $controllerName }}@getReset');
-Route::get('{{ $url }}/reset_password', '{{ $controllerName }}@postReset');
+Route::post('{{ $url }}/reset_password', '{{ $controllerName }}@postReset');
 Route::controller( '{{ $url }}', '{{ $controllerName }}');
 @endif
