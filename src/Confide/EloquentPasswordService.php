@@ -24,7 +24,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function __construct($app = null)
     {
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**

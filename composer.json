@@ -15,14 +15,13 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "~4.2|~5.0"
+        "illuminate/support": "~5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
-        "illuminate/auth": "~4.2",
-        "illuminate/console": "~4.2",
-        "illuminate/database": "~4.2",
+        "illuminate/console": "~5.0",
+        "illuminate/database": "~5.0",
         "satooshi/php-coveralls": "~0.6"
     },
     "suggest": {

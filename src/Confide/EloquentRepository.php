@@ -32,7 +32,7 @@ class EloquentRepository implements RepositoryInterface
      */
     public function __construct($app = null)
     {
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**

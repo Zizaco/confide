@@ -22,9 +22,9 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
      *
      * @param \Illuminate\Foundation\Application $app Laravel application object.
      */
-    public function __construct($app = null)
+    public function __construct($app)
     {
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**

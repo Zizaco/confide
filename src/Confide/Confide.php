@@ -57,7 +57,7 @@ class Confide
         $this->repo           = $repo;
         $this->passService    = $passService;
         $this->loginThrottler = $loginThrottler;
-        $this->app            = $app ?: app();
+        $this->app            = $app;
     }
 
     /**
