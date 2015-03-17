@@ -1,5 +1,7 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Contracts\Foundation\Application;
+
 /**
  * A service that abstracts all database interactions that happens
  * in Confide using Eloquent.
@@ -30,7 +32,7 @@ class EloquentRepository implements RepositoryInterface
      *
      * @param \Illuminate\Foundation\Application $app Laravel application object
      */
-    public function __construct($app = null)
+    public function __construct(Application $app)
     {
         $this->app = $app;
     }
@@ -43,11 +45,11 @@ class EloquentRepository implements RepositoryInterface
     public function model()
     {
         if (! $this->model) {
-            $this->model = $this->app['config']->get('auth.model');
+            $this->model = $this->app->make('config')->get('auth.model');
         }
 
         if ($this->model) {
-            return $this->app[$this->model];
+            return $this->app->make($this->model);
         }
 
         throw new \Exception("Wrong model specified in config/auth.php", 639);

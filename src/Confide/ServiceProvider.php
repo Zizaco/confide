@@ -1,5 +1,6 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**
@@ -53,7 +54,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerRepository()
     {
-        $this->app->bind('confide.repository', function ($app) {
+        $this->app->bind('confide.repository', function (Application $app) {
             return new EloquentRepository($app);
         });
     }
@@ -64,7 +65,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerPasswordService()
     {
-        $this->app->bind('confide.password', function ($app) {
+        $this->app->bind('confide.password', function (Application $app) {
             return new EloquentPasswordService($app);
         });
     }
@@ -76,7 +77,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerLoginThrottleService()
     {
-        $this->app->bind('confide.throttle', function ($app) {
+        $this->app->bind('confide.throttle', function (Application $app) {
             return new CacheLoginThrottleService($app);
         });
     }
@@ -87,8 +88,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerUserValidator()
     {
-        $this->app->bind('confide.user_validator', function ($app) {
-            return new UserValidator();
+        $this->app->bind('confide.user_validator', function (Application $app) {
+            return new UserValidator($app);
         });
     }
 
@@ -97,7 +98,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerConfide()
     {
-        $this->app->bind('confide', function ($app) {
+        $this->app->bind('confide', function (Application $app) {
             return new Confide(
                 $app->make('confide.repository'),
                 $app->make('confide.password'),
@@ -112,15 +113,15 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerCommands()
     {
-        $this->app->bind('command.confide.controller', function ($app) {
+        $this->app->bind('command.confide.controller', function (Application $app) {
             return new ControllerCommand($app);
         });
 
-        $this->app->bind('command.confide.routes', function ($app) {
+        $this->app->bind('command.confide.routes', function (Application $app) {
             return new RoutesCommand($app);
         });
 
-        $this->app->bind('command.confide.migration', function ($app) {
+        $this->app->bind('command.confide.migration', function (Application $app) {
             return new MigrationCommand($app);
         });
     }

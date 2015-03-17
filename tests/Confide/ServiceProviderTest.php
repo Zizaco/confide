@@ -95,7 +95,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -133,7 +133,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -171,7 +171,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -209,7 +209,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -247,7 +247,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -257,15 +257,15 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $app->shouldReceive('make')
             ->once()->with('confide.repository')
-            ->andReturn(new EloquentRepository);
+            ->andReturn(new EloquentRepository($app));
 
         $app->shouldReceive('make')
             ->once()->with('confide.password')
-            ->andReturn(new EloquentPasswordService);
+            ->andReturn(new EloquentPasswordService($app));
 
         $app->shouldReceive('make')
             ->once()->with('confide.throttle')
-            ->andReturn(new CacheLoginThrottleService);
+            ->andReturn(new CacheLoginThrottleService($app));
 
         $app->shouldReceive('bind')
             ->once()->andReturnUsing(
@@ -297,7 +297,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -347,7 +347,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
