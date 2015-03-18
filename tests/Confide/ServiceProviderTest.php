@@ -20,7 +20,11 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $sp = m::mock('Zizaco\Confide\ServiceProvider[package,commands]', ['something']);
+        $sp = m::mock(
+            'Zizaco\Confide\ServiceProvider[commands,loadTranslationsFrom,loadViewsFrom,mergeConfigFrom,publishes]',
+            ['something']
+        );
+        $sp->shouldAllowMockingProtectedMethods();
         $test = $this;
 
         /*
@@ -28,11 +32,32 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
-        $sp->shouldReceive('package')
-            ->with('zizaco/confide', 'confide', m::any())
+        $sp->shouldReceive('publishes')
+            ->with(m::type('array'))
             ->once()
-            ->andReturnUsing(function ($a, $b, $c) use ($test) {
-                $test->assertContains('confide/src/Confide/../', $c);
+            ->andReturnUsing(function ($array) use ($test) {
+                $test->assertContains('test/confide.php', $array);
+            });
+
+        $sp->shouldReceive('mergeConfigFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('config/config.php', $a);
+            });
+
+        $sp->shouldReceive('loadTranslationsFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('lang', $a);
+            });
+
+        $sp->shouldReceive('loadViewsFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('views', $a);
             });
 
         $sp->shouldReceive('commands')

@@ -21,7 +21,14 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        $this->package('zizaco/confide', 'confide', __DIR__.'/../');
+        $root = __DIR__.'/../';
+
+        $this->publishes([
+            $root . 'config/config.php' => config_path('confide.php'),
+        ]);
+        $this->mergeConfigFrom($root . 'config/config.php', 'confide');
+        $this->loadTranslationsFrom($root . 'lang', 'confide');
+        $this->loadViewsFrom($root . 'views', 'confide');
 
         $this->commands(
             'command.confide.controller',
