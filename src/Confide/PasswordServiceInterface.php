@@ -21,13 +21,13 @@ interface PasswordServiceInterface
     public function requestChangePassword(RemindableInterface $user);
 
     /**
-     * Returns the email associated with the given reset password token.
+     * Returns the user id associated with the given reset password token.
      *
      * @param string $token
      *
-     * @return string Email.
+     * @return mixed id.
      */
-    public function getEmailByToken($token);
+    public function getUserIdentityByToken($token);
 
     /**
      * Delete the record of the given token from database.

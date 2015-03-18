@@ -233,11 +233,12 @@ class Confide
      *
      * @return string $token
      */
-    public function forgotPassword($email)
+    public function forgotPassword($emailorusername)
     {
-        $user = $this->repo->getUserByEmail($email);
+        $user = $this->repo->getUserByEmailOrUsername($emailorusername);
 
-        if ($user) {
+        if ($user) 
+        {
             return $this->passService->requestChangePassword($user);
         }
 
@@ -266,6 +267,13 @@ class Confide
      */
     public function userByResetPasswordToken($token)
     {
+        $id = $this->passService->getUserIdentityByToken($token);
+
+        if($id)
+        {
+            return $this->repo->getUserByIdentity($id);
+        }
+
         $email = $this->passService->getEmailByToken($token);
 
         if ($email) {

@@ -47,6 +47,11 @@ class MigrationCommand extends GenerateCommand
         // Prepare variables
         $table = lcfirst($this->option('table'));
         $includeUsername = $this->option('username');
+        $includeEmail = $this->option('email');
+        if(!$includeUsername && !$includeEmail)
+        {
+            $includeUsername = true;
+        }
 
         $viewVars = compact(
             'table',
@@ -63,6 +68,11 @@ class MigrationCommand extends GenerateCommand
         if ($includeUsername) {
             $this->comment(
                 "An 'username' column will be included in the table."
+            );
+        }
+        if ($includeEmail) {
+            $this->comment(
+                "An 'email' column will be included in the table."
             );
         }
         $this->line('');
