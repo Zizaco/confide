@@ -1,7 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\Reminders\RemindableInterface;
-
+use DateTime;
 /**
  * A service that abstracts all user password management related methods.
  *
@@ -41,10 +41,10 @@ class EloquentPasswordService implements PasswordServiceInterface
         $token = $this->generateToken();
 
         $values = array(
-            'user_id' => $user->id,
-            'email'=> $email,
+            'user_id' => $user->getAuthIdentifier(),
+            'email'=> $user->getReminderEmail(),
             'token'=> $token,
-            'created_at'=> new \DateTime
+            'created_at'=> new DateTime
         );
 
         $table = $this->getTable();
