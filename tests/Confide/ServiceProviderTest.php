@@ -21,7 +21,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp = m::mock(
-            'Zizaco\Confide\ServiceProvider[commands,loadTranslationsFrom,loadViewsFrom,mergeConfigFrom,publishes]',
+            'Zizaco\Confide\ServiceProvider[commands,loadTranslationsFrom,loadViewsFrom,publishes]',
             ['something']
         );
         $sp->shouldAllowMockingProtectedMethods();
@@ -37,13 +37,6 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturnUsing(function ($array) use ($test) {
                 $test->assertContains('test/confide.php', $array);
-            });
-
-        $sp->shouldReceive('mergeConfigFrom')
-            ->with(m::type('string'), 'confide')
-            ->once()
-            ->andReturnUsing(function ($a, $b) use ($test) {
-                $test->assertStringEndsWith('config/config.php', $a);
             });
 
         $sp->shouldReceive('loadTranslationsFrom')
@@ -82,7 +75,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp = m::mock(
             'Zizaco\Confide\ServiceProvider'.
             '[registerRepository,registerPasswordService,'.
-            'registerConfide,registerCommands,'.
+            'registerConfide,registerCommands,registerConfig,'.
             'registerLoginThrottleService,'.
             'registerUserValidator]',
             ['something']
@@ -97,6 +90,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->shouldReceive(
             'registerRepository',
             'registerConfide',
+            'registerConfig',
             'registerCommands',
             'registerPasswordService',
             'registerLoginThrottleService',
@@ -312,6 +306,22 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $sp->registerConfide();
+    }
+
+    public function testShouldRegisterConfig()
+    {
+        $test = $this;
+        $sp = m::mock('Zizaco\Confide\ServiceProvider[mergeConfigFrom]', ['something']);
+        $sp->shouldAllowMockingProtectedMethods();
+
+        $sp->shouldReceive('mergeConfigFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('config/config.php', $a);
+            });
+
+        $sp->registerConfig();
     }
 
     public function testShouldRegisterCommands()

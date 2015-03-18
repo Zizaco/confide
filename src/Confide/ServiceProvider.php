@@ -21,12 +21,11 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function boot()
     {
-        $root = __DIR__.'/../';
+        $root = __DIR__ . '/../';
 
         $this->publishes([
             $root . 'config/config.php' => config_path('confide.php'),
         ]);
-        $this->mergeConfigFrom($root . 'config/config.php', 'confide');
         $this->loadTranslationsFrom($root . 'lang', 'confide');
         $this->loadViewsFrom($root . 'views', 'confide');
 
@@ -53,6 +52,8 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->registerConfide();
 
         $this->registerCommands();
+
+        $this->registerConfig();
     }
 
     /**
@@ -131,6 +132,14 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->bind('command.confide.migration', function (Application $app) {
             return new MigrationCommand($app);
         });
+    }
+
+    /**
+     * Register Config
+     */
+    public function registerConfig()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'confide');
     }
 
     /**
