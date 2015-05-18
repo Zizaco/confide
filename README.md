@@ -271,7 +271,7 @@ Confide::makeResetPasswordForm($token):
 You would use:
 
 ```php
-View::make(Config::get('confide::reset_password_form'))
+View::make(Config::get('confide.reset_password_form'))
     ->with('token', $token);
 ```
 
