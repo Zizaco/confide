@@ -32,9 +32,6 @@
             "src/migrations",
             "src/commands"
         ],
-        "files": [
-            "tests/Confide/helpers.php"
-        ],
         "psr-4": {
             "Zizaco\\Confide\\": "src/Confide/"
         }
