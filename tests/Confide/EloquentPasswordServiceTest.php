@@ -33,7 +33,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $generatedToken = '123456789';
 
         $app = m::mock('Illuminate\Contracts\Foundation\Application');
-        $user = m::mock('Illuminate\Contracts\Auth\Authenticable');
+        $user = m::mock('Illuminate\Contracts\Auth\Authenticatable');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail,getTable]', [$app]);
         $db = m::mock('connection');
 

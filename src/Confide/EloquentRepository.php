@@ -14,7 +14,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
@@ -30,7 +30,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Create a new ConfideRepository
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
     public function __construct(Application $app)
     {
@@ -68,7 +68,7 @@ class EloquentRepository implements RepositoryInterface
     {
         $user = $this->model();
 
-        $user = $user->where(function($user) use ($identity) {
+        $user = $user->where(function ($user) use ($identity) {
             foreach ($identity as $attribute => $value) {
                 $user = $user->orWhere($attribute, '=', $value);
             }

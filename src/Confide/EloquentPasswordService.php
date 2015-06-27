@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Auth\Authenticable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -14,14 +14,14 @@ class EloquentPasswordService implements PasswordServiceInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new PasswordService.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
     public function __construct(Application $app)
     {
@@ -33,11 +33,11 @@ class EloquentPasswordService implements PasswordServiceInterface
      * the 'password_reminders' table with the email of the
      * user.
      *
-     * @param Authenticable $user An existent user.
+     * @param Authenticatable $user An existent user.
      *
      * @return string Password reset token.
      */
-    public function requestChangePassword(Authenticable $user)
+    public function requestChangePassword(Authenticatable $user)
     {
         $email = $user->getReminderEmail();
         $token = $this->generateToken();

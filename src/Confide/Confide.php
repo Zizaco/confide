@@ -15,7 +15,7 @@ class Confide
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
@@ -46,7 +46,7 @@ class Confide
      * @param \Zizaco\Confide\RepositoryInterface           $repo
      * @param \Zizaco\Confide\PasswordServiceInterface      $passService
      * @param \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param \Illuminate\Foundation\Application            $app            Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application            $app            Laravel application object
      *
      * @return void
      */

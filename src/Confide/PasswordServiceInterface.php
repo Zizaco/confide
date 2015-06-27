@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Auth\Authenticable;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
  * A service that abstracts all user password management related methods.
@@ -14,11 +14,11 @@ interface PasswordServiceInterface
      * Generate a token for password change and saves it in the
      * 'password_reminders' table with the email of the user.
      *
-     * @param RemindableInterface $user An existent user.
+     * @param Authenticatable $user An existent user.
      *
      * @return string Password reset token.
      */
-    public function requestChangePassword(Authenticable $user);
+    public function requestChangePassword(Authenticatable $user);
 
     /**
      * Returns the email associated with the given reset password token.
