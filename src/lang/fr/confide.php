@@ -39,7 +39,7 @@ return array(
         'wrong_confirmation' => 'Code de confirmation incorrect',
         'password_forgot' => 'Les informations de réinitialisation vous ont été envoyé par email.',
         'wrong_password_forgot' => 'Utilisateur inconnu.',
-        'password_reset' => 'Votre mot de passe a été modifié avec succes.',
+        'password_reset' => 'Votre mot de passe a été modifié avec succès.',
         'wrong_password_reset' => 'Mot de passe incorrect. Veuillez réessayer',
         'wrong_token' => 'Le token de réinitialisation du mot de passe est incorrect.',
         'duplicated_credentials' => "Les identifiants donnés sont déja utilisés. Veuillez réessayer avec d'autres identifiants.",
