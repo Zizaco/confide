@@ -20,7 +20,11 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $sp = m::mock('Zizaco\Confide\ServiceProvider[package,commands]', ['something']);
+        $sp = m::mock(
+            'Zizaco\Confide\ServiceProvider[commands,loadTranslationsFrom,loadViewsFrom,publishes]',
+            ['something']
+        );
+        $sp->shouldAllowMockingProtectedMethods();
         $test = $this;
 
         /*
@@ -28,11 +32,25 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
-        $sp->shouldReceive('package')
-            ->with('zizaco/confide', 'confide', m::any())
+        $sp->shouldReceive('publishes')
+            ->with(m::type('array'))
             ->once()
-            ->andReturnUsing(function ($a, $b, $c) use ($test) {
-                $test->assertContains('confide/src/Confide/../', $c);
+            ->andReturnUsing(function ($array) use ($test) {
+                $test->assertContains('test/confide.php', $array);
+            });
+
+        $sp->shouldReceive('loadTranslationsFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('lang', $a);
+            });
+
+        $sp->shouldReceive('loadViewsFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('views', $a);
             });
 
         $sp->shouldReceive('commands')
@@ -57,7 +75,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp = m::mock(
             'Zizaco\Confide\ServiceProvider'.
             '[registerRepository,registerPasswordService,'.
-            'registerConfide,registerCommands,'.
+            'registerConfide,registerCommands,registerConfig,'.
             'registerLoginThrottleService,'.
             'registerUserValidator]',
             ['something']
@@ -72,6 +90,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->shouldReceive(
             'registerRepository',
             'registerConfide',
+            'registerConfig',
             'registerCommands',
             'registerPasswordService',
             'registerLoginThrottleService',
@@ -95,7 +114,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -133,7 +152,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -171,7 +190,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -209,7 +228,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -247,7 +266,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -257,15 +276,15 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         */
         $app->shouldReceive('make')
             ->once()->with('confide.repository')
-            ->andReturn(new EloquentRepository);
+            ->andReturn(new EloquentRepository($app));
 
         $app->shouldReceive('make')
             ->once()->with('confide.password')
-            ->andReturn(new EloquentPasswordService);
+            ->andReturn(new EloquentPasswordService($app));
 
         $app->shouldReceive('make')
             ->once()->with('confide.throttle')
-            ->andReturn(new CacheLoginThrottleService);
+            ->andReturn(new CacheLoginThrottleService($app));
 
         $app->shouldReceive('bind')
             ->once()->andReturnUsing(
@@ -289,6 +308,22 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         $sp->registerConfide();
     }
 
+    public function testShouldRegisterConfig()
+    {
+        $test = $this;
+        $sp = m::mock('Zizaco\Confide\ServiceProvider[mergeConfigFrom]', ['something']);
+        $sp->shouldAllowMockingProtectedMethods();
+
+        $sp->shouldReceive('mergeConfigFrom')
+            ->with(m::type('string'), 'confide')
+            ->once()
+            ->andReturnUsing(function ($a, $b) use ($test) {
+                $test->assertStringEndsWith('config/config.php', $a);
+            });
+
+        $sp->registerConfig();
+    }
+
     public function testShouldRegisterCommands()
     {
         /*
@@ -297,7 +332,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -347,7 +382,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('LaravelApp');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*

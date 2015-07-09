@@ -1,5 +1,7 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Contracts\Foundation\Application;
+
 /**
  * This class is the main entry point to use the confide
  * services. Usually this is the only service class that the
@@ -13,7 +15,7 @@ class Confide
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
@@ -44,7 +46,7 @@ class Confide
      * @param \Zizaco\Confide\RepositoryInterface           $repo
      * @param \Zizaco\Confide\PasswordServiceInterface      $passService
      * @param \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param \Illuminate\Foundation\Application            $app            Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application            $app            Laravel application object
      *
      * @return void
      */
@@ -52,12 +54,12 @@ class Confide
         RepositoryInterface       $repo,
         PasswordServiceInterface  $passService,
         LoginThrottleServiceInterface $loginThrottler,
-        $app = null
+        Application $app
     ) {
         $this->repo           = $repo;
         $this->passService    = $passService;
         $this->loginThrottler = $loginThrottler;
-        $this->app            = $app ?: app();
+        $this->app            = $app;
     }
 
     /**
@@ -77,7 +79,7 @@ class Confide
      */
     public function user()
     {
-        return $this->app['auth']->user();
+        return $this->app->make('auth')->user();
     }
 
     /**
@@ -135,7 +137,7 @@ class Confide
                 return false;
             }
 
-            $correctPassword = $this->app['hash']->check(
+            $correctPassword = $this->app->make('hash')->check(
                 isset($input['password']) ? $input['password'] : false,
                 $user->password
             );
@@ -144,7 +146,7 @@ class Confide
                 return false;
             }
 
-            $this->app['auth']->login($user, $remember);
+            $this->app->make('auth')->login($user, $remember);
             return true;
         }
 
@@ -199,7 +201,7 @@ class Confide
         $count = $this->loginThrottler
             ->throttleIdentity($identity);
 
-        if ($count >= $this->app['config']->get('confide::throttle_limit')) {
+        if ($count >= $this->app->make('config')->get('confide::throttle_limit')) {
             return false;
         }
 
@@ -280,7 +282,7 @@ class Confide
      */
     public function logout()
     {
-        return $this->app['auth']->logout();
+        return $this->app->make('auth')->logout();
     }
 
     /**
@@ -290,7 +292,7 @@ class Confide
      */
     public function makeLoginForm()
     {
-        return $this->app['view']->make($this->app['config']->get('confide::login_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide::login_form'));
     }
 
     /**
@@ -300,7 +302,7 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->app['view']->make($this->app['config']->get('confide::signup_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide::signup_form'));
     }
 
     /**
@@ -310,7 +312,7 @@ class Confide
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app['view']->make($this->app['config']->get('confide::forgot_password_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide::forgot_password_form'));
     }
 
     /**
@@ -320,8 +322,8 @@ class Confide
      */
     public function makeResetPasswordForm($token)
     {
-        return $this->app['view']->make(
-            $this->app['config']->get('confide::reset_password_form'),
+        return $this->app->make('view')->make(
+            $this->app->make('config')->get('confide::reset_password_form'),
             array('token' => $token)
         );
     }

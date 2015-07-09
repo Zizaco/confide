@@ -1,6 +1,7 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Foundation\Application;
 
 /**
  * A service that abstracts all user password management related methods.
@@ -13,18 +14,18 @@ class EloquentPasswordService implements PasswordServiceInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new PasswordService.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
-    public function __construct($app = null)
+    public function __construct(Application $app)
     {
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**
@@ -32,11 +33,11 @@ class EloquentPasswordService implements PasswordServiceInterface
      * the 'password_reminders' table with the email of the
      * user.
      *
-     * @param RemindableInterface $user An existent user.
+     * @param Authenticatable $user An existent user.
      *
      * @return string Password reset token.
      */
-    public function requestChangePassword(RemindableInterface $user)
+    public function requestChangePassword(Authenticatable $user)
     {
         $email = $user->getReminderEmail();
         $token = $this->generateToken();
@@ -49,7 +50,7 @@ class EloquentPasswordService implements PasswordServiceInterface
 
         $table = $this->getTable();
 
-        $this->app['db']
+        $this->app->make('db')
             ->connection($user->getConnectionName())
             ->table($table)
             ->insert($values);
@@ -72,7 +73,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         $connection = $this->getConnection();
         $table = $this->getTable();
 
-        $email = $this->app['db']
+        $email = $this->app->make('db')
             ->connection($connection)
             ->table($table)
             ->select('email')
@@ -97,7 +98,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         $connection = $this->getConnection();
         $table = $this->getTable();
 
-        $affected = $this->app['db']
+        $affected = $this->app->make('db')
             ->connection($connection)
             ->table($table)
             ->where('token', '=', $token)
@@ -115,7 +116,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     protected function getConnection()
     {
-        return $this->app['confide.repository']
+        return $this->app->make('confide.repository')
             ->model()->getConnectionName();
     }
 
@@ -126,7 +127,7 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     protected function getTable()
     {
-        return $this->app['config']->get('auth.reminder.table');
+        return $this->app->make('config')->get('auth.reminder.table');
     }
 
     /**
@@ -168,10 +169,10 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     protected function sendEmail($user, $token)
     {
-        $config = $this->app['config'];
-        $lang   = $this->app['translator'];
+        $config = $this->app->make('config');
+        $lang   = $this->app->make('translator');
 
-        $this->app['mailer']->queueOn(
+        $this->app->make('mailer')->queueOn(
             $config->get('confide::email_queue'),
             $config->get('confide::email_reset_password'),
             compact('user', 'token'),
@@ -192,8 +193,8 @@ class EloquentPasswordService implements PasswordServiceInterface
     {
         // Instantiate a carbon object (that is a dependency of
         // 'illuminate/database')
-        $carbon = $this->app['Carbon\Carbon'];
-        $config = $this->app['config'];
+        $carbon = $this->app->make('Carbon\Carbon');
+        $config = $this->app->make('config');
 
         return $carbon->now()
             ->subHours($config->get('confide::confide.password_reset_expiration', 7))
