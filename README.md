@@ -1,4 +1,4 @@
-# Confide _(A Laravel4 Package)_
+# Confide _(A Laravel5 Package)_
 
 ![Confide Poster](https://dl.dropbox.com/u/12506137/libs_bundles/confide.png)
 
@@ -15,8 +15,6 @@
 Confide is an authentication solution for **Laravel** made to cut repetitive work involving the management of users. A [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself) approach on features like account creation, login, logout, confirmation by e-mail, password reset, etc.
 
 Confide aims to be simple to use, quick to configure and flexible.
-
-> Note: If you are using MongoDB check [Confide Mongo](https://github.com/Zizaco/confide-mongo).
 
 ## Features
 
@@ -35,8 +33,6 @@ Confide aims to be simple to use, quick to configure and flexible.
 
 If you are looking for user roles and permissions see [Entrust](https://github.com/Zizaco/entrust)
 
-For MongoDB support see [Confide Mongo](https://github.com/Zizaco/confide-mongo)
-
 **Warning:** _By default a confirmation email is sent and users are required to confirm the email address.
 It is easy to change this in the confide config file.
 Change `signup_email` and `signup_confirm` to false if you do not want to send them an email and they do not need
@@ -49,7 +45,7 @@ to be confirmed to be able to login to the website._
 In the `require` key of `composer.json` file add the following
 
 ```json
-"zizaco/confide": "~4.3@dev"
+"zizaco/confide": "dev-laravel-5"
 ```
 
 Run the Composer update comand
@@ -371,6 +367,12 @@ For example: `"zizaco/confide": "~3.2"` will avoid composer download version 4.0
 
 ## Release Notes
 
+### Version 5.0.0 Beta 1
+* Laravel 5 Support
+
+### Version 4.3.0
+* General Bugfixes.
+
 ### Version 4.3.0 Beta 1
 * **Username is now an optional field.** Use `--username` when generating the migrations and the controllers.
 * General Bugfixes.
@@ -462,6 +464,4 @@ Confide is free software distributed under the terms of the MIT license
 
 ## Aditional information
 
-Any questions, feel free to contact me or ask [here](http://forums.laravel.io/viewtopic.php?id=4658)
-
-Any issues, please [report here](https://github.com/Zizaco/confide/issues)
+Any questions or issues, please [post here](https://github.com/Zizaco/confide/issues)
