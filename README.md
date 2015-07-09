@@ -45,7 +45,7 @@ to be confirmed to be able to login to the website._
 In the `require` key of `composer.json` file add the following
 
 ```json
-"zizaco/confide": "dev-laravel-5"
+"zizaco/confide": "dev-5-0"
 ```
 
 Run the Composer update comand
