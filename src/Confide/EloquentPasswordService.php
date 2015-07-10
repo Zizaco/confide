@@ -1,7 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Auth\Reminders\RemindableInterface;
-
+use DateTime;
 /**
  * A service that abstracts all user password management related methods.
  *
@@ -38,13 +38,13 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     public function requestChangePassword(RemindableInterface $user)
     {
-        $email = $user->getReminderEmail();
         $token = $this->generateToken();
 
         $values = array(
-            'email'=> $email,
+            'user_id' => $user->getAuthIdentifier(),
+            'email'=> $user->getReminderEmail(),
             'token'=> $token,
-            'created_at'=> new \DateTime
+            'created_at'=> new DateTime
         );
 
         $table = $this->getTable();
@@ -67,22 +67,24 @@ class EloquentPasswordService implements PasswordServiceInterface
      *
      * @return string Email.
      */
-    public function getEmailByToken($token)
+    public function getUserIdentityByToken($token)
     {
         $connection = $this->getConnection();
         $table = $this->getTable();
 
-        $email = $this->app['db']
+        $id = $this->app['db']
             ->connection($connection)
             ->table($table)
-            ->select('email')
+            ->select('user_id')
             ->where('token', '=', $token)
             ->where('created_at', '>=', $this->getOldestValidDate())
             ->first();
 
-        $email = $this->unwrapEmail($email);
-
-        return $email;
+        if($id)
+        {
+            $id = ['id' => $id->user_id];
+        }
+        return $id;
     }
 
     /**
@@ -139,23 +141,6 @@ class EloquentPasswordService implements PasswordServiceInterface
         return md5(uniqid(mt_rand(), true));
     }
 
-    /**
-     * Extracts the email of the given object or array.
-     *
-     * @param mixed $email An object, array or email string.
-     *
-     * @return string The email address.
-     */
-    protected function unwrapEmail($email)
-    {
-        if ($email && is_object($email)) {
-            $email = $email->email;
-        } elseif ($email && is_array($email)) {
-            $email = $email['email'];
-        }
-
-        return $email;
-    }
 
     /**
      * Sends an email containing the reset password link with the
@@ -168,6 +153,8 @@ class EloquentPasswordService implements PasswordServiceInterface
      */
     protected function sendEmail($user, $token)
     {
+        $email = $user->getReminderEmail();
+
         $config = $this->app['config'];
         $lang   = $this->app['translator'];
 
@@ -177,7 +164,7 @@ class EloquentPasswordService implements PasswordServiceInterface
             compact('user', 'token'),
             function ($message) use ($user, $token, $lang) {
                 $message
-                    ->to($user->email, $user->username)
+                    ->to($email, $user->username)
                     ->subject($lang->get('confide::confide.email.password_reset.subject'));
             }
         );

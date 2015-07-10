@@ -52,6 +52,11 @@ class ControllerCommand extends GenerateCommand
         $model = $this->app['config']->get('auth.model');
         $restful = $this->option('restful');
         $includeUsername = $this->option('username');
+        $includeEmail = $this->option('email');
+        if(!$includeUsername && !$includeEmail)
+        {
+            $includeUsername = true;
+        }
 
         $viewVars = compact(
             'class',

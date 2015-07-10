@@ -15,7 +15,9 @@ class ConfideSetupUsersTable extends Migration
 @if ($includeUsername)
             $table->string('username')->unique();
 @endif
+@if ($includeEmail)
             $table->string('email')->unique();
+@endif
             $table->string('password');
             $table->string('confirmation_code');
             $table->string('remember_token')->nullable();
@@ -25,9 +27,11 @@ class ConfideSetupUsersTable extends Migration
 
         // Creates password reminders table
         Schema::create('password_reminders', function ($table) {
+            $table->integer('user_id');
             $table->string('email');
             $table->string('token');
             $table->timestamp('created_at');
+            $table->primary('token');
         });
     }
 

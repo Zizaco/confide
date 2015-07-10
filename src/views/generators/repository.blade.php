@@ -19,7 +19,7 @@ class UserRepository
     /**
      * Signup a new account with the given parameters
      *
-     * @param array $input Array containing {{ ($includeUsername) ? "'username', " : '' }}'email' and 'password'.
+     * @param array $input Array containing {{ ($includeUsername) ? "'username', " : '' }} {{ ($includeEmail) ? "'email', " : '' }} and 'password'.
      *
      * @return {{ $nonNamespacedName }} {{ $nonNamespacedName }} object that may or may not be saved successfully. Check the id to make sure.
      */
@@ -30,7 +30,9 @@ class UserRepository
 @if ($includeUsername)
         $user->username = array_get($input, 'username');
 @endif
+@if ($includeEmail)
         $user->email    = array_get($input, 'email');
+@endif
         $user->password = array_get($input, 'password');
 
         // The password confirmation will be removed from model
