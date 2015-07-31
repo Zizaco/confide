@@ -78,7 +78,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn(10); // More than the limit specified bellow
 
         $config->shouldReceive('get')
-            ->once()->with('confide::throttle_limit')
+            ->once()->with('confide.throttle_limit')
             ->andReturn(9);
 
         /*
@@ -118,7 +118,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn(5); // Less than the limit specified bellow
 
         $config->shouldReceive('get')
-            ->once()->with('confide::throttle_limit')
+            ->once()->with('confide.throttle_limit')
             ->andReturn(9);
 
         /*
@@ -295,7 +295,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
             ->andReturn(1);
 
         $config->shouldReceive('get')
-            ->once()->with('confide::throttle_time_period')
+            ->once()->with('confide.throttle_time_period')
             ->andReturn($ttl);
 
         $cache->shouldReceive('put')
