@@ -1,7 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application;
 
 /**
  * A service that abstracts all user password management related methods.

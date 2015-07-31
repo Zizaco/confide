@@ -32,7 +32,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $userEmail = 'someone@somewhere.com';
         $generatedToken = '123456789';
 
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $user = m::mock('Illuminate\Contracts\Auth\Authenticatable');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail,getTable]', [$app]);
         $db = m::mock('connection');
@@ -113,7 +113,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $userEmail       = 'someone@somewhere.com';
         $token           = '123456789';
         $oldestValidDate = '2014-07-16 22:20:26';
-        $app         = m::mock('Illuminate\Foundation\Application');
+        $app         = m::mock('Illuminate\Contracts\Foundation\Application');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $db          = m::mock('connection');
         $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
@@ -195,7 +195,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $token       = '123456789';
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $db          = m::mock('connection');
 
@@ -256,7 +256,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repository    = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService   = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $modelInstance = m::mock('Zizaco\Confide\ConfideUserInterface');
@@ -296,7 +296,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $config = m::mock('Config');
 
@@ -399,7 +399,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService[sendEmail]', [$app]);
         $passService->shouldAllowMockingProtectedMethods();
 
@@ -471,7 +471,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $oldestValidDate = '2014-07-16 22:20:26';
         $carbon      = m::mock('Carbon\Carbon');
         $config      = m::mock('Config');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
 
         $passService->shouldAllowMockingProtectedMethods();

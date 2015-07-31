@@ -22,7 +22,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $modelClassName = '_mockedUser';
         $user = m::mock($modelClassName);
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $config = m::mock('Illuminate\Config\Repository');
         $repo = new EloquentRepository($app);
         $app->shouldReceive('make')->once()->with('config')->andReturn($config);
@@ -57,7 +57,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $config = m::mock('Illuminate\Config\Repository');
         $repo = new EloquentRepository($app);
         $app->shouldReceive('make')->once()->with('config')->andReturn($config);
@@ -101,7 +101,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $model = m::mock('_mockedUser');
         $user = m::mock('_mockedUser');
         $nestedModel = m::mock('_mockedUser');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[model]', [$app]);
 
         /*
@@ -159,7 +159,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $email = 'someone@somewhere.com';
         $user = m::mock('_mockedUser');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', [$app]);
 
         /*
@@ -190,7 +190,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         */
         $username = 'Someone';
         $user = m::mock('_mockedUser');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity]', [$app]);
 
         /*
@@ -222,7 +222,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         $confirmCode = 123123;
         $wrongConfirmCode = 'IdontExist';
         $user = m::mock('_mockedUser');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[getUserByIdentity,confirmUser]', [$app]);
         $repo->shouldAllowMockingProtectedMethods();
 
@@ -265,7 +265,7 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $user = m::mock('_mockedUser');
-        $app = m::mock('Illuminate\Foundation\Application');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repo = m::mock('Zizaco\Confide\EloquentRepository[confirmUser]', [$app]);
 
         /*
