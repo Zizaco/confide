@@ -59,7 +59,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
         // Retuns the current count
         $count = $this->countThrottle($identity, 0);
 
-        return $count >= $this->app->make('config')->get('confide.throttle_limit');
+        return $count >= $this->app->make('config')->get('confide::throttle_limit');
     }
 
     /**
@@ -104,7 +104,7 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
 
         $count = $count + $increments;
 
-        $ttl = $this->app->make('config')->get('confide.throttle_time_period');
+        $ttl = $this->app->make('config')->get('confide::throttle_time_period');
 
         $this->app->make('cache')
             ->put('login_throttling:'.md5($identityString), $count, $ttl);
