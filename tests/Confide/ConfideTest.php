@@ -659,7 +659,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->passthru();
 
         $config->shouldReceive('get')
-            ->twice()->with('confide::throttle_limit')
+            ->twice()->with('confide.throttle_limit')
             ->andReturn(19);
 
         $loginThrottler->shouldReceive('throttleIdentity')
@@ -712,7 +712,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
             ->passthru();
 
         $config->shouldReceive('get')
-            ->twice()->with('confide::throttle_limit')
+            ->twice()->with('confide.throttle_limit')
             ->andReturn(19);
 
         $loginThrottler->shouldReceive('throttleIdentity')
@@ -961,7 +961,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         $app->shouldReceive('make')->with('view')->times(4)->andReturn($view);
 
         $view->shouldReceive('make')
-            ->once()->with('view.confide::login_form')
+            ->once()->with('view.confide.login_form')
             ->andReturn($view);
         $view->shouldReceive('make')
             ->once()->with('view.confide::signup_form')
