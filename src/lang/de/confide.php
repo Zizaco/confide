@@ -34,6 +34,7 @@ return array(
         'wrong_credentials' => 'Falscher Benutzername, E-Mail oder Passwort.',
         'not_confirmed' => 'Ihr Konto wurde möglicherweise nicht bestätigt. Prüfen Sie Ihre E-Mails um Ihr Konto zu bestätigen.',
         'confirmation' => 'Ihr Konto wurde bestätigt. Sie können sich nun anmelden.',
+        'password_confirmation' => 'Die Passwörter stimmen nicht überein.',
         'wrong_confirmation' => 'Falscher Bestätigungscode.',
         'password_forgot' => 'Die Informationen zum Zurücksetzen des Passworts wurden Ihnen per E-Mail gesendet.',
         'wrong_password_forgot' => 'Benutzer nicht gefunden.',

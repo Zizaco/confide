@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Auth\Authenticable;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
  * A service that abstracts all user password management related methods.
@@ -18,7 +18,7 @@ interface PasswordServiceInterface
      *
      * @return string Password reset token.
      */
-    public function requestChangePassword(Authenticable $user);
+    public function requestChangePassword(Authenticatable $user);
 
     /**
      * Returns the email associated with the given reset password token.
