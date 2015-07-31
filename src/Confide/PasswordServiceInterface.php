@@ -14,7 +14,7 @@ interface PasswordServiceInterface
      * Generate a token for password change and saves it in the
      * 'password_reminders' table with the email of the user.
      *
-     * @param Authenticatable $user An existent user.
+     * @param RemindableInterface $user An existent user.
      *
      * @return string Password reset token.
      */

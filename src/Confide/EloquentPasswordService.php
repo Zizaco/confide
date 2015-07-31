@@ -173,13 +173,13 @@ class EloquentPasswordService implements PasswordServiceInterface
         $lang   = $this->app->make('translator');
 
         $this->app->make('mailer')->queueOn(
-            $config->get('confide::email_queue'),
-            $config->get('confide::email_reset_password'),
+            $config->get('confide.email_queue'),
+            $config->get('confide.email_reset_password'),
             compact('user', 'token'),
             function ($message) use ($user, $token, $lang) {
                 $message
                     ->to($user->email, $user->username)
-                    ->subject($lang->get('confide::confide.email.password_reset.subject'));
+                    ->subject($lang->get('confide.email.password_reset.subject'));
             }
         );
     }
@@ -197,7 +197,7 @@ class EloquentPasswordService implements PasswordServiceInterface
         $config = $this->app->make('config');
 
         return $carbon->now()
-            ->subHours($config->get('confide::confide.password_reset_expiration', 7))
+            ->subHours($config->get('confide.confide.password_reset_expiration', 7))
             ->toDateTimeString();
     }
 }

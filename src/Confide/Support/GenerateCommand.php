@@ -14,14 +14,14 @@ abstract class GenerateCommand extends Command
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new command instance.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      *
      * @return void
      */
@@ -44,7 +44,7 @@ abstract class GenerateCommand extends Command
      */
     protected function generateFile($filename, $view, $viewVars)
     {
-        $output = $this->app['view']->make('confide::'.$view, $viewVars)
+        $output = $this->app['view']->make('confide.'.$view, $viewVars)
             ->render();
 
         $filename = $this->app['path'].'/'.trim($filename,'/');
@@ -68,7 +68,7 @@ abstract class GenerateCommand extends Command
      */
     protected function appendInFile($filename, $view, $viewVars)
     {
-        $output = $this->app['view']->make('confide::'.$view, $viewVars)
+        $output = $this->app['view']->make('confide.'.$view, $viewVars)
             ->render();
 
         $filename = $this->app['path'].'/'.trim($filename,'/');

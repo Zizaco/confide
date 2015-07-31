@@ -442,15 +442,15 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             });
 
         $translator->shouldReceive('get')
-            ->once()->with('confide::confide.email.password_reset.subject')
+            ->once()->with('confide.email.password_reset.subject')
             ->andReturn('the-email-subject');
 
         $config->shouldReceive('get')
-            ->once()->with('confide::email_reset_password')
+            ->once()->with('confide.email_reset_password')
             ->andReturn('view.name');
 
         $config->shouldReceive('get')
-            ->once()->with('confide::email_queue')
+            ->once()->with('confide.email_queue')
             ->andReturn('sync');
 
         /*
@@ -488,7 +488,7 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
             ->passthru();
 
         $config->shouldReceive('get')
-            ->once()->with('confide::confide.password_reset_expiration', 7)
+            ->once()->with('confide.confide.password_reset_expiration', 7)
             ->andReturn(14);
 
         $carbon->shouldReceive('now')

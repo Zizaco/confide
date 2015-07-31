@@ -68,7 +68,7 @@ class EloquentRepository implements RepositoryInterface
     {
         $user = $this->model();
 
-        $user = $user->where(function ($user) use ($identity) {
+        $user = $user->where(function($user) use ($identity) {
             foreach ($identity as $attribute => $value) {
                 $user = $user->orWhere($attribute, '=', $value);
             }
