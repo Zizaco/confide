@@ -15,7 +15,7 @@ class Confide
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var \Illuminate\Foundation\Application
      */
     public $app;
 
@@ -46,7 +46,7 @@ class Confide
      * @param \Zizaco\Confide\RepositoryInterface           $repo
      * @param \Zizaco\Confide\PasswordServiceInterface      $passService
      * @param \Zizaco\Confide\LoginThrottleServiceInterface $loginThrottler
-     * @param \Illuminate\Contracts\Foundation\Application            $app            Laravel application object
+     * @param \Illuminate\Foundation\Application            $app            Laravel application object
      *
      * @return void
      */
@@ -201,7 +201,7 @@ class Confide
         $count = $this->loginThrottler
             ->throttleIdentity($identity);
 
-        if ($count >= $this->app->make('config')->get('confide::throttle_limit')) {
+        if ($count >= $this->app->make('config')->get('confide.throttle_limit')) {
             return false;
         }
 
@@ -292,7 +292,7 @@ class Confide
      */
     public function makeLoginForm()
     {
-        return $this->app->make('view')->make($this->app->make('config')->get('confide::login_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide.login_form'));
     }
 
     /**
@@ -302,7 +302,7 @@ class Confide
      */
     public function makeSignupForm()
     {
-        return $this->app->make('view')->make($this->app->make('config')->get('confide::signup_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide.signup_form'));
     }
 
     /**
@@ -312,7 +312,7 @@ class Confide
      */
     public function makeForgotPasswordForm()
     {
-        return $this->app->make('view')->make($this->app->make('config')->get('confide::forgot_password_form'));
+        return $this->app->make('view')->make($this->app->make('config')->get('confide.forgot_password_form'));
     }
 
     /**
@@ -323,7 +323,7 @@ class Confide
     public function makeResetPasswordForm($token)
     {
         return $this->app->make('view')->make(
-            $this->app->make('config')->get('confide::reset_password_form'),
+            $this->app->make('config')->get('confide.reset_password_form'),
             array('token' => $token)
         );
     }

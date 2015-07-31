@@ -60,7 +60,7 @@ class UserRepository
             $input['password'] = null;
         }
 
-        return Confide::logAttempt($input, Config::get('confide::signup_confirm'));
+        return Confide::logAttempt($input, Config::get('confide.signup_confirm'));
     }
 
     /**

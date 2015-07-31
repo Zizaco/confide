@@ -44,7 +44,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
         */
         $view->shouldReceive('make')
             ->once()
-            ->with('confide::'.$viewName, $viewVars)
+            ->with('confide.'.$viewName, $viewVars)
             ->andReturn($view);
 
         $view->shouldReceive('render')
@@ -101,7 +101,7 @@ class GenerateCommandTest extends PHPUnit_Framework_TestCase
         */
         $view->shouldReceive('make')
             ->once()
-            ->with('confide::'.$viewName, $viewVars)
+            ->with('confide.'.$viewName, $viewVars)
             ->andReturn($view);
 
         $view->shouldReceive('render')

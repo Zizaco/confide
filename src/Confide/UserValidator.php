@@ -93,7 +93,7 @@ class UserValidator implements UserValidatorInterface
             } else {
                 $this->attachErrorMsg(
                     $user,
-                    'confide::confide.alerts.password_confirmation',
+                    'confide.confide.alerts.password_confirmation',
                     'password_confirmation'
                 );
                 return false;
@@ -132,7 +132,7 @@ class UserValidator implements UserValidatorInterface
             } else {
                 $this->attachErrorMsg(
                     $user,
-                    'confide::confide.alerts.duplicated_credentials',
+                    'confide.confide.alerts.duplicated_credentials',
                     $attribute
                 );
             }
