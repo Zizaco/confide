@@ -33,7 +33,7 @@
             "src/commands"
         ],
         "files": [
-            "tests/Confide/helpers.php"
+            "src/Confide/helpers.php"
         ],
         "psr-4": {
             "Zizaco\\Confide\\": "src/Confide/"

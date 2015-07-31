@@ -2,5 +2,5 @@
 
 function config_path($path)
 {
-    return 'test/' . $path;
+    return 'config/' . $path;
 }

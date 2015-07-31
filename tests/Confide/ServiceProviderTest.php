@@ -36,7 +36,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
             ->with(m::type('array'))
             ->once()
             ->andReturnUsing(function ($array) use ($test) {
-                $test->assertContains('test/confide.php', $array);
+                $test->assertContains('config/confide.php', $array);
             });
 
         $sp->shouldReceive('loadTranslationsFrom')
