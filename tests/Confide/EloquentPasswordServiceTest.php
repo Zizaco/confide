@@ -32,13 +32,14 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $userEmail = 'someone@somewhere.com';
         $generatedToken = '123456789';
 
-        $user = m::mock('Illuminate\Auth\Reminders\RemindableInterface');
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail,getTable]', []);
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $user = m::mock('Illuminate\Contracts\Auth\Authenticatable');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[generateToken,sendEmail,getTable]', [$app]);
         $db = m::mock('connection');
 
         $passService->shouldAllowMockingProtectedMethods();
 
-        $passService->app['db'] = $db;
+        $app->shouldReceive('make')->with('db')->once()->andReturn($db);
 
         /*
         |------------------------------------------------------------
@@ -112,12 +113,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $userEmail       = 'someone@somewhere.com';
         $token           = '123456789';
         $oldestValidDate = '2014-07-16 22:20:26';
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $app         = m::mock('Illuminate\Contracts\Foundation\Application');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $db          = m::mock('connection');
         $userModel   = m::mock('Zizaco\Confide\ConfideUserInterface');
 
         $passService->shouldAllowMockingProtectedMethods();
-        $passService->app['db'] = $db;
+        $app->shouldReceive('make')->once()->with('db')->andReturn($db);
 
         /*
         |------------------------------------------------------------
@@ -193,11 +195,12 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $token       = '123456789';
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $db          = m::mock('connection');
 
         $passService->shouldAllowMockingProtectedMethods();
-        $passService->app['db'] = $db;
+        $app->shouldReceive('make')->once()->with('db')->andReturn($db);
 
         /*
         |------------------------------------------------------------
@@ -253,12 +256,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
         $repository    = m::mock('Zizaco\Confide\RepositoryInterface');
-        $passService   = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $passService   = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $modelInstance = m::mock('Zizaco\Confide\ConfideUserInterface');
 
         $passService->shouldAllowMockingProtectedMethods();
-        $passService->app['confide.repository'] = $repository;
+        $app->shouldReceive('make')->once()->with('confide.repository')->andReturn($repository);
 
         /*
         |------------------------------------------------------------
@@ -292,11 +296,12 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
         $config = m::mock('Config');
 
         $passService->shouldAllowMockingProtectedMethods();
-        $passService->app['config'] = $config;
+        $app->shouldReceive('make')->times(3)->with('config')->andReturn($config);
 
         /*
         |------------------------------------------------------------
@@ -394,15 +399,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[sendEmail]');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService[sendEmail]', [$app]);
         $passService->shouldAllowMockingProtectedMethods();
 
         $mailer                         = m::mock('Mailer');
         $config                         = m::mock('Config');
         $translator                     = m::mock('Translator');
-        $passService->app['mailer']     = $mailer;
-        $passService->app['config']     = $config;
-        $passService->app['translator'] = $translator;
 
         $token = '123';
         $user  = m::mock('UserWithEmail');
@@ -416,6 +419,9 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         | Expectation
         |------------------------------------------------------------
         */
+        $app->shouldReceive('make')->once()->with('mailer')->andReturn($mailer);
+        $app->shouldReceive('make')->once()->with('config')->andReturn($config);
+        $app->shouldReceive('make')->once()->with('translator')->andReturn($translator);
         $passService->shouldReceive('sendEmail')
             ->passthru();
 
@@ -465,17 +471,19 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
         $oldestValidDate = '2014-07-16 22:20:26';
         $carbon      = m::mock('Carbon\Carbon');
         $config      = m::mock('Config');
-        $passService = m::mock('Zizaco\Confide\EloquentPasswordService');
+        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $passService = m::mock('Zizaco\Confide\EloquentPasswordService', [$app]);
 
         $passService->shouldAllowMockingProtectedMethods();
-        $passService->app['Carbon\Carbon'] = $carbon;
-        $passService->app['config']        = $config;
 
         /*
         |------------------------------------------------------------
         | Expectation
         |------------------------------------------------------------
         */
+        $app->shouldReceive('make')->once()->with('Carbon\Carbon')->andReturn($carbon);
+        $app->shouldReceive('make')->once()->with('config')->andReturn($config);
+
         $passService->shouldReceive('getOldestValidDate')
             ->passthru();
 

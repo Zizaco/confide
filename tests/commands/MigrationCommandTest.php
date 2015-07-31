@@ -80,7 +80,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
 
         $command->shouldReceive('generateFile')
             ->once()->with(
-                'database/migrations/'.date('Y_m_d_His').'_confide_setup_users_table.php',
+                '/database\/migrations\/([\d_]+)_confide_setup_users_table\.php/',
                 'generators.migration',
                 $viewVars
             )
