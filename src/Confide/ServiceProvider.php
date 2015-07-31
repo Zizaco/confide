@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 /**

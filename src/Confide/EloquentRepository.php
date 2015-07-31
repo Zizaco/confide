@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\Application;
 
 /**
  * A service that abstracts all database interactions that happens
@@ -14,7 +14,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
@@ -30,7 +30,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Create a new ConfideRepository
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
     public function __construct(Application $app)
     {

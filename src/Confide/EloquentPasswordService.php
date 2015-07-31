@@ -1,7 +1,7 @@
 <?php namespace Zizaco\Confide;
 
 use Illuminate\Contracts\Auth\Authenticable;
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\Application;
 
 /**
  * A service that abstracts all user password management related methods.
@@ -14,14 +14,14 @@ class EloquentPasswordService implements PasswordServiceInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new PasswordService.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
     public function __construct(Application $app)
     {

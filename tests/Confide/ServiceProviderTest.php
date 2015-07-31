@@ -114,7 +114,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -152,7 +152,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -190,7 +190,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -228,7 +228,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -266,7 +266,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -332,7 +332,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $test = $this;
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*
@@ -382,7 +382,7 @@ class ServiceProviderTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $sp = m::mock('Zizaco\Confide\ServiceProvider', [$app]);
 
         /*

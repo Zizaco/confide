@@ -20,7 +20,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -50,7 +50,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $auth           = m::mock('Auth');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
@@ -81,7 +81,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -112,7 +112,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -159,7 +159,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         */
         $auth = m::mock('Auth');
         $hash = m::mock('Hash');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -227,7 +227,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -281,7 +281,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -339,7 +339,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -398,7 +398,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $hash = m::mock('Hash');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -464,7 +464,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         */
         $auth = m::mock('Auth');
         $hash = m::mock('Hash');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -533,7 +533,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -578,7 +578,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -634,7 +634,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $config = m::mock('Config');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -687,7 +687,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $config = m::mock('Config');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -739,7 +739,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -778,7 +778,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -824,7 +824,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -863,7 +863,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -912,7 +912,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         |------------------------------------------------------------
         */
         $auth = m::mock('Auth');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');
@@ -945,7 +945,7 @@ class ConfideTest extends PHPUnit_Framework_TestCase
         */
         $config = m::mock('Config');
         $view = m::mock('View');
-        $app            = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app            = m::mock('Illuminate\Foundation\Application');
         $repo           = m::mock('Zizaco\Confide\RepositoryInterface');
         $passService    = m::mock('Zizaco\Confide\PasswordServiceInterface');
         $loginThrottler = m::mock('Zizaco\Confide\LoginThrottleServiceInterface');

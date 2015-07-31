@@ -24,7 +24,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
 
         $throttleService = m::mock(
             'Zizaco\Confide\CacheLoginThrottleService[countThrottle, parseIdentity]',
-            [m::mock('Illuminate\Contracts\Foundation\Application')]
+            [m::mock('Illuminate\Foundation\Application')]
         );
         $throttleService->shouldAllowMockingProtectedMethods();
 
@@ -58,7 +58,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
         $config = m::mock('Config');
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $app->shouldReceive('make')->with('config')->once()->andReturn($config);
 
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]', [$app]);
@@ -98,7 +98,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         */
         $identity = ['email'=>'someone@somewhere.com','password'=>'123'];
         $config = m::mock('Config');
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $app->shouldReceive('make')->with('config')->once()->andReturn($config);
 
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[countThrottle,parseIdentity]', [$app]);
@@ -136,7 +136,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = [
@@ -172,7 +172,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = [
@@ -208,7 +208,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = [
@@ -243,7 +243,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $throttleService = m::mock('Zizaco\Confide\CacheLoginThrottleService[parseIdentity]', [$app]);
         $throttleService->shouldAllowMockingProtectedMethods();
         $identity = 'someuser';
@@ -277,7 +277,7 @@ class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
         $idString = serialize(['email'=>'someone@somewhere.com']);
         $cache = m::mock('Cache');
         $config = m::mock('Config');
-        $app = m::mock('Illuminate\Contracts\Foundation\Application');
+        $app = m::mock('Illuminate\Foundation\Application');
         $app->shouldReceive('make')->with('config')->once()->andReturn($config);
         $app->shouldReceive('make')->with('cache')->twice()->andReturn($cache);
 

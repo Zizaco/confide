@@ -14,14 +14,14 @@ abstract class GenerateCommand extends Command
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new command instance.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      *
      * @return void
      */

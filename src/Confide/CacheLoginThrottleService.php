@@ -1,6 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\Application;
 
 /**
  * The LoginThrottle is a service that Throttles login after
@@ -15,14 +15,14 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
     /**
      * Create a new PasswordService.
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object.
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object.
      */
     public function __construct(Application $app)
     {
