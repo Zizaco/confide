@@ -29,7 +29,7 @@ class {{ $class }} extends Controller
      */
     public function {{ (! $restful) ? 'create' : 'getCreate' }}()
     {
-        return View::make(Config::get('confide::signup_form'));
+        return View::make(Config::get('confide.signup_form'));
     }
 
     /**
@@ -43,10 +43,10 @@ class {{ $class }} extends Controller
         $user = $repo->signup(Input::all());
 
         if ($user->id) {
-            if (Config::get('confide::signup_email')) {
+            if (Config::get('confide.signup_email')) {
                 Mail::queueOn(
-                    Config::get('confide::email_queue'),
-                    Config::get('confide::email_account_confirmation'),
+                    Config::get('confide.email_queue'),
+                    Config::get('confide.email_account_confirmation'),
                     compact('user'),
                     function ($message) use ($user) {
                         $message
@@ -77,7 +77,7 @@ class {{ $class }} extends Controller
         if (Confide::user()) {
             return Redirect::to('/');
         } else {
-            return View::make(Config::get('confide::login_form'));
+            return View::make(Config::get('confide.login_form'));
         }
     }
 
@@ -135,7 +135,7 @@ class {{ $class }} extends Controller
      */
     public function {{ (! $restful) ? 'forgotPassword' : 'getForgot' }}()
     {
-        return View::make(Config::get('confide::forgot_password_form'));
+        return View::make(Config::get('confide.forgot_password_form'));
     }
 
     /**
@@ -166,7 +166,7 @@ class {{ $class }} extends Controller
      */
     public function {{ (! $restful) ? 'resetPassword' : 'getReset' }}($token)
     {
-        return View::make(Config::get('confide::reset_password_form'))
+        return View::make(Config::get('confide.reset_password_form'))
                 ->with('token', $token);
     }
 

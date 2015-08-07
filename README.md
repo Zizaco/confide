@@ -45,7 +45,7 @@ to be confirmed to be able to login to the website._
 In the `require` key of `composer.json` file add the following
 
 ```json
-"zizaco/confide": "dev-5.0"
+"zizaco/confide": "5.0.x-dev"
 ```
 
 Run the Composer update comand
@@ -267,7 +267,7 @@ Confide::makeResetPasswordForm($token):
 You would use:
 
 ```php
-View::make(Config::get('confide::reset_password_form'))
+View::make(Config::get('confide.reset_password_form'))
     ->with('token', $token);
 ```
 
