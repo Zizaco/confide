@@ -24,6 +24,13 @@ interface ConfideUserInterface extends UserInterface, RemindableInterface
     public function confirm();
 
     /**
+     * Set validation method to check only for fields related to password 
+     * resetting
+     * @return void 
+     */
+    public function setResetOnly();
+
+    /**
      * Send email with information about password reset.
      *
      * @return string

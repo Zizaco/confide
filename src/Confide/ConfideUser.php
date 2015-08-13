@@ -21,6 +21,13 @@ trait ConfideUser
     public $errors;
 
     /**
+     * A boolean that store if a validation ocurring is for password resetting
+     * only 
+     * @var bool 
+     */
+    private $isResetOnly;
+
+    /**
      * Confirm the user (usually means that the user)
      * email is valid. Sets the confirmed attribute of
      * the user to true and also update the database.
@@ -47,6 +54,15 @@ trait ConfideUser
     }
 
     /**
+     * Set validation method to check only for fields related to password 
+     * resetting
+     * @return void 
+     */
+    public function setResetOnly() {
+        $this->isResetOnly = true;
+    }
+
+    /**
      * Checks if the current user is valid using the ConfideUserValidator.
      *
      * @return bool
@@ -61,6 +77,10 @@ trait ConfideUser
         // If the model already exists in the database we call validate with
         // the update ruleset
         if ($this->exists) {
+            if ($this->isResetOnly) {
+              return $validator->validate($this, 'password_reset');
+            }
+
             return $validator->validate($this, 'update');
         }
 

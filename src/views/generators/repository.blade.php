@@ -109,16 +109,19 @@ class UserRepository
     {
         $result = false;
         $user   = Confide::userByResetPasswordToken($input['token']);
+        $user->setResetOnly();
 
         if ($user) {
             $user->password              = $input['password'];
             $user->password_confirmation = $input['password_confirmation'];
-            $result = $this->save($user);
+            $result['status'] = $this->save($user);
         }
 
-        // If result is positive, destroy token
-        if ($result) {
+        // If result status is positive, destroy token
+        if ($result['status']) {
             Confide::destroyForgotPasswordToken($input['token']);
+        } else {
+            $result['errors'] = $user->errors;
         }
 
         return $result;

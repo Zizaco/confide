@@ -185,7 +185,8 @@ class {{ $class }} extends Controller
         );
 
         // By passing an array with the token, password and confirmation
-        if ($repo->resetPassword($input)) {
+        $result = $repo->resetPassword( $input );
+        if ( $result['status'] ) {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
             return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@login' : '@getLogin' }}')
                 ->with('notice', $notice_msg);
@@ -193,7 +194,8 @@ class {{ $class }} extends Controller
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
             return Redirect::action('{{ $namespace ? $namespace.'\\' : '' }}{{ $class }}{{ (! $restful) ? '@resetPassword' : '@getReset' }}', array('token'=>$input['token']))
                 ->withInput()
-                ->with('error', $error_msg);
+                ->with('error', $error_msg)
+                ->withErrors($result['errors']);
         }
     }
 
