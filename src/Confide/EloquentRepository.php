@@ -1,5 +1,7 @@
 <?php namespace Zizaco\Confide;
 
+use Illuminate\Contracts\Foundation\Application;
+
 /**
  * A service that abstracts all database interactions that happens
  * in Confide using Eloquent.
@@ -12,7 +14,7 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Laravel application.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     public $app;
 
@@ -28,11 +30,11 @@ class EloquentRepository implements RepositoryInterface
     /**
      * Create a new ConfideRepository
      *
-     * @param \Illuminate\Foundation\Application $app Laravel application object
+     * @param \Illuminate\Contracts\Foundation\Application $app Laravel application object
      */
-    public function __construct($app = null)
+    public function __construct(Application $app)
     {
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**
@@ -43,11 +45,11 @@ class EloquentRepository implements RepositoryInterface
     public function model()
     {
         if (! $this->model) {
-            $this->model = $this->app['config']->get('auth.model');
+            $this->model = $this->app->make('config')->get('auth.model');
         }
 
         if ($this->model) {
-            return $this->app[$this->model];
+            return $this->app->make($this->model);
         }
 
         throw new \Exception("Wrong model specified in config/auth.php", 639);
@@ -66,7 +68,7 @@ class EloquentRepository implements RepositoryInterface
     {
         $user = $this->model();
 
-        $user = $user->where(function($user) use ($identity) {
+        $user = $user->where(function ($user) use ($identity) {
             foreach ($identity as $attribute => $value) {
                 $user = $user->orWhere($attribute, '=', $value);
             }

@@ -1,7 +1,6 @@
 <?php namespace Zizaco\Confide;
 
-use Illuminate\Auth\UserInterface;
-use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
  * Interface that declares the methods that must be
@@ -14,7 +13,7 @@ use Illuminate\Auth\Reminders\RemindableInterface;
  * @license MIT
  * @package Zizaco\Confide
  */
-interface ConfideUserInterface extends UserInterface, RemindableInterface
+interface ConfideUserInterface extends Authenticatable
 {
     /**
      * Confirm the user (usually means that the user) email is valid.

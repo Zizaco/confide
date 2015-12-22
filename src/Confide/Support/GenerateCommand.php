@@ -30,7 +30,7 @@ abstract class GenerateCommand extends Command
         if (!is_array($app))
             parent::__construct();
 
-        $this->app = $app ?: app();
+        $this->app = $app;
     }
 
     /**
