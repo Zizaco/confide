@@ -98,14 +98,14 @@ class CacheLoginThrottleService implements LoginThrottleServiceInterface
     protected function countThrottle($identityString, $increments = 1)
     {
         $count = $this->app['cache']
-            ->get('login_throttling:'.md5($identityString), 0);
+            ->get('login_throttling:'.md5($identityString.$this->app['request']->server('REMOTE_ADDR')), 0);
 
         $count = $count + $increments;
 
         $ttl = $this->app['config']->get('confide::throttle_time_period');
 
         $this->app['cache']
-            ->put('login_throttling:'.md5($identityString), $count, $ttl);
+            ->put('login_throttling:'.md5($identityString.$this->app['request']->server('REMOTE_ADDR')), $count, $ttl);
 
         return $count;
     }
