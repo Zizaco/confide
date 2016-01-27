@@ -264,16 +264,16 @@ class Confide
      *
      * @return ConfideUser
      */
-    public function userByResetPasswordToken($token)
-    {
+     public function userByResetPasswordToken($token)
+     {
         $email = $this->passService->getEmailByToken($token);
 
         if ($email) {
-            return $this->repo->getUserByEmail($email);
+          return $this->repo->getUserByEmail($email);
         }
 
         return false;
-    }
+     }
 
     /**
      * Log the user out of the application.

@@ -39,6 +39,14 @@ class EloquentPasswordService implements PasswordServiceInterface
     public function requestChangePassword(RemindableInterface $user)
     {
         $email = $user->getReminderEmail();
+
+        $record = $this->getRecordByEmail($email);
+
+        if($record)
+        {
+          return $record;
+        }
+
         $token = $this->generateToken();
 
         $values = array(
@@ -60,6 +68,36 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
+     * Returns the record for email given
+     *
+     * @param string $token
+     *
+     * @return string Email.
+     */
+    public function getRecordByEmail($email)
+    {
+        $connection = $this->getConnection();
+        $table = $this->getTable();
+
+        $record = $this->app['db']
+            ->connection($connection)
+            ->table($table)
+            ->where('email', '=', $email)
+            ->first();
+        // Check if record date is no longer valid
+        if($record && $record->created_at < $this->getOldestValidDate())
+        {
+          // Delete the record
+          $this->destroyToken($record->token);
+          return null;
+        }
+
+
+        return $record;
+    }
+
+
+    /**
      * Returns the email associated with the given reset
      * password token.
      *
@@ -72,17 +110,24 @@ class EloquentPasswordService implements PasswordServiceInterface
         $connection = $this->getConnection();
         $table = $this->getTable();
 
-        $email = $this->app['db']
+        $record = $this->app['db']
             ->connection($connection)
             ->table($table)
-            ->select('email')
             ->where('token', '=', $token)
-            ->where('created_at', '>=', $this->getOldestValidDate())
             ->first();
 
-        $email = $this->unwrapEmail($email);
-
-        return $email;
+        if($record)
+        {
+          // Check if record date is valid
+          if($record->created_at >= $this->getOldestValidDate())
+          {
+            $email = $this->unwrapEmail($record);
+            return $email;
+          }
+          // Delete the record if token is no longer valid
+          $this->destroyToken($record->token);
+        }
+        return null;
     }
 
     /**
