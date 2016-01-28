@@ -235,13 +235,16 @@ class Confide
      */
     public function forgotPassword($email)
     {
-        $user = $this->repo->getUserByEmail($email);
+      if($this->passService->isThrottled()) return 'trottling';
 
-        if ($user) {
-            return $this->passService->requestChangePassword($user);
-        }
+      $user = $this->repo->getUserByEmail($email);
 
-        return false;
+      if ($user) {
+          return $this->passService->requestChangePassword($user);
+      }
+      $this->passService->countThrottle();
+
+      return false;
     }
 
     /**

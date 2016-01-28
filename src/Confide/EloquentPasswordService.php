@@ -244,4 +244,45 @@ class EloquentPasswordService implements PasswordServiceInterface
             ->subHours($config->get('confide::confide.password_reset_expiration', 7))
             ->toDateTimeString();
     }
+
+    /**
+     * Tells if the remote IP has reached the throttle_limit.
+     *
+     *
+     * @return bool True if the remote IP has reached the throttle_limit.
+     */
+    public function isThrottled()
+    {
+
+        // Retuns the current count
+        $count = $this->countThrottle(0);
+
+        return $count >= $this->app['config']->get('confide::reset_password_throttle_limit', 4);
+    }
+
+    /**
+     * Increments the count for the remote IP by given $increments
+     * stores it into cache and returns the current value for remote IP
+     * address.
+     *
+     * @param int    $increments     Amount that is going to be added to the throttling attemps for the remote IP.
+     *
+     * @return int How many times that same remote IP was used.
+     */
+    public function countThrottle($increments = 1)
+    {
+        $ip_remote = $this->app['request']->server('REMOTE_ADDR');
+
+        $count = $this->app['cache']
+            ->get('reset_password_throttling:'.md5($ip_remote), 0);
+
+        $count = $count + $increments;
+
+        $ttl = $this->app['config']->get('confide::reset_password_throttle_time_period',15);
+
+        $this->app['cache']
+            ->put('reset_password_throttling:'.md5($ip_remote), $count, $ttl);
+
+        return $count;
+    }
 }
