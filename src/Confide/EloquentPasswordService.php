@@ -39,6 +39,14 @@ class EloquentPasswordService implements PasswordServiceInterface
     public function requestChangePassword(RemindableInterface $user)
     {
         $email = $user->getReminderEmail();
+
+        $record = $this->getRecordByEmail($email);
+
+        if($record)
+        {
+          return $record;
+        }
+
         $token = $this->generateToken();
 
         $values = array(
@@ -60,6 +68,36 @@ class EloquentPasswordService implements PasswordServiceInterface
     }
 
     /**
+     * Returns the record for email given
+     *
+     * @param string $token
+     *
+     * @return string Email.
+     */
+    public function getRecordByEmail($email)
+    {
+        $connection = $this->getConnection();
+        $table = $this->getTable();
+
+        $record = $this->app['db']
+            ->connection($connection)
+            ->table($table)
+            ->where('email', '=', $email)
+            ->first();
+        // Check if record date is no longer valid
+        if($record && $record->created_at < $this->getOldestValidDate())
+        {
+          // Delete the record
+          $this->destroyToken($record->token);
+          return null;
+        }
+
+
+        return $record;
+    }
+
+
+    /**
      * Returns the email associated with the given reset
      * password token.
      *
@@ -72,17 +110,24 @@ class EloquentPasswordService implements PasswordServiceInterface
         $connection = $this->getConnection();
         $table = $this->getTable();
 
-        $email = $this->app['db']
+        $record = $this->app['db']
             ->connection($connection)
             ->table($table)
-            ->select('email')
             ->where('token', '=', $token)
-            ->where('created_at', '>=', $this->getOldestValidDate())
             ->first();
 
-        $email = $this->unwrapEmail($email);
-
-        return $email;
+        if($record)
+        {
+          // Check if record date is valid
+          if($record->created_at >= $this->getOldestValidDate())
+          {
+            $email = $this->unwrapEmail($record);
+            return $email;
+          }
+          // Delete the record if token is no longer valid
+          $this->destroyToken($record->token);
+        }
+        return null;
     }
 
     /**
@@ -198,5 +243,46 @@ class EloquentPasswordService implements PasswordServiceInterface
         return $carbon->now()
             ->subHours($config->get('confide::confide.password_reset_expiration', 7))
             ->toDateTimeString();
+    }
+
+    /**
+     * Tells if the remote IP has reached the throttle_limit.
+     *
+     *
+     * @return bool True if the remote IP has reached the throttle_limit.
+     */
+    public function isThrottled()
+    {
+
+        // Retuns the current count
+        $count = $this->countThrottle(0);
+
+        return $count >= $this->app['config']->get('confide::reset_password_throttle_limit', 4);
+    }
+
+    /**
+     * Increments the count for the remote IP by given $increments
+     * stores it into cache and returns the current value for remote IP
+     * address.
+     *
+     * @param int    $increments     Amount that is going to be added to the throttling attemps for the remote IP.
+     *
+     * @return int How many times that same remote IP was used.
+     */
+    public function countThrottle($increments = 1)
+    {
+        $ip_remote = $this->app['request']->server('REMOTE_ADDR');
+
+        $count = $this->app['cache']
+            ->get('reset_password_throttling:'.md5($ip_remote), 0);
+
+        $count = $count + $increments;
+
+        $ttl = $this->app['config']->get('confide::reset_password_throttle_time_period',15);
+
+        $this->app['cache']
+            ->put('reset_password_throttling:'.md5($ip_remote), $count, $ttl);
+
+        return $count;
     }
 }

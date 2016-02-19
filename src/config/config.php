@@ -85,6 +85,18 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Password reset Throttle
+    |--------------------------------------------------------------------------
+    |
+    | Defines how many wrong email failed tries from one IP may be done within
+    | the 'reset_password_throttle_time_period', which is in minutes.
+    |
+    */
+    'reset_password_throttle_limit' => 4,
+    'reset_password_throttle_time_period' => 15,
+
+    /*
+    |--------------------------------------------------------------------------
     | Signup E-mail and confirmation (true or false)
     |--------------------------------------------------------------------------
     |
