@@ -1,4 +1,4 @@
-<form method="POST" action="{{{ URL::to('users') }}}" accept-charset="UTF-8">
+<form method="POST" action="{{{ URL::action('UsersController@store') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         @if (Cache::remember('username_in_confide', 5, function() {

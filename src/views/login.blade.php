@@ -1,4 +1,4 @@
-<form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
+<form role="form" method="POST" action="{{{ URL::action('UsersController@doLogin') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
     <fieldset>
         <div class="form-group">
@@ -11,7 +11,7 @@
         </label>
         <input class="form-control" tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
         <p class="help-block">
-            <a href="{{{ URL::to('/users/forgot_password') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
+            <a href="{{{ URL::action('UsersController@doForgotPassword') }}}">{{{ Lang::get('confide::confide.login.forgot_password') }}}</a>
         </p>
         </div>
         <div class="checkbox">

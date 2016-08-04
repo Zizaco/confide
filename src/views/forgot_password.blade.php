@@ -1,4 +1,4 @@
-<form method="POST" action="{{ URL::to('/users/forgot_password') }}" accept-charset="UTF-8">
+<form method="POST" action="{{ URL::action('UsersController@doForgotPassword') }}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
 
     <div class="form-group">
