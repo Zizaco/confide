@@ -1,17 +1,18 @@
 <?php namespace Zizaco\Confide\Support;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class GenerateCommandTest extends PHPUnit_Framework_TestCase
+class GenerateCommandTest extends TestCase
 {
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 

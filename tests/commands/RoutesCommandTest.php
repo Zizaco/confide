@@ -1,11 +1,11 @@
 <?php namespace Zizaco\Confide;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class RoutesCommandTest extends PHPUnit_Framework_TestCase
+class RoutesCommandTest extends TestCase
 {
     /**
      * ConfideRepository instance
@@ -17,12 +17,13 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 
-    public function testSouldGetOptions()
+    public function testShouldGetOptions()
     {
         /*
         |------------------------------------------------------------
@@ -44,7 +45,7 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($options, $command->getOptions());
     }
 
-    public function testSouldFire()
+    public function testShouldFire()
     {
         /*
         |------------------------------------------------------------

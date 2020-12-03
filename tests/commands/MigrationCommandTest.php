@@ -1,11 +1,11 @@
 <?php namespace Zizaco\Confide;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class MigrationCommandTest extends PHPUnit_Framework_TestCase
+class MigrationCommandTest extends TestCase
 {
     /**
      * ConfideRepository instance
@@ -17,12 +17,13 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 
-    public function testSouldGetOptions()
+    public function testShouldGetOptions()
     {
         /*
         |------------------------------------------------------------
@@ -44,7 +45,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($options, $command->getOptions());
     }
 
-    public function testSouldFire()
+    public function testShouldFire()
     {
         /*
         |------------------------------------------------------------
@@ -80,7 +81,7 @@ class MigrationCommandTest extends PHPUnit_Framework_TestCase
 
         $command->shouldReceive('generateFile')
             ->once()->with(
-                '/database\/migrations\/([\d_]+)_confide_setup_users_table\.php/',
+                m::pattern('/database\/migrations\/([\d_]+)_confide_setup_users_table\.php/'),
                 'generators.migration',
                 $viewVars
             )

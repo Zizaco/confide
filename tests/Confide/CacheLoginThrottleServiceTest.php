@@ -1,15 +1,16 @@
 <?php namespace Zizaco\Confide;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CacheLoginThrottleServiceTest extends PHPUnit_Framework_TestCase
+class CacheLoginThrottleServiceTest extends TestCase
 {
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 

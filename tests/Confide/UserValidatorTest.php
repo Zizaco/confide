@@ -1,17 +1,18 @@
 <?php namespace Zizaco\Confide;
 
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Support\Facades\Lang as Lang;
 
-class UserValidatorTest extends PHPUnit_Framework_TestCase
+class UserValidatorTest extends TestCase
 {
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 

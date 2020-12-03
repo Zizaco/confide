@@ -5,9 +5,9 @@ use DateTime;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Foundation\Application;
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
+class EloquentPasswordServiceTest extends TestCase
 {
 
     /**
@@ -20,12 +20,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 
-    public function testSouldRequestChangePassword()
+    public function testShouldRequestChangePassword()
     {
         /*
         |------------------------------------------------------------
@@ -89,14 +90,13 @@ class EloquentPasswordServiceTest extends PHPUnit_Framework_TestCase
 
         $db->shouldReceive('insert')
             ->with(m::on(function($result) use ($userEmail, $generatedToken) {
-                $this->assertEquals(
+                $this->assertEqualsWithDelta(
                     $result,
                     [
                         'email' => $userEmail,
                         'token' => $generatedToken,
                         'created_at' => new DateTime()
                     ],
-                    '',
                     10
                 );
 

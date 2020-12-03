@@ -2,18 +2,19 @@
 
 use Exception;
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Zizaco\Confide\Facade as ConfideFacade;
 use Illuminate\Support\Facades\App as App;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
-class ConfideUserTest extends PHPUnit_Framework_TestCase
+class ConfideUserTest extends TestCase
 {
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 
@@ -68,7 +69,9 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Assertion
         |------------------------------------------------------------
         */
-        $user->forgotPassword();
+        $result = $user->forgotPassword();
+
+        $this->assertTrue($result);
     }
 
     public function testIsValidOnNew()
@@ -164,10 +167,8 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
             });
 
         // Set the exception as expected ;)
-        $this->setExpectedException(
-            Exception::class,
-            'Saved in database'
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Saved in database');
 
         /*
         |------------------------------------------------------------

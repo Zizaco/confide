@@ -1,15 +1,17 @@
 <?php namespace Zizaco\Confide;
 
+use Exception;
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
+class EloquentRepositoryTest extends TestCase
 {
     /**
      * Calls Mockery::close
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
+        $this->addToAssertionCount(m::getContainer()->mockery_getExpectationCount());
         m::close();
     }
 
@@ -74,10 +76,8 @@ class EloquentRepositoryTest extends PHPUnit_Framework_TestCase
             ->andReturn(null);
 
         // Set the exception as expected ;)
-        $this->setExpectedException(
-            'Exception',
-            'Wrong model specified in config/auth.php'
-        );
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Wrong model specified in config/auth.php');
 
         /*
         |------------------------------------------------------------
