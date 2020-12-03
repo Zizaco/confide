@@ -1,5 +1,6 @@
 <?php namespace Zizaco\Confide;
 
+use Exception;
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Zizaco\Confide\Facade as ConfideFacade;
@@ -140,7 +141,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         | Set
         |------------------------------------------------------------
         */
-        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newQueryWithoutScopes]');
+        $user = m::mock('Zizaco\Confide\_ConfideUserStub[isValid,save,newModelQuery]');
 
         /*
         |------------------------------------------------------------
@@ -156,15 +157,15 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
             ->andReturn(true);
 
         // Throw an exception instead of actually saving the object
-        $user->shouldReceive('newQueryWithoutScopes')
+        $user->shouldReceive('newModelQuery')
             ->once()
             ->andReturnUsing(function () {
-                throw new \Exception('Saved in database');
+                throw new Exception('Saved in database');
             });
 
         // Set the exception as expected ;)
         $this->setExpectedException(
-            'Exception',
+            Exception::class,
             'Saved in database'
         );
 
@@ -202,7 +203,7 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
         $user->shouldReceive('newQueryWithoutScopes')
             ->never()
             ->andReturnUsing(function () {
-                throw new \Exception('Saved in database');
+                throw new Exception('Saved in database');
             });
 
         /*
@@ -370,4 +371,9 @@ class ConfideUserTest extends PHPUnit_Framework_TestCase
 class _ConfideUserStub extends Eloquent implements ConfideUserInterface
 {
     use ConfideUser;
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
 }
