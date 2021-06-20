@@ -21,6 +21,7 @@ Confide aims to be simple to use, quick to configure and flexible.
 ## Features
 
 **Current:**
+hello
 - Account confirmation (through confirmation link).
 - Password reset (sending email with a change password link).
 - Easily render forms for login, signup and password reset.
